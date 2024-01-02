@@ -7,7 +7,7 @@ How to Install?
 2. type "py -m venv env" to create virtual environment
 3. Activate it by navigating to the >env/Scripts and opening the activate.bat, can be done by continuing the command prompt from before.
 <br>>cd env/Scripts
-<br>>activate
+<br>>activate.bat
 4. After that, go back to the project folder and install the required dependencies, can be done by continuing the command prompt from before.
 <br>>cd..
 <br>>cd..
