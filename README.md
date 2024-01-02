@@ -9,8 +9,6 @@ How to Install?
 >cd env/Scripts<br>
 >activate
 4. After than, go back to the project folder and install the required dependencies, can be done by continuing the command prompt from before.
->cd..
-<br>
->cd..
-<br>
+>cd..<br>
+>cd..<br>
 >pip install -r requirements.txt
