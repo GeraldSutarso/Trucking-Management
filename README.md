@@ -12,3 +12,9 @@ How to Install?
 <br>>cd..
 <br>>cd..
 <br>>pip install -r requirements.txt
+
+5. To setting the database, run this.
+<br>py manage.py makemigrations tm_app
+<br>py manage.py migrate tm_app
+
+### To save the dependencies:> pip freeze > requirements.txt
