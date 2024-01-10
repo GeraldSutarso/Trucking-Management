@@ -13,7 +13,7 @@ How to Install?
 <br>>cd..
 <br>>pip install -r requirements.txt
 
-5. To setting the database, run this.
+5. To setting the database, create a MySql Database named tm (you may change the setting in tm\settings.py), then run this.
 <br>>py manage.py makemigrations
 <br>>py manage.py migrate
 
