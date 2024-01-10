@@ -14,7 +14,7 @@ How to Install?
 <br>>pip install -r requirements.txt
 
 5. To setting the database, run this.
-<br>>py manage.py makemigrations tm_app
-<br>>py manage.py migrate tm_app
+<br>>py manage.py makemigrations
+<br>>py manage.py migrate
 
 ### To save the dependencies:> pip freeze > requirements.txt
