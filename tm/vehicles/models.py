@@ -4,6 +4,7 @@ from django.db import models
 class Truck(models.Model):
     model = models.CharField(max_length=255)
     license_plate = models.CharField(max_length=20)
+    driver = models.OneToOneField('accounts.Driver', on_delete=models.SET_NULL, null=True)
     capacity = models.IntegerField()
 
 class Maintenance(models.Model):

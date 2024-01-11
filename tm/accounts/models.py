@@ -14,9 +14,9 @@ class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     license_number = models.CharField(max_length=20)
     availability = models.BooleanField()
-    truck = models.OneToOneField('vehicles.Truck', on_delete=models.SET_NULL, null=True)
-    profile_picture = models.ImageField(upload_to='driver_profile_pics/', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='tm/static/img/driver/', blank=True, null=True)
     profile_picture_confirmed = models.BooleanField(default=False)
+    accepted = models.BooleanField(default = False)
     
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key= True)
