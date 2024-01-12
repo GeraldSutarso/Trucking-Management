@@ -6,6 +6,7 @@ class Truck(models.Model):
     license_plate = models.CharField(max_length=20)
     driver = models.OneToOneField('accounts.Driver', on_delete=models.SET_NULL, null=True)
     capacity = models.IntegerField()
+    location = models.CharField(max_length=255)
 
 class Maintenance(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
