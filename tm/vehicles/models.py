@@ -3,20 +3,24 @@ from django.contrib import admin
 from accounts.models import *
 
 class Truck(models.Model):
-    model = models.CharField(max_length=255)
+    status_choices= (
+        ("OK", "OK"),
+        ("WARNING","WARNING"),
+        ("DANGER","DANGER")
+    )
+    truck_model = models.CharField(max_length=255)
     license_plate = models.CharField(max_length=20)
     driver = models.OneToOneField('accounts.Driver', on_delete=models.SET_NULL, null=True)
     capacity = models.IntegerField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
-
-    def get_driver_first_name(self, obj):
-        return obj.driver.user.first_name
-
-    def get_driver_last_name(self, obj):
-        return obj.driver.user.last_name
-
+    status = models.CharField(choices=status_choices, max_length = 10)
+    last_maintained = models.DateField(blank = True, null = True)
+    
+    def __str__(self):
+        return self.truck_model
+    
 class Maintenance(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
     sensor_type = models.CharField(max_length=50)
     notification_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20)
+    schedule = models.DateTimeField(blank = True, null = True)

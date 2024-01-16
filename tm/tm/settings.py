@@ -205,4 +205,5 @@ JAZZMIN_SETTINGS = {
         "auth.user": "collapsible",
         "auth.group": "vertical_tabs",
     },
+    "search_model": ["accounts.User"],
 }

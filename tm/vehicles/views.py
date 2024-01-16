@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def admintenance_Truck():
+    return render('maintenance/admin/sensors.html')
