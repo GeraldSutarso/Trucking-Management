@@ -25,9 +25,9 @@ admin.site.site_title = "iTrucking Admin"
 admin.site.index_title = "iTrucking Administrator"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include("django.contrib.auth.urls")),
-    # path('register/', views.register, name='register')
+    path('admin/', admin.site.urls, name= 'admin'),
+    # path('accounts/', include("django.contrib.auth.urls")),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

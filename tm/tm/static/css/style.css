@@ -7913,15 +7913,35 @@ input[type="tel"] {
   top: 0;
 }
 
+/* .page_loaders_father {
+  width: 100%;
+  height: 100%; 
+  z-index: 9999;
+  background: #FFFFFF;
+
+} */
+
 .page_loader {
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -0%;
+  top: -0%;
   width: 100%;
-  height: 100%;
+  height: 100%; 
+  z-index: 999999;
+  background: url(../img/loaders.gif) center no-repeat #fff;
+  /* transform: translate(-50%, -50%); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 
+.page_loaders_fathers_granddaughter {
+  width: 100%;
+  height: 100%; 
   z-index: 999999;
   background: url(../img/loader.gif) center no-repeat #fff;
-}
+  /* transform: translate(-50%, -50%); */
+} 
 
 .slider-section .simple-slider {
   margin-bottom: 30px;

@@ -1,0 +1,31 @@
+{% if user.is_authenticated %}
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Login To Your Account</h1>
+            <ul class="breadcrumbs">
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'admin/' %}">Home</a></li>
+                {% elif user.is_customer %}
+                    <li><a href="{% url 'customer_home' %}">Home</a></li>
+                {% elif user.is_driver %}
+                    <li><a href="{% url 'driver_home' %}">Home</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Login To Your Account</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'login' %}">Login</a> | </li>
+                <li><a href="{% url 'register_customer' %}">Register as Customer</a> | </li>
+                <li><a href="{% url 'register_driver' %}">Register as Driver</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}

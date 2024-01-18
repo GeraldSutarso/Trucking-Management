@@ -2,6 +2,7 @@ from django.contrib import admin
 from accounts.models import *
 
 class UserAdmin(admin.ModelAdmin):
+    list_filter = ("is_superuser","is_driver","is_customer")
     pass
 admin.site.register(User,UserAdmin)
 class CustomerAdmin(admin.ModelAdmin):

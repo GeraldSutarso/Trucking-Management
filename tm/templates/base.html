@@ -8,7 +8,7 @@
     <meta charset="utf-8">
 
     <!-- External CSS libraries -->
-	<!-- Log on to codeastro.com for more projects -->
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/animate.min.css' %} ">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-submenu.css' %}">
@@ -32,7 +32,6 @@
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" >
 
     <!-- Google fonts -->
-	<!-- Log on to codeastro.com for more projects -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
 
@@ -42,8 +41,11 @@
     <script  src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
 </head>
 <body>
-<div class="page_loader"></div>
-
+{% comment %} <div class="page_loaders_father"> {% endcomment %}
+    <div class="page_loader">
+        {% comment %} <div class="page_loaders_fathers_granddaughter"></div> {% endcomment %}
+    </div>
+{% comment %} </div> {% endcomment %}
 {% include 'includes/topbar.html' %}
 
 {% include 'includes/navbar.html' %}
@@ -55,7 +57,7 @@
 
 {% endblock %}
 
-<!-- Full Page Search -->
+{% comment %} <!-- Full Page Search -->
 <div id="full-page-search">
     <button type="button" class="close">×</button>
     <form action="{% url 'search' %}" class="search-header">
@@ -63,7 +65,7 @@
         <button type="submit" class="btn btn-sm button-theme">Search</button>
     </form>
 	<!-- Log on to codeastro.com for more projects -->
-</div>
+</div> {% endcomment %}
 
 {% include 'includes/footer.html' %}
 
