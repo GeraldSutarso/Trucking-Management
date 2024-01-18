@@ -12,14 +12,14 @@ def login(request):
         user2 = auth.authenticate(username=username, password=password, is_customer = 1)
         user3 = auth.authenticate(username=username, password=password, is_driver = 1)
         if user1 is not None: 
-            messages.success(request, 'You are now logged in.')
+            messages.success(request, 'You are an admin! Please login from the admin page')
             return render(request, 'admin/base_site.html')
         elif user2 is not None:
             messages.success(request, 'You are now logged in.')
-            return redirect('customer_home')
+            return redirect('go_customer_home')
         elif user3 is not None:
             messages.success(request, 'You are now logged in.')
-            return redirect('driver_home')
+            return redirect('go_driver_home')
         else:
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
@@ -49,7 +49,7 @@ def register_customer(request):
                     messages.success(request, 'You are registered successfully.')
                     auth.login(request, user)
                     messages.success(request, 'You are now logged in.')
-                    return redirect('home')
+                    return redirect('go_customer_home')
 
         else:
             messages.error(request, 'Password do not match')
@@ -85,7 +85,7 @@ def register_driver(request):
                     messages.success(request, 'You are registered successfully.')
                     auth.login(request, user)
                     messages.success(request, 'You are now logged in.')
-                    return redirect('home')
+                    return redirect('go_driver_home')
         else:
             messages.error(request, 'Password do not match')
             return redirect('register')
@@ -93,12 +93,12 @@ def register_driver(request):
         return render(request, 'accounts/register_customer.html')
 
 @login_required(login_url = 'login')
-def driver_home(request):
-    return render(request, 'accounts/driver_home.html')
+def go_driver_home(request):
+    return redirect(request, 'driver_home')
 
 @login_required(login_url = 'login')
-def customer_home(request):
-    return render(request, 'accounts/customer_home.html')
+def go_customer_home(request):
+    return render(request, 'customer_home')
 
 def logout(request):
     if request.method == 'POST':
