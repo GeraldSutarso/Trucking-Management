@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from .models import User, Driver
+from pages.urls import urlpatterns
 from django.contrib.auth.decorators import login_required
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect ('go_home')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -26,6 +29,8 @@ def login(request):
     return render(request, 'accounts/login.html')
 
 def register_customer(request):
+    if request.user.is_authenticated:
+        return redirect ('go_home')
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -58,6 +63,8 @@ def register_customer(request):
         return render(request, 'accounts/register_customer.html')
 
 def register_driver(request):
+    if request.user.is_authenticated:
+        return redirect ('go_home')
     if request.method == 'POST':
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
@@ -94,11 +101,11 @@ def register_driver(request):
 
 @login_required(login_url = 'login')
 def go_driver_home(request):
-    return redirect(request, 'driver_home')
+    return redirect(request, 'go_home')
 
 @login_required(login_url = 'login')
 def go_customer_home(request):
-    return render(request, 'customer_home')
+    return redirect(request, 'go_home')
 
 def logout(request):
     if request.method == 'POST':

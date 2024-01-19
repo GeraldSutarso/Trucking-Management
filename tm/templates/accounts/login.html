@@ -3,7 +3,18 @@
 {% block title %} | Login {% endblock %}
 {% block content %}
 {% load static %}
-
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Login To Your Account</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'login' %}">Login</a> | </li>
+                <li><a href="{% url 'register_customer' %}">Register as Customer</a> | </li>
+                <li><a href="{% url 'register_driver' %}">Register as Driver</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <!-- Contact section start -->
 <div class="contact-section">

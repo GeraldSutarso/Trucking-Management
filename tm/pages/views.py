@@ -3,9 +3,18 @@ from django.contrib import messages, auth
 from accounts.models import User, Driver
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+# FALL BACKK!! FALL BACKK!!!
 def go_home(request):
-    return redirect('customer_home')
+    if request.user.is_authenticated:
+        if request.user.is_staff: # check if the user is a staff member
+            return redirect('customer_home')
+        elif request.user.is_superuser: # check if the user is a superuser
+            return redirect('admin')
+        else: # assume the user is a driver by default
+            return redirect('driver_home')
+    else:
+        return render(request,'pages/no_home.html')
+
 
 def go_login(request):
     return redirect('login')

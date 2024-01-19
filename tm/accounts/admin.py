@@ -3,6 +3,7 @@ from accounts.models import *
 
 class UserAdmin(admin.ModelAdmin):
     list_filter = ("is_superuser","is_driver","is_customer")
+    search_fields = ["username","first_name","last_name", "email", "phone_number"]
     pass
 admin.site.register(User,UserAdmin)
 class CustomerAdmin(admin.ModelAdmin):
