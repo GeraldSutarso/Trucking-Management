@@ -89,7 +89,10 @@ def register_driver(request):
                     driver = Driver.objects.create(id_card = id_card, license_card = license_card)
                     user.save()
                     driver.save()
-                    messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
+                    messages.success(request, 'You are registered successfully.')
+                    auth.login(request, user)
+                    messages.success(request, 'You are now logged in.')
+                    return redirect('go_driver_home')
         else:
             messages.error(request, 'Password do not match')
             return redirect('register')
