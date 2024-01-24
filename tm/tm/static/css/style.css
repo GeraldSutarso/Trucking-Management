@@ -1,10 +1,4 @@
 /*==================================
-* Author        : "ThemeSine"
-* Template Name : CarVilla  HTML Template
-* Version       : 1.0
-==================================== */
-
-/*==================================
 font-family: 'Poppins', sans-serif;
 font-family: 'Rufina', serif;
 ==================================== */
@@ -16,8 +10,8 @@ font-family: 'Rufina', serif;
 3.  Welcome-hero
 4.  Model-search
 5.  Service
-6.  New-cars
-7.  Featured-cars
+6.  New-trucks
+7.  Featured-trucks
 8.  Client-say
 9.  Brand
 10. Blog
@@ -371,30 +365,30 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 
 
 /*-------------------------------------
-        6. New-cars
+        6. New-trucks
 --------------------------------------*/
-.new-cars{
+.new-trucks{
     background: #f8f9fb;
     padding:112px 0 120px;
 }
-.new-cars-content{padding-top:96px;}
-/*.new-cars-txt*/
-.new-cars-txt {margin-left: 29px;margin-bottom: 30px;}
-.new-cars-txt h2 a {
+.new-trucks-content{padding-top:96px;}
+/*.new-trucks-txt*/
+.new-trucks-txt {margin-left: 29px;margin-bottom: 30px;}
+.new-trucks-txt h2 a {
     font-size:  30px;
     font-weight:  500;
     margin-bottom: 26px;
 }
-.new-cars-txt h2 a span {text-transform:  uppercase;}
-.new-cars-para2 {margin-top: 30px;}
-.welcome-btn.new-cars-btn {
+.new-trucks-txt h2 a span {text-transform:  uppercase;}
+.new-trucks-para2 {margin-top: 30px;}
+.welcome-btn.new-trucks-btn {
     width: 176px;
     margin-top: 32px;
 }
-/*.new-cars-txt*/
+/*.new-trucks-txt*/
 
 /*.owl-dots */
-.new-cars .owl-theme .owl-dots .owl-dot span {
+.new-trucks .owl-theme .owl-dots .owl-dot span {
     width: 8px;
     height: 8px;
     margin: 0px 4px;
@@ -402,23 +396,23 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     border: 1px solid #6a7781;
     border-radius: 50%;
 }
-.new-cars .owl-theme .owl-dots .owl-dot.active span,.new-cars .owl-theme .owl-dots .owl-dot:hover span {background: #6a7781;}
-.new-cars .owl-theme .owl-nav.disabled+.owl-dots {margin-top: 62px;}
+.new-trucks .owl-theme .owl-dots .owl-dot.active span,.new-trucks .owl-theme .owl-dots .owl-dot:hover span {background: #6a7781;}
+.new-trucks .owl-theme .owl-nav.disabled+.owl-dots {margin-top: 62px;}
 /*.owl-dots */
 
 /*-------------------------------------
-        7. Featured-cars
+        7. Featured-trucks
 --------------------------------------*/
-.featured-cars{
+.featured-trucks{
     padding:112px 0 120px;
 }
-.featured-cars-content{padding-top:96px;}
+.featured-trucks-content{padding-top:96px;}
 
-/*.single-featured-cars*/
+/*.single-featured-trucks*/
 .featured-img-box {
     border: 1px solid #dadfe9;
 }
-.featured-cars-img {
+.featured-trucks-img {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -434,12 +428,12 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 }
 .featured-mi-span{display: inline-block;margin:0 10px;}
 .featured-hp-span{display: inline-block;margin-right: 10px;}
-.featured-cars-txt{margin:21px 0 47px;}
-.featured-cars-txt h2 a{font-size: 16px;margin-bottom: 15px;}
-.featured-cars-txt h2 a span{text-transform: uppercase;}
-.featured-cars-txt h3{margin-bottom: 10px;}
-.featured-cars-txt h3,.featured-cars-txt p{font-size: 13px;}
-/*.single-featured-cars*/
+.featured-trucks-txt{margin:21px 0 47px;}
+.featured-trucks-txt h2 a{font-size: 16px;margin-bottom: 15px;}
+.featured-trucks-txt h2 a span{text-transform: uppercase;}
+.featured-trucks-txt h3{margin-bottom: 10px;}
+.featured-trucks-txt h3,.featured-trucks-txt p{font-size: 13px;}
+/*.single-featured-trucks*/
 
 /*-------------------------------------       
         8. Clients-say 

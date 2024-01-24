@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 	"use strict";
     
@@ -17,6 +18,25 @@ $(document).ready(function(){
 ======================================*/
 
     // 1. Scroll To Top 
+	$(window).on('load', function () {
+        setTimeout(function () {
+            $(".page_loader").fadeOut("fast");
+        }, 100);
+
+        if ($('body .filter-portfolio').length > 0) {
+            $(function () {
+                $('.filter-portfolio').filterizr(
+                    {
+                        delay: 0
+                    }
+                );
+            });
+            $('.filteriz-navigation li').on('click', function () {
+                $('.filteriz-navigation .filtr').removeClass('active');
+                $(this).addClass('active');
+            });
+        }
+    });
 		$(window).on('scroll',function () {
 			if ($(this).scrollTop() > 300) {
 				$('.return-to-top').fadeIn();
@@ -46,9 +66,9 @@ $(document).ready(function(){
 	
 	// 3. owl carousel
 
-		// i.  new-cars-carousel
+		// i.  new-trucks-carousel
 		
-			$("#new-cars-carousel").owlCarousel({
+			$("#new-trucks-carousel").owlCarousel({
 				items: 1,
 				autoplay:true,
 				loop: true,
