@@ -24,8 +24,12 @@ def login(request):
             messages.success(request, 'You are now logged in.')
             return redirect('go_driver_home')
         else:
-            messages.error(request, 'Invalid login credentials')
-            return redirect('login')
+            if username is None:    
+                messages.error(request, 'Invalid username')
+                return redirect('login')
+            elif password is None:
+                messages.error(request, 'Invalid password')
+                return redirect('login')
     return render(request, 'accounts/login.html')
 
 def register_customer(request):

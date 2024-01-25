@@ -264,12 +264,17 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     bottom: -150px;
     width: 100%;
     border-radius: 3px;
+    justify-content: center;
+    align-items: center;
 }
 
 /*.single-model-search*/
 .single-model-search{margin-bottom: 30px;}
 .single-model-search:last-child {margin-bottom: 0;}
-
+.logo-2 img {
+    margin-bottom: 5px;
+    height: 45px;
+  }
 .single-model-search h2 {
     font-size: 16px;
     font-weight: 400;
@@ -373,6 +378,10 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 }
 .new-trucks-content{padding-top:96px;}
 /*.new-trucks-txt*/
+.new-trucks-img{
+    width: 75%;
+    height: 75%;
+}
 .new-trucks-txt {margin-left: 29px;margin-bottom: 30px;}
 .new-trucks-txt h2 a {
     font-size:  30px;
