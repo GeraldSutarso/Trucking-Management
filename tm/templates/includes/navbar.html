@@ -15,8 +15,40 @@
         </div>
     </div>
 </div>
+<div class="top-area">
+    <div class="header-area">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default bootsnav  navbar-sticky"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+
+            <div class="container">
+
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="{% url "go_home" %}">ITruck<span></span></a>
+
+                </div><!--/.navbar-header-->
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="scroll"><a href="{% url "go_home" %}">Home</a></li>
+                        <li class="scroll"><a href="{% url "login" %}">Log In</a></li>
+                        <li class="scroll"><a href="{% url "logout" %}">Log Out</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!--/.container-->
+        </nav><!--/nav-->
+        <!-- End Navigation -->
+    </div><!--/.header-area-->
+    <div class="clearfix"></div>
+
+</div><!-- /.top-area-->
 {% else %}
-<div class="nav-banner overview-bgi">
+{% comment %} <div class="nav-banner overview-bgi">
     <div class="container breadcrumb-area">
         <div class="breadcrumb-areas">
             <h1>Login To Your Account</h1>
@@ -27,5 +59,37 @@
             </ul>
         </div>
     </div>
-</div>
+</div> {% endcomment %}
+<div class="top-area">
+    <div class="header-area">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default bootsnav  navbar-sticky"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+
+            <div class="container">
+
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="{% url "go_home" %}">ITruck<span></span></a>
+
+                </div><!--/.navbar-header-->
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class=" scroll active"><a href="{% url "go_home" %}">Home</a></li>
+                        <li class=" scroll"><a href="{% url "login" %}">Log In</a></li>
+                        <li class="scroll"><a href="{% url "register_customer" %}">Register</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!--/.container-->
+        </nav><!--/nav-->
+        <!-- End Navigation -->
+    </div><!--/.header-area-->
+    <div class="clearfix"></div>
+
+</div><!-- /.top-area-->
 {% endif %}

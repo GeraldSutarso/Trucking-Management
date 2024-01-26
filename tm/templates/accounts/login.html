@@ -3,64 +3,67 @@
 {% block title %} | Login {% endblock %}
 {% block content %}
 {% load static %}
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Login To Your Account</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'login' %}">Login</a> | </li>
-                <li><a href="{% url 'register_customer' %}">Register as Customer</a> | </li>
-                <li><a href="{% url 'register_driver' %}">Register as Driver</a></li>
-            </ul>
+<section id="home" class="welcome-hero">
+    <div class="container">
+        <div class="welcome-hero-txt">
+            <h2>Sign In</h2>
+            <p>
+                Login if you have previously registered as a user of this website
+            </p>
+            <button class="welcome-btn" onclick="window.location.href='#login-box'">login </button>
+            <button class="welcome-btn" onclick="window.location.href='{% url "register_customer" %}'">Register as customer </button>
+            <button class="welcome-btn" onclick="window.location.href='{% url "register_driver" %}'">Register as driver </button>
         </div>
     </div>
-</div>
 
-<!-- Contact section start -->
-<div class="contact-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-section">
-                    <div class="logo-2">
-                        <a href="">
-                            <img src="{% static 'img/logos/PWF.gif' %}" alt="logo">
-                        </a>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px;">
+                    <div class="card-header text-center">
+                        <div class="logo-2">
+                            <a href="#">
+                                <img src="{% static 'img/logos/PWF.gif' %}" alt="logo" class="img-fluid">
+                            </a>
+                        </div>
+                        <h3>Log In</h3>
                     </div>
-                    <h3>Log In</h3>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
+                    <div class="card-body" style="margin: 15px;"  id="login-box">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form action="{% url 'login' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group form-box">
+                                <label for="username" class="col-form-label">Username:</label>
+                                <input type="text" name="username" class="form-control" placeholder="Username" required>
+                                <i class="flaticon-user"></i>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                    <form action="{% url 'login' %}" method="POST">
-                      {% csrf_token %}
-                        <div class="form-group form-box">
-                            <input type="text" name="username" class="input-text" placeholder="Username" required>
-                            <i class="flaticon-user"></i>
-                        </div>
-                        <div class="form-group form-box">
-                            <input type="password" name="password" class="input-text" placeholder="Password" required>
-                            <i class="flaticon-lock"></i>
-                        </div>
-                        
-                        <div class="form-group mb-0 clearfix">
-                            <button type="submit" class="btn-md btn-success float-center">Login</button>
-                        </div>
-                    
-                        <div class="extra-login clearfix">
-                            <span><p>Don't have an account? <a href="{% url 'register_customer' %}" class="thembo" style="color: red;"> Register here</a></p></span>
-                        </div>
-                        <div class="clearfix"></div>
-                    
-                    </form>
+                            <div class="form-group form-box">
+                                <label for="password" class="col-form-label">Password:</label>
+                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                <i class="flaticon-lock"></i>
+                            </div>
+                            <div class="form-group mb-0 text-center">
+                                <button type="submit" class="btn btn-success btn-lg" style="padding: 10px 30px;">Login</button>
+                            </div>
+                            <div class="extra-login clearfix mt-2 text-center">
+                                <span><p>Don't have an account? <a href="{% url 'register_customer' %}" class="thembo" style="color: red;"> Register here</a></p></span>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Contact section end -->
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
 {% endblock %}
