@@ -8,7 +8,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20)
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="user_customer")
     address = models.TextField()
     
     @admin.display(ordering='user__username', description='Username')
@@ -32,12 +32,12 @@ class Customer(models.Model):
         return self.user.phone_number
     
 class Driver(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="user_driver")
     license_number = models.CharField(max_length=20)
     availability = models.BooleanField(default = False)
-    profile_picture = models.ImageField(upload_to='tm/static/img/driver/face', blank=True, null=True)
-    id_card = models.ImageField(upload_to='tm/static/img/driver/id', blank= True, null=True)
-    license_card = models.ImageField(upload_to='tm/static/img/driver/license', blank= True, null=True)
+    profile_picture = models.ImageField(upload_to='media/driver/face', blank=True, null=True)
+    id_card = models.ImageField(upload_to='media/driver/id', blank= True, null=True)
+    license_card = models.ImageField(upload_to='media/driver/license', blank= True, null=True)
     profile_picture_confirmed = models.BooleanField(default=False)
     accepted = models.BooleanField(default = False)
     vehicle_available = models.BooleanField(default = False)
@@ -65,7 +65,7 @@ class Driver(models.Model):
         return self.user.phone_number
     
 class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key= True)
+    user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key= True, related_name="use_admin")
     
     @admin.display(ordering='user__username', description='Username')
     def username(self):
