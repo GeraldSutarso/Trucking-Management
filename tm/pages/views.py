@@ -23,7 +23,9 @@ def profile(request):
             return redirect(request, 'admin/base_site.html')
         elif request.user.is_driver:
             return redirect('driver_profile')
-        
+    else:
+        return redirect('go_home')    
+    
 #HEY USER, WHO ARE YOU??
 
 def im_customer(user):
@@ -37,8 +39,9 @@ def im_driver(user):
     return user.is_driver
 
 #Oi, Are you accepted?
-def initely(request,user, Driver):
-    return request.user.Driver.accepted
+# def initely(request):
+    # user_driver = Driver.objects.get(user_id=User.id)
+    # user_driver.accepted == 1:
 #other redirectings
 def go_login(request):
     return redirect('login')
@@ -54,10 +57,16 @@ def go_register_d(request):
 
 #home
 @login_required(login_url = 'login')
-@user_passes_test(im_driver, login_url='/laogin')
-@user_passes_test(initely, login_url='logain')
+@user_passes_test(im_driver, login_url='/login')
+# @user_passes_test(initely, login_url='login')
 def driver_home(request):
-    return render(request, 'pages/driver_home.html')
+    user_driver = Driver.objects.get(user_id=request.user.id)
+    if user_driver.accepted == 1:
+        print("User:", request.user)
+        # print("Driver:", request.Driver)
+        return render(request, 'pages/driver_home.html')
+    else:
+        return render(request, 'pages/registration_thanks.html')
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
@@ -69,7 +78,7 @@ def customer_home(request):
 #profile
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
-@user_passes_test(initely, login_url='/login')
+# @user_passes_test(initely, login_url='/login')
 def driver_profile(request):
     return render(request, 'pages/profile/driver_profile.html')
 

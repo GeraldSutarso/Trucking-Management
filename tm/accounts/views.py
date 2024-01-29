@@ -15,25 +15,28 @@ def login(request):
         
         
         user = auth.authenticate(username=username, password=password)
-        if username is None:
+        if user is None:
+            # Check if the user with the given username exists
+            if not User.objects.filter(username=username).exists():
                 messages.error(request, 'Invalid username')
-                return redirect('login')
-        else:
-            if password is None:
+            else:
                 messages.error(request, 'Invalid password')
-                return redirect('login')
-            elif user.is_superuser: 
+            return redirect('login')
+        else: 
+            if user.is_superuser: 
                 messages.error(request, 'You are an admin! Please login from the admin page')
                 return render(request, 'admin/base_site.html')
             elif user.is_customer:
                 # messages.success(request, 'You are now logged in.')
+                auth.login(request, user)
                 return redirect('customer_home')
             elif user.is_driver:
-                user_driver = Driver
-                if user_driver.accepted:
                 # messages.success(request, 'You are now logged in.')
-                    return redirect('driver_home')
-
+                auth.login(request, user)
+                return redirect('driver_home')
+                # else:
+                    # messages.error(request, 'Your driver account is not yet accepted.')
+                    # return redirect('login')
 
     return render(request, 'accounts/login.html')
 
