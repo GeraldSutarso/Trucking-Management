@@ -316,6 +316,15 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 }
 /*.welcome-hero-txt*/
 
+.profilePic {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  
+    object-fit: cover;
+  }
+
 /*-------------------------------------
         4. Model-Search
 --------------------------------------*/

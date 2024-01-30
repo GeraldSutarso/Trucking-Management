@@ -4,24 +4,6 @@
 {% block content %}
 {% load static %}
 
-{% comment %} <div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1><a href="{% url 'go_home' %}">Home</a></h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'login' %}">Login</a> | </li>
-                <li><a href="{% url 'register_customer' %}">Register as Customer</a> | </li>
-                <li><a href="{% url 'register_driver' %}">Register as Driver</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-No home?? :(
-
-{% endblock %} {% endcomment %}
-{% load static %}
-
 		<!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
@@ -40,11 +22,19 @@ No home?? :(
 
 			<div class="container">
 				<div class="welcome-hero-txt">
-					<h2>NO HOME? :(</h2>
+					<h2>Driver, {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+                    <div>
+                        {% if request.user.Driver.profile.url is not None %}
+                        <img class="profilePic" src="{{ request.user.Driver.profile.url }}">
+                        {% else %}
+                        <img class="profilePic" src="{% static 'img/avatar/setting-profile.png' %}">
+                        {% endif %}
+                    </div>
+                    <br><br>
 					<p>
-						{% comment %} Our trucks are good. Our trucks are the best. Our trucks beat other trucks. You won't be disappointed. We won't disappoint. Trust our trucks. We will take control of the world. Autobots roll out. {% endcomment %}
-					</p>
-					<button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+                        Selamat datang {{ request.user.first_name }}, di menu utama milik para driver atau supir.
+                    </p>
+					<button class="welcome-btn" onclick="window.location.href='{% url "driver_profile" %}'">Ganti profil</button>
 				</div>
 			</div>
 
@@ -64,36 +54,36 @@ No home?? :(
 			<div class="container">
 				<div class="service-content">
 					<div class="row">
-						<div class="col-md-4 col-sm-6">
+						<div class="col-md-4 col-sm-6" onclick="window.location.href='{% url "driver_profile" %}'">
 							<div class="single-service-item">
 								<div class="single-service-icon">
 									<i class="flaticon-car"></i>
 								</div>
-								<h2><a href="#">largest dealership <span> of</span> trucks</a></h2>
+								<h2><a href='{% url "driver_profile" %}'>List truk</a></h2>
 								<p>
-									Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia.  
+									Daftar truk-truk yang tersedia dan drivernya masing-masing
 								</p>
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-6">
-							<div class="single-service-item">
+							<div class="single-service-item" onclick="window.location.href='{% url "driver_profile" %}'">
 								<div class="single-service-icon">
 									<i class="flaticon-car-repair"></i>
 								</div>
-								<h2><a href="#">unlimited repair warrenty</a></h2>
+								<h2><a href="#">Kondisi truk</a></h2>
 								<p>
-									Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia.  
+									Perhatikan kondisi truk yang anda pakai  
 								</p>
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-6">
-							<div class="single-service-item">
+							<div class="single-service-item" onclick="window.location.href='{% url "driver_profile" %}'">
 								<div class="single-service-icon">
 									<i class="flaticon-car-1"></i>
 								</div>
-								<h2><a href="#">insurence support</a></h2>
+								<h2><a href="#">Riwayat/History</a></h2>
 								<p>
-									Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut den fugit sed quia. 
+									Cek riwayat pengantaran atau delivery muatan 
 								</p>
 							</div>
 						</div>
