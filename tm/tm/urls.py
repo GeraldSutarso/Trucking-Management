@@ -26,7 +26,7 @@ admin.site.site_title = "iTrucking Admin"
 admin.site.index_title = "iTrucking Administrator"
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name= 'admin'),
+    path('DoNotAccessTheAdminPageIfYouAreNotAnAdmin/', admin.site.urls, name= 'admin'),
     # path('accounts/', include("django.contrib.auth.urls")),
     path('accounts/', include('accounts.urls')),
     path('',include('pages.urls')),
