@@ -5,15 +5,14 @@ from django.contrib.auth.decorators import login_required
 
 # FALL BACKK!! FALL BACKK!!!
 def go_home(request):
-    if request.user.is_authenticated:
-        if request.user.is_staff: # check if the user is a staff member
-            return redirect('customer_home')
-        elif request.user.is_superuser: # check if the user is a superuser
-            return redirect('admin')
-        else: # assume the user is a driver by default
-            return redirect('driver_home')
-    else:
+    if not request.user.is_authenticated:
         return render(request,'pages/no_home.html')
+    if request.user.is_staff: # check if the user is a staff member
+        return redirect('customer_home')
+    elif request.user.is_superuser: # check if the user is a superuser
+        return redirect('admin')
+    else: # assume the user is a driver by default
+        return redirect('driver_home')
 
 
 def go_login(request):

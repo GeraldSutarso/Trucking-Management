@@ -31,41 +31,45 @@ def login(request):
 def register_customer(request):
     if request.user.is_authenticated:
         return redirect ('go_home')
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return render(request, 'accounts/register_customer.html')
+    password = request.POST['password']
+    confirm_password = request.POST['confirm_password']
+
+    if password == confirm_password:
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
         username = request.POST['username']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
-
-        if password == confirm_password:
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Username already exists!')
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists!')
+            return redirect('register')
+        else:
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists!')
                 return redirect('register')
             else:
-                if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email already exists!')
-                    return redirect('register')
-                else:
-                    user = User.objects.create_user(first_name=firstname, last_name=lastname, email=email,phone_number = phone_number , username=username, password=password, is_customer = True)
-                    user.save()
-                    messages.success(request, 'You are registered successfully.')
-                    auth.login(request, user)
-                    messages.success(request, 'You are now logged in.')
-                    return redirect('go_customer_home')
+                user = User.objects.create_user(first_name=firstname, last_name=lastname, email=email,phone_number = phone_number , username=username, password=password, is_customer = True)
+                user.save()
+                messages.success(request, 'You are registered successfully.')
+                auth.login(request, user)
+                messages.success(request, 'You are now logged in.')
+                return redirect('go_customer_home')
 
-        else:
-            messages.error(request, 'Password do not match')
-            return redirect('register')
     else:
-        return render(request, 'accounts/register_customer.html')
+        messages.error(request, 'Password do not match')
+        return redirect('register')
 
 def register_driver(request):
     if request.user.is_authenticated:
         return redirect ('go_home')
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return render(request, 'accounts/register_customer.html')
+    password = request.POST['password']
+    confirm_password = request.POST['confirm_password']
+
+    if password == confirm_password:
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
         username = request.POST['username']
@@ -73,28 +77,22 @@ def register_driver(request):
         id_card = request.POST['id_card']
         license_card = request.POST['license_card']
         email = request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
-
-        if password == confirm_password:
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Username already exists!')
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists!')
+            return redirect('register')
+        else:
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists!')
                 return redirect('register')
             else:
-                if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email already exists!')
-                    return redirect('register')
-                else:
-                    user = User.objects.create_user(first_name=firstname, last_name=lastname, email=email,phone_number = phone_number , username=username, password=password, is_driver = True)
-                    driver = Driver.objects.create(id_card = id_card, license_card = license_card)
-                    user.save()
-                    driver.save()
-                    messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
-        else:
-            messages.error(request, 'Password do not match')
-            return redirect('register')
+                user = User.objects.create_user(first_name=firstname, last_name=lastname, email=email,phone_number = phone_number , username=username, password=password, is_driver = True)
+                driver = Driver.objects.create(id_card = id_card, license_card = license_card)
+                user.save()
+                driver.save()
+                messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
     else:
-        return render(request, 'accounts/register_customer.html')
+        messages.error(request, 'Password do not match')
+        return redirect('register')
 
 @login_required(login_url = 'login')
 def go_driver_home(request):
