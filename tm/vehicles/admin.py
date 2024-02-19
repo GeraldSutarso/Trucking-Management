@@ -29,6 +29,6 @@ class MaintenanceAdmin(admin.ModelAdmin):
     def get_driver_last_name(self, obj):
         return obj.truck.driver.user.last_name
     def driver(self,obj):
-        return obj.truck.driver.user.first_name +" "+ obj.truck.driver.user.last_name
+        return f"{obj.truck.driver.user.first_name} {obj.truck.driver.user.last_name}"
     pass
 admin.site.register(Maintenance,MaintenanceAdmin)

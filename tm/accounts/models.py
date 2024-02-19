@@ -42,7 +42,7 @@ class Driver(models.Model):
     accepted = models.BooleanField(default = False)
     vehicle_available = models.BooleanField(default = False)
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
+        return f"{self.user.first_name} {self.user.last_name}"
     
     @admin.display(ordering='user__username', description='Username')
     def username(self):
