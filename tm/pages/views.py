@@ -16,15 +16,14 @@ def go_home(request):
         request.session.flush()
         return render(request,'pages/no_home.html')
 def profile(request):
-    if request.user.is_authenticated:
-        if request.user.is_customer:
-            return redirect('customer_profile')
-        elif request.user.is_superuser:
-            return redirect(request, 'admin/base_site.html')
-        elif request.user.is_driver:
-            return redirect('driver_profile')
-    else:
-        return redirect('go_home')    
+    if not request.user.is_authenticated:
+        return redirect('go_home')
+    if request.user.is_customer:
+        return redirect('customer_profile')
+    elif request.user.is_superuser:
+        return redirect(request, 'admin/base_site.html')
+    elif request.user.is_driver:
+        return redirect('driver_profile')    
     
 #HEY USER, WHO ARE YOU??
 
@@ -58,15 +57,13 @@ def go_register_d(request):
 #home
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/login')
-# @user_passes_test(initely, login_url='login')
 def driver_home(request):
     user_driver = Driver.objects.get(user_id=request.user.id)
-    if user_driver.accepted == 1:
-        print("User:", request.user)
-        # print("Driver:", request.Driver)
-        return render(request, 'pages/driver_home.html')
-    else:
+    if user_driver.accepted != 1:
         return render(request, 'pages/registration_thanks.html')
+    print("User:", request.user)
+    # print("Driver:", request.Driver)
+    return render(request, 'pages/driver_home.html')
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
