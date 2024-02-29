@@ -1,6 +1,6 @@
 # Trucking-Management
 Capstone Project
-## Title
+## iTrucking: Intelligent Trucking Management System for Efficient Logistics
 How to Install?
 
 1. Assuming Python and pip are already installed, open the cmd of this folder
