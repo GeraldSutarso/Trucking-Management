@@ -97,6 +97,7 @@ def customer_profile(request):
     request.session['phone_number'] = customer.phone_number()
     request.session['email'] = customer.email()
     request.session['address'] = customer.address
+    request.session['profile_picture'] = customer.profile_picture.url if customer.profile_picture else None
 
     if request.method == 'POST':
         firstname = request.POST['firstname']
@@ -123,7 +124,8 @@ def customer_profile(request):
 
                 customer.address = address
                 # Assuming the profile picture is being sent in the 'profile_picture' field
-                customer.profile_picture = request.FILES.get('profile_picture', customer.profile_picture)
+                if 'profile_picture' in request.FILES:
+                    customer.profile_picture = request.FILES['profile_picture']
                 customer.save()
 
                 messages.success(request, 'Profile updated successfully.')

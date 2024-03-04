@@ -7,10 +7,13 @@ class User(AbstractUser):
     is_driver = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20)
 
+def customer_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/customer/<id>/profile/<filename>
+    return 'customer/{0}/profile/{1}'.format(instance.user.id, filename)
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="user_customer")
     address = models.TextField()
-    profile_picture = models.ImageField(upload_to='media/customer/face', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to=customer_directory_path, blank=True, null=True)
     @admin.display(ordering='user__username', description='Username')
     def username(self):
         return self.user.username
@@ -31,13 +34,24 @@ class Customer(models.Model):
     def phone_number(self):
         return self.user.phone_number
     
+def driver_profile_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/driver/<id>/profile/<filename>
+    return 'driver/{0}/profile/{1}'.format(instance.user.id, filename)
+
+def driver_id_card_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/driver/<id>/id_card/<filename>
+    return 'driver/{0}/id_card/{1}'.format(instance.user.id, filename)
+
+def driver_license_card_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/driver/<id>/license_card/<filename>
+    return 'driver/{0}/license_card/{1}'.format(instance.user.id, filename)
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="user_driver")
     license_number = models.CharField(max_length=20)
     availability = models.BooleanField(default = False)
-    profile_picture = models.ImageField(upload_to='media/driver/face', blank=True, null=True)
-    id_card = models.ImageField(upload_to='media/driver/id', blank= True, null=True)
-    license_card = models.ImageField(upload_to='media/driver/license', blank= True, null=True)
+    profile_picture = models.ImageField(upload_to=driver_profile_directory_path, blank=True, null=True)
+    id_card = models.ImageField(upload_to=driver_id_card_directory_path, blank= True, null=True)
+    license_card = models.ImageField(upload_to=driver_license_card_directory_path, blank= True, null=True)
     profile_picture_confirmed = models.BooleanField(default=False)
     accepted = models.BooleanField(default = False)
     vehicle_available = models.BooleanField(default = False)
