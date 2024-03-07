@@ -201,6 +201,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .welcome-hero {
     position: relative;
     background:url(../img/PWF.gif)no-repeat;
+    /* background:url(../img/avatar/no-home.jpeg)no-repeat; */
     background-position: center;
     background-size: cover;
     z-index: 1;
