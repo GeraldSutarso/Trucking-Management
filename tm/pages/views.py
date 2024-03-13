@@ -64,6 +64,22 @@ def driver_home(request):
     if user_driver.accepted != 1:
         return render(request, 'pages/registration_thanks.html')
     print("User:", request.user)
+
+    driver = Driver.objects.get(user=request.user)
+    # Save the driver's data in the session
+    request.session['firstname'] = driver.first_name()
+    request.session['lastname'] = driver.last_name()
+    request.session['username'] = driver.username()
+    request.session['phone_number'] = driver.phone_number()
+    request.session['email'] = driver.email()
+    request.session['license_number'] = driver.license_number
+    request.session['availability'] = driver.availability
+    request.session['profile_picture'] = driver.profile_picture.url if driver.profile_picture else None
+    request.session['id_card'] = driver.id_card.url if driver.id_card else None
+    request.session['license_card'] = driver.license_card.url if driver.license_card else None
+    request.session['profile_picture_confirmed'] = driver.profile_picture_confirmed
+    request.session['accepted'] = driver.accepted
+    request.session['vehicle_available'] = driver.vehicle_available
     # print("Driver:", request.Driver)
     return render(request, 'pages/driver_home.html')
 
