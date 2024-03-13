@@ -218,7 +218,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .header-area{position: absolute;top:0;left:0;width: 100%;z-index: 99;}
 
 /*.welcome-hero-txt*/
-.welcome-hero-txt{text-align: center;padding:290px 0 372px;}
+.welcome-hero-txt{ 
+    text-align: center;
+    padding-top: 210px;
+    padding-bottom: 210px;
+}
 .welcome-hero-txt h2 {
     font-size: 42px;
     color: #fff;
@@ -317,14 +321,27 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 }
 /*.welcome-hero-txt*/
 
+.profilePic-wrapper {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    position: relative;
+}
+
 .profilePic {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* .profilePic {
     display: inline-block;
     width: 150px;
     height: 150px;
     border-radius: 50%;
-  
+    mix-blend-mode: lighten;
     object-fit: cover;
-  }
+  } */
 
 /*-------------------------------------
         4. Model-Search
@@ -335,7 +352,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     background: #fff;
     box-shadow:0 10px 40px 0px rgba(38,40,64,.2);
     position: absolute;
-    bottom: -150px;
+    top: -150px;
     width: 100%;
     border-radius: 3px;
     justify-content: center;
@@ -398,7 +415,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 /*-------------------------------------
         5. Service 
 --------------------------------------*/
-.service { padding: 260px 0 87px;}
+.service { padding: 120px 0 87px;}
 
 .single-service-item{
     text-align: center;
@@ -416,11 +433,14 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .single-service-icon {
     display: inline-block;
     color: #50616c;
+    font-size:60px; /* Added this line */
 }
+
 .single-service-item h2 a {
     font-size:20px;
     margin: 35px 0 20px;
 }
+
 .single-service-item h2 a span {text-transform:  lowercase;}
 .single-service-item p {padding-bottom: 35px;text-transform: initial;position: relative;}
 .single-service-item p:before {
@@ -434,14 +454,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     margin-left: -10px;
 }
 
-.single-service-icon [class^="flaticon-"]:before,.single-service-icon[class*=" flaticon-"]:before,.single-service-icon [class^="flaticon-"]:after,.single-service-icon [class*=" flaticon-"]:after {font-size:60px;}
-.single-service-item:hover .single-service-icon [class^="flaticon-"]:before,.single-service-item:hover .single-service-icon [class*=" flaticon-"]:before,.single-service-item:hover .single-service-icon [class^="flaticon-"]:after,.single-service-item:hover .single-service-icon [class*=" flaticon-"]:after {color:#fff;}
-
+.single-service-item:hover .single-service-icon {color:#fff;} /* Modified this line */
 
 .single-service-item:hover h2 a,.single-service-item:hover p{color: #fff;}
 .single-service-item:hover  p:before {background: #fff;}
 .single-service-item:hover{box-shadow: 0 12px 30px 0px rgba(0,1,193,.2);background: #4e4ffa;border: 1px solid #4e4ffa;}
-
 
 /*-------------------------------------
         6. New-trucks

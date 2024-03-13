@@ -70,6 +70,15 @@ def driver_home(request):
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
 def customer_home(request):
+    # get session for customer
+    customer = Customer.objects.get(user=request.user)
+    request.session['firstname'] = customer.first_name()
+    request.session['lastname'] = customer.last_name()
+    request.session['username'] = customer.username()
+    request.session['phone_number'] = customer.phone_number()
+    request.session['email'] = customer.email()
+    request.session['address'] = customer.address
+    request.session['profile_picture'] = customer.profile_picture.url if customer.profile_picture else None
     return render(request, 'pages/customer_home.html')
 
 
@@ -79,6 +88,60 @@ def customer_home(request):
 @user_passes_test(im_driver, login_url='/')
 # @user_passes_test(initely, login_url='/login')
 def driver_profile(request):
+    try:
+        driver = Driver.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        # Handle the case where the driver does not exist
+        return redirect('go_home')
+
+    # Save the driver's data in the session
+    request.session['firstname'] = driver.first_name()
+    request.session['lastname'] = driver.last_name()
+    request.session['username'] = driver.username()
+    request.session['phone_number'] = driver.phone_number()
+    request.session['email'] = driver.email()
+    request.session['license_number'] = driver.license_number
+    request.session['availability'] = driver.availability
+    request.session['profile_picture'] = driver.profile_picture.url if driver.profile_picture else None
+    request.session['id_card'] = driver.id_card.url if driver.id_card else None
+    request.session['license_card'] = driver.license_card.url if driver.license_card else None
+    request.session['profile_picture_confirmed'] = driver.profile_picture_confirmed
+    request.session['accepted'] = driver.accepted
+    request.session['vehicle_available'] = driver.vehicle_available
+    
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        username = request.POST['username']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+
+        if User.objects.filter(email=email).exclude(email=request.user.email).exists():
+                messages.error(request, 'Email already exists!')
+                return redirect('driver_profile')
+        else:
+            request.user.first_name = firstname
+            request.user.last_name = lastname
+            request.user.email = email
+            request.user.phone_number = phone_number
+            request.user.username = username
+            request.user.save()
+
+            driver.license_number = request.POST['license_number']
+            driver.availability = request.POST['availability']
+
+            # Assuming the profile picture, id card, and license card are being sent in the respective fields
+            if 'profile_picture' in request.FILES:
+                driver.profile_picture = request.FILES['profile_picture']
+            if 'id_card' in request.FILES:
+                driver.id_card = request.FILES['id_card']
+            if 'license_card' in request.FILES:
+                driver.license_card = request.FILES['license_card']
+            driver.save()
+
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('driver_profile')
+
     return render(request, 'pages/profile/driver_profile.html')
 
 @login_required(login_url = 'login')

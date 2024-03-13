@@ -1,8 +1,177 @@
 {% extends 'base.html' %}
 
-{% block title %} | Customer Home {% endblock %}
+{% block title %} | Profile {% endblock %}
 {% block content %}
 {% load static %}
+<section id="home" class="welcome-hero">
+    {% comment %} <div class="welcome-hero-txt"> {% endcomment %}
+    <br><br><br><br><br><br>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="col">
+                <br><br id="register-box"><br>
+                <div class="col-lg-12" >
+                    <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px;">
+                        <div class="card-header text-center">
+                            <div class="logo-2">
+                                <a href="#">
+                                    <img src="{% static 'img/logos/PWF.gif' %}" alt="logo" class="img-fluid">
+                                </a>
+                            </div>
+                            <h3>Edit Profile</h3>
+                        </div>
+                        <div class="card-body" style="margin: 15px;"  >
+                            <div class="row">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="text-danger">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <form action="{% url 'driver_profile' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-md-4 text-center">
+                                    <img id="preview" src="{% if request.session.profile_picture %}{{ request.session.profile_picture }}{% else %}{% static 'img/avatar/user.png' %}{% endif %}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px;">
+                                    <div class="form-group">
+                                        <label for="profile_picture" style="display: block; margin-bottom: 10px;">Change Profile Picture</label>
+                                        <input type="file" class="form-control-file" id="profile_picture" name="profile_picture" style="display: none;" accept="image/*" onchange="previewFile()">
+                                        <button type="button" class="btn btn-primary" onclick="document.getElementById('profile_picture').click();">Choose File</button>
+                                    </div>
+                                    {% if request.session.profile_picture_confirmed %}
+                                    {% else %}
+                                            <p class="text-danger">
+                                                Use a decent picture of yourself to be approved by the admin.
+                                            </p>
+                                    {% endif %}
+                                    <hr class="horizontal-line">
+                                    <div class="form-group mb-0 text-center">
+                                        <button type="submit" class="btn btn-success custom-btn">Save</button>
+                                    </div>
+                                    <div class="form-group mb-0 text-center">
+                                        <button type="button" onclick="location.href='/home'" class="btn btn-danger custom-btn">Back to Home</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                <div class="form-group form-box">
+                                    <label for="firstname" class="col-form-label">First Name</label>
+                                    <input type="text" name="firstname" class="form-control" placeholder="What is your first name?" value="{{ request.session.firstname }}" required>
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="lastname" class="col-form-label">Last Name</label>
+                                    <input type="text" name="lastname" class="form-control" placeholder="What is your last name?" value="{{ request.session.lastname }}" required>
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="username" class="col-form-label">Username</label>
+                                    <input type="text" name="username" class="form-control" placeholder="What will be your username?" value = "{{ request.session.username }}" required>
+                                    <i class="flaticon-user-2"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="email" class="col-form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" placeholder="What is your email?" value="{{ request.session.email }}" required>
+                                    <i class="flaticon-mail"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="phone_number" class="col-form-label">Phone Number</label>
+                                    <input type="tel" name="phone_number" class="form-control" placeholder="xxxx-xxxx-xxxx"  pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}" value="{{ request.session.phone_number }}" required>
+                                    <i class="flaticon-phone"></i>
+                                </div>
 
-
+                                <div class="form-group form-box">
+                                    <label for="license_number" class="col-form-label">License Number</label>
+                                    <input type="text" name="license_number" class="form-control" placeholder="Enter your license number" value="{{ request.session.license_number }}" required>
+                                    <i class="flaticon-license"></i>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="id_card" style="display: block; margin-bottom: 10px;">Upload ID Card</label>
+                                    <input type="file" class="form-control-file" id="id_card" name="id_card" style="display: none;" accept="image/*" onchange="document.getElementById('id_card_preview').src = window.URL.createObjectURL(this.files[0])">
+                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('id_card').click();">Choose File</button>
+                                    <img id="id_card_preview" src="{{ request.session.id_card }}" alt="ID Card Preview" style=" max-width: 200px; max-height: 200px;"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="license_card" style="display: block; margin-bottom: 10px;">Upload License Card</label>
+                                    <input type="file" class="form-control-file" id="license_card" name="license_card" style="display: none;" accept="image/*" onchange="document.getElementById('license_card_preview').src = window.URL.createObjectURL(this.files[0])">
+                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('license_card').click();">Choose File</button>
+                                    <img id="license_card_preview" src="{{ request.session.license_card }}" alt="License Card Preview" style=" max-width: 200px; max-height: 200px;"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="availability" class="col-form-label">Availability</label>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-success">
+                                            <input type="radio" name="availability" id="yes" autocomplete="off" value="True" onchange="document.getElementById('availability_display').value = this.value" {% if request.session.availability == True %}checked{% endif %}>True
+                                        </label>
+                                        <label class="btn btn-danger">
+                                            <input type="radio" name="availability" id="no" autocomplete="off" value="False" onchange="document.getElementById('availability_display').value = this.value" {% if request.session.availability == False or request.session.availability == None %}checked{% endif %}>False
+                                        </label>
+                                    </div>
+                                    <input type="text" id="availability_display" class="form-control" style="margin-top: 10px;" value="{{ request.session.availability }}" disabled>
+                                </div>
+                                
+                                <div class="form-group form-box">
+                                    <label for="vehicle_available" class="col-form-label">Vehicle Available</label>
+                                    <input type="text" name="vehicle_available" class="form-control" value="{{ request.session.vehicle_available }}" disabled>
+                                    <i class="flaticon-vehicle"></i>
+                                </div>
+                                {% comment %} <div class="form-group form-box">
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Password has to be strong" required>
+                                    <i class="flaticon-lock"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="confirm_password" class="col-form-label">Confirm Password</label>
+                                    <input type="password" name="confirm_password" class="form-control" placeholder="Re-Type your Password" required>
+                                    <i class="flaticon-lock"></i>
+                                </div> {% endcomment %}
+                            </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<br>
+</section>
+<style>
+    .custom-btn {
+        width: 150px;
+        height: 50px;
+        transition: transform .2s; /* Animation */
+    }
+    
+    .custom-btn:hover {
+        transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    }
+    .horizontal-line {
+        border-top: 1px solid #D3D3D3;
+        width: 100%;
+        margin: 20px 0;
+    }
+    
+    </style>
+    <script>
+        function previewFile() {
+            const preview = document.querySelector('#preview');
+            const file = document.querySelector('#profile_picture').files[0];
+            const reader = new FileReader();
+        
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                preview.src = reader.result;
+            }, false);
+        
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+        </script>
 {% endblock %}

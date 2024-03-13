@@ -1,25 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %} | Customer Home {% endblock %}
+{% block title %} | Driver Home {% endblock %}
 {% block content %}
-{% load static %}
-
-{% comment %} <div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1><a href="{% url 'go_home' %}">Home</a></h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'login' %}">Login</a> | </li>
-                <li><a href="{% url 'register_customer' %}">Register as Customer</a> | </li>
-                <li><a href="{% url 'register_driver' %}">Register as Driver</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-No home?? :(
-
-{% endblock %} {% endcomment %}
 {% load static %}
 
 		<!--[if lte IE 9]>
@@ -27,7 +9,12 @@ No home?? :(
         <![endif]-->
 	
 		<!--welcome-hero start -->
-		<section id="home" class="welcome-hero">
+		<section id="home" class="welcome-hero" 
+        style="position: relative;
+        background:url({% static "/img/mantap.gif" %})no-repeat;
+        background-position: center;
+        background-size: cover;
+        z-index: 1;">
 
 			<!-- top-area Start -->
 			
@@ -35,132 +22,26 @@ No home?? :(
 
 			<div class="container">
 				<div class="welcome-hero-txt">
-					<h2></h2>
-                    <div class="profilePic-wrapper">
-                        {% if request.session.profile_picture is not None %}
-                        <img class="profilePic" src="{{ request.session.profile_picture }}">
+					<h2>Driver {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+                    <div>
+                        {% if request.user.Driver.profile.url is not None %}
+                        <img class="profilePic" src="{{ request.user.Driver.profile.url }}">
                         {% else %}
                         <img class="profilePic" src="{% static 'img/avatar/user.png' %}">
                         {% endif %}
                     </div>
                     <br><br>
 					<p>
-                        Welcome, {{ request.user.first_name }}, to the home page.
+                        Selamat datang, {{ request.user.first_name }}, pada halaman utama driver.
                     </p>
-					<button class="welcome-btn" onclick="window.location.href='{% url "driver_profile" %}'">Book a truck</button>
+					<button class="welcome-btn" onclick="window.location.href='{% url "driver_profile" %}'">Ganti profil</button>
 				</div>
 			</div>
 
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="model-search-content">
-							<div class="row">
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>select truck model</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">model</option><!-- /.option-->
-
-											  	<option value="optimus">optimus</option><!-- /.option-->
-
-											  	<option value="mack">mack</option><!-- /.option-->
-											  	<option value="hino">hino</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-									<div class="single-model-search">
-										<h2>driver</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="a">a</option><!-- /.option-->
-
-											  	<option value="b">b</option><!-- /.option-->
-
-											  	<option value="c">c</option><!-- /.option-->
-											  	<option value="d">d</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-								</div>
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>select make</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">make</option><!-- /.option-->
-
-											  	<option value="toyota">toyota</option><!-- /.option-->
-
-											  	<option value="holden">holden</option><!-- /.option-->
-											  	<option value="maecedes-benz">maecedes-benz.</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-									<div class="single-model-search">
-										<h2>truck condition</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">condition</option><!-- /.option-->
-
-											  	<option value="something">something</option><!-- /.option-->
-
-											  	<option value="something">something</option><!-- /.option-->
-											  	<option value="something">something</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-								</div>
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>select model</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">model</option><!-- /.option-->
-
-											  	<option value="kia-rio">kia-rio</option><!-- /.option-->
-
-											  	<option value="mitsubishi">mitsubishi</option><!-- /.option-->
-											  	<option value="ford">ford</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-									<div class="single-model-search">
-										<h2>select price</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">price</option><!-- /.option-->
-
-											  	<option value="$0.00">$0.00</option><!-- /.option-->
-
-											  	<option value="$0.00">$0.00</option><!-- /.option-->
-											  	<option value="$0.00">$0.00</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-								</div>
-								<div class="col-md-2 col-sm-12">
-									<div class="single-model-search text-center">
-										<button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
-											search
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -173,7 +54,39 @@ No home?? :(
 			<div class="container">
 				<div class="service-content">
 					<div class="row">
-						
+						<div class="col-md-4 col-sm-6" onclick="window.location.href='{% url "driver_profile" %}'">
+							<div class="single-service-item">
+								<div class="single-service-icon">
+									<i class="flaticon-car"></i>
+								</div>
+								<h2><a href='{% url "driver_profile" %}'>List truk</a></h2>
+								<p>
+									Daftar truk-truk yang tersedia dan drivernya masing-masing
+								</p>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div class="single-service-item" onclick="window.location.href='{% url "driver_profile" %}'">
+								<div class="single-service-icon">
+									<i class="flaticon-car-repair"></i>
+								</div>
+								<h2><a href="#">Kondisi truk</a></h2>
+								<p>
+									Perhatikan kondisi truk yang anda pakai  
+								</p>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div class="single-service-item" onclick="window.location.href='{% url "driver_profile" %}'">
+								<div class="single-service-icon">
+									<i class="flaticon-car-1"></i>
+								</div>
+								<h2><a href="#">Riwayat/History</a></h2>
+								<p>
+									Cek riwayat pengantaran atau delivery muatan 
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div><!--/.container-->
@@ -185,8 +98,8 @@ No home?? :(
 		<section id="new-trucks" class="new-trucks">
 			<div class="container">
 				<div class="section-header">
-					<p>recommended <span>for</span> you</p>
-					<h2>recommendations</h2>
+					<p>checkout <span>the</span> latest trucks</p>
+					<h2>newest trucks</h2>
 				</div><!--/.section-header-->
 				<div class="new-trucks-content">
 					<div class="owl-carousel owl-theme" id="new-trucks-carousel">
