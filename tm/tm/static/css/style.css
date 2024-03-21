@@ -428,6 +428,9 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     -ms-transition:.3s linear; 
     -o-transition:.3s linear;
     transition: .3s linear;
+    width: 500px; /* Set a fixed width */
+    height: 400px; /* Set a fixed height */
+    overflow: auto; /* Add a scrollbar if the content is too large */
 }
 
 .single-service-icon {
@@ -609,6 +612,96 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     margin:0 auto;
 }
 /*owl carousel*/
+/*-------------------------------------
+        8.5. other-truck
+--------------------------------------*/
+
+/* Cloned and renamed .clients-say */
+.other-truck {
+    padding: 115px 0 80px;
+    background: #f8f9fb;
+}
+
+/* Cloned and renamed .single-testimonial-box */
+.other-truck-box {
+    padding: 50px 30px 57px;
+    text-align: center;
+    border: 1px solid #dadfe9;
+    overflow-x: hidden;
+    -webkit-transition: .3s; 
+    -moz-transition: .3s; 
+    -ms-transition: .3s; 
+    -o-transition: .3s;
+    transition: .3s;
+}
+
+/* Cloned and renamed .testimonial-description */
+.other-truck .testimonial-carousel .col-sm-3,
+.other-truck .testimonial-carousel .col-xs-12 {
+    width: 100%;
+    height: auto;
+}
+
+/* Cloned and renamed .testimonial-img */
+.other-truck-img {
+    margin-right: 5px;
+    border-radius: 50%; /* Change this to 0% for a rectangle image */
+    -webkit-transition: .3s; 
+    -moz-transition: .3s; 
+    -ms-transition: .3s; 
+    -o-transition: .3s;
+    transition: .3s;
+}
+
+/* Cloned and renamed .testimonial-person h2 a, .testimonial-person h4 */
+.other-truck-person h2 a, .other-truck-person h4 {
+    font-size: 16px;
+    color: #5e6778;
+    font-weight: 600;
+}
+
+/* Cloned and renamed .testimonial-person h4 */
+.other-truck-person h4 {
+    margin-top: 10px;
+}
+
+/* Cloned and renamed .testimonial-comment p */
+.other-truck-comment p {
+    font-size: 16px;
+    color: #5e6778;
+    margin-top: 30px;
+    margin-bottom: 25px;
+}
+
+/* Cloned and renamed .single-testimonial-box:hover */
+.other-truck-box:hover h2 a, .other-truck-box:hover h4, .other-truck-box:hover p {
+    color: #fff;
+}
+
+.other-truck-box:hover {
+    background: #4e4ffa;
+    border: 1px solid #4e4ffa;
+    box-shadow: 0 12px 30px 0px rgba(0,1,193,.2);
+}
+
+/* Cloned and renamed .owl-carousel */
+.other-truck .owl-carousel .owl-stage {
+    position: relative;
+    padding: 100px 0 40px;
+}
+
+.other-truck .owl-carousel .owl-item img {
+    display: block;
+    width: 100%; /* Adjust as needed */
+    height: auto; /* Adjust as needed */
+    border-radius: 0; /* Makes the image rectangular */
+    margin: 0 auto;
+    background: transparent;
+}
+.list-group-item-warning {
+    border: 1px solid #ff5d5d; /* Sets the border color */
+    background-color: #fff; /* Makes the background transparent */
+}
 
 /*-------------------------------------
         9. Brand
@@ -844,5 +937,37 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 @keyframes example {
     0%   {bottom:0px;}
     100%  {bottom:7px;}
+}
+.col-centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.row-centered {
+    display: flex;
+    align-items: center;
+}
+.owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+
+.owl-nav .owl-prev,
+.owl-nav .owl-next {
+    position: absolute;
+    transform: translateY(-50%);
+    background: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.owl-nav .owl-prev {
+    left: -50px;
+}
+
+.owl-nav .owl-next {
+    right: -50px;
 }
 /*========================Thank you=================

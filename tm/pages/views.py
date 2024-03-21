@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from accounts.models import User, Driver, Customer
+from vehicles.models import Truck, TruckForm, Maintenance
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-# FALL BACKK!! FALL BACKK!!!
+# FALL BACKK!! FALL BACKK!!! HANDLE WHICH TYPE IS THE USER
 def go_home(request):
     if request.user.is_authenticated:
         if request.user.is_customer: # check if the user is a customer
@@ -17,6 +20,7 @@ def go_home(request):
     else:
         request.session.flush()
         return render(request,'pages/no_home.html')
+    
 def profile(request):
     if not request.user.is_authenticated:
         return redirect('go_home')
@@ -26,6 +30,16 @@ def profile(request):
         return redirect(request, 'admin/base_site.html')
     elif request.user.is_driver:
         return redirect('driver_profile')    
+    
+def trucks(request):
+    if not request.user.is_authenticated:
+        return redirect('go_home')
+    if request.user.is_customer:
+        return redirect('customer_trucks')
+    elif request.user.is_superuser:
+        return redirect(request, 'admin/base_site.html')
+    elif request.user.is_driver:
+        return redirect('driver_trucks')
     
 #HEY USER, WHO ARE YOU??
 
@@ -106,6 +120,8 @@ def customer_home(request):
 def driver_profile(request):
     try:
         driver = Driver.objects.get(user=request.user)
+        if driver.accepted != 1:
+         return render(request, 'pages/registration_thanks.html')
     except ObjectDoesNotExist:
         # Handle the case where the driver does not exist
         return redirect('go_home')
@@ -211,3 +227,47 @@ def customer_profile(request):
                 return redirect('customer_profile')
 
     return render(request, 'pages/profile/customer_profile.html')
+
+#Trucks
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/')
+# @user_passes_test(initely, login_url='/login')
+def driver_trucks(request):
+    try:
+        user_driver = Driver.objects.get(user=request.user.user_driver)
+        if user_driver.accepted != 1:
+         return render(request, 'pages/registration_thanks.html')
+    except ObjectDoesNotExist:
+        # Handle the case where the driver does not exist
+        return redirect('go_home')
+    current_driver_trucks = Truck.objects.filter(driver=request.user.user_driver)
+    other_driver_trucks = Truck.objects.exclude(driver=request.user.user_driver).exclude(truck_available=False).exclude(truck_accepted=False).exclude(driver__availability=False).exclude(driver__profile_picture_confirmed=False)
+    return render(request, 'pages/trucks/driver/driver_truck.html', {'current_driver_trucks': current_driver_trucks, 'other_driver_trucks': other_driver_trucks})
+
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/')
+@csrf_exempt
+def delete_truck(request):
+    if request.method == 'POST':
+        truck_id = request.POST.get('truck_id')
+        Truck.objects.filter(id=truck_id).delete()
+        return JsonResponse({'status':'success'})    
+
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/')
+def add_truck(request):
+    if request.method == 'POST':
+        form = TruckForm(request.POST, request.FILES)
+        if form.is_valid():
+            truck = form.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    else:
+        form = TruckForm()
+    return render(request, 'driver/driver_truck.html', {'form': form})
+@login_required(login_url = 'login')
+@user_passes_test(im_customer, login_url='/')
+# @user_passes_test(initely, login_url='/login')
+def customer_trucks(request):
+    return render(request, 'pages/trucks/customer/customer_truck.html')

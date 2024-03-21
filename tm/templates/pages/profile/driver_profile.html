@@ -3,7 +3,12 @@
 {% block title %} | Profile {% endblock %}
 {% block content %}
 {% load static %}
-<section id="home" class="welcome-hero">
+<section id="home" class="welcome-hero" 
+style="position: relative;
+background:url({% static "/img/mantap.gif" %})no-repeat;
+background-position: center;
+background-size: cover;
+z-index: 1;">
     {% comment %} <div class="welcome-hero-txt"> {% endcomment %}
     <br><br><br><br><br><br>
     <div class="container">

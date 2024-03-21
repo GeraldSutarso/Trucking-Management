@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% block title %} | Trucks{% endblock title %}
+{% block content %}
+{% load static %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+    $(".delete-button").click(function(e){
+        e.preventDefault();
+        var truckId = $(this).data('truck-id');
+        var confirmation = confirm("Are you sure?");
+        if (confirmation) {
+            $.ajax({
+                url: '{% url "delete_truck" %}',  // Update with your delete URL
+                type: 'POST',
+                data: {
+                    'truck_id': truckId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(){
+                    // Remove the truck from the list
+                    $("#truck-" + truckId).remove();
+                }
+            });
+        }
+    });
+});
+
+function previewImage(input, imgId, textId) {
+    var file = input.files[0];
+    var img = document.getElementById(imgId);
+    var text = document.getElementById(textId);
+
+    if (file) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            img.style.display = 'block';
+            text.textContent = '';
+        }
+
+        reader.readAsDataURL(file);
+    } else {
+        img.style.display = 'none';
+        text.textContent = 'No file chosen';
+    }
+}
+$(document).ready(function() {
+    $('#addTruckForm').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                // Close the modal
+                $('#addTruckModal').modal('hide');
+
+                // Create new truck element and append it to the list
+                var newTruck = `
+                <div id="truck-${data.truck.id}" class="row text-center row-centered">
+                    <hr class="horizontal_line">
+                    <div class="col-md-8 col-centered">
+                        <div class="single-service-icon">
+                            <img src="${data.truck.overall_view.url}" alt="Truck image" width="400" height="400">
+                        </div>
+                    </div>
+                    <div class="col-md-8 single-service-item" style="position: relative;">
+                        <button class="btn btn-danger delete-button pull-right" data-truck-id="${data.truck.id}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                          </svg></button>
+                        <h1 class="${data.truck.status}">${data.truck.status}</h1>
+                        <h2><a href='{% url "trucks" %}'>${data.truck.truck_model}<br><br>${data.truck.license_plate}</a></h2>
+                        <p>
+                            Capacity:<br>
+                            ${data.truck.capacity} Kg(s)
+                        </p>
+                    </div>
+                </div>
+                `;
+                $('.service-content').append(newTruck);
+            }
+        });
+    });
+});
+</script>
+<section id="home" class="welcome-hero" style="position: relative; background:url({% static 'img/mantap.gif' %})no-repeat; background-position: center; background-size: cover; z-index: 1;">
+
+    <!-- top-area Start -->
+    
+    <!-- top-area End -->
+
+    <div class="container">
+        <div class="welcome-hero-txt">
+            <h2></h2>
+            <div class="profilePic-wrapper">
+                {% if request.session.profile_picture is not None %}
+                <img class="profilePic" src="{{ request.session.profile_picture }}">
+                {% else %}
+                <img class="profilePic" src="{% static 'img/avatar/user.png' %}">
+                {% endif %}
+            </div>
+            <br><br>
+            <p>
+                Hey, {{ request.user.first_name }}, find your or other drivers' trucks here
+            </p>
+            <button class="welcome-btn" onclick="window.location.href='#other_driver_trucks'">See other's trucks</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="model-search-content">
+                    <div class="row">
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>select truck model</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="default">model</option><!-- /.option-->
+
+                                          <option value="optimus">optimus</option><!-- /.option-->
+
+                                          <option value="mack">mack</option><!-- /.option-->
+                                          <option value="hino">hino</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                            <div class="single-model-search">
+                                <h2>driver</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="a">a</option><!-- /.option-->
+
+                                          <option value="b">b</option><!-- /.option-->
+
+                                          <option value="c">c</option><!-- /.option-->
+                                          <option value="d">d</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                        </div>
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>select make</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="default">make</option><!-- /.option-->
+
+                                          <option value="toyota">toyota</option><!-- /.option-->
+
+                                          <option value="holden">holden</option><!-- /.option-->
+                                          <option value="maecedes-benz">maecedes-benz.</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                            <div class="single-model-search">
+                                <h2>truck condition</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="default">condition</option><!-- /.option-->
+
+                                          <option value="something">something</option><!-- /.option-->
+
+                                          <option value="something">something</option><!-- /.option-->
+                                          <option value="something">something</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                        </div>
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>select model</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="default">model</option><!-- /.option-->
+
+                                          <option value="kia-rio">kia-rio</option><!-- /.option-->
+
+                                          <option value="mitsubishi">mitsubishi</option><!-- /.option-->
+                                          <option value="ford">ford</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                            <div class="single-model-search">
+                                <h2>select price</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control">
+
+                                          <option value="default">price</option><!-- /.option-->
+
+                                          <option value="$0.00">$0.00</option><!-- /.option-->
+
+                                          <option value="$0.00">$0.00</option><!-- /.option-->
+                                          <option value="$0.00">$0.00</option><!-- /.option-->
+
+                                    </select><!-- /.select-->
+                                </div><!-- /.model-select-icon -->
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <div class="single-model-search text-center">
+                                <button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
+                                    search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<br><br><br><br><br>
+<section id="service" class="service">
+    <div class="container">
+        <div class="section-header">
+            <h2>Your Trucks</h2>
+        </div>
+        <div class="service-content"  style="position: relative;">
+            <button class="btn btn-success" data-toggle="modal" data-target="#addTruckModal" style="position: absolute; top: 0; left: 0;">+</button>
+
+            <!-- Add Truck Modal -->
+            <div id="addTruckModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add New Truck</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addTruckForm" action="{% url 'add_truck' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="truck_model">Truck Model</label>
+                                <input type="text" name="truck_model" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="license_plate">License Plate</label>
+                                <input type="text" name="license_plate" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="capacity">Capacity</label>
+                                <input type="number" name="capacity" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="front_view">Front View</label>
+                                <input type="file" name="front_view" class="form-control-file"  required onchange="previewImage(this, 'frontPreview', 'frontText')">
+                                <img id="frontPreview" style="display: none; width: 100px; height: 100px;">
+                                <p id="frontText"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="side_view">Side View</label>
+                                <input type="file" name="side_view" class="form-control-file" required onchange="previewImage(this, 'sidePreview', 'sideText')">
+                                <img id="sidePreview" style="display: none; width: 100px; height: 100px;">
+                                <p id="sideText"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="back_view">Back View</label>
+                                <input type="file" name="back_view" class="form-control-file" required onchange="previewImage(this, 'backPreview', 'backText')">
+                                <img id="backPreview" style="display: none; width: 100px; height: 100px;">
+                                <p id="backText"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="top_view">Top View</label>
+                                <input type="file" name="top_view" class="form-control-file" required onchange="previewImage(this, 'topPreview', 'topText')">
+                                <img id="topPreview" style="display: none; width: 100px; height: 100px;">
+                                <p id="topText"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="overall_view">Overall View</label>
+                                <input type="file" name="overall_view" class="form-control-file" required onchange="previewImage(this, 'overallPreview', 'overallText')">
+                                <img id="overallPreview" style="display: none; width: 100px; height: 100px;">
+                                <p id="overallText"></p>
+                            </div>
+                            
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Add Truck</button>
+                    </form>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            {% for truck in current_driver_trucks %}
+                <div id="truck-{{ truck.id }}" class="row text-center row-centered">
+                    <hr class="horizontal_line">
+                    <div class="col-md-8 col-centered">
+                        <div class="single-service-icon">
+                            <img src="{{ truck.overall_view.url }}" alt="Truck image" width="400" height="400">
+                        </div>
+                    </div>
+                    <div class="col-md-8 single-service-item" style="position: relative;">
+                        <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                          </svg></button>
+                        <h1 class="{% if truck.status == 'OK' %}text-success{% elif truck.status == 'WARNING' %}text-warning{% elif truck.status == 'DANGER' %}text-danger{% endif %}">{{ truck.status }}</h1>
+                        <h2><a href='{% url "trucks" %}'>{{ truck.truck_model }}<br><br>{{ truck.license_plate }}</a></h2>
+                        <p>
+                            Capacity:<br>
+                            {{ truck.capacity }} Kg(s)
+                        </p>
+                    </div>
+                </div>
+                
+            {% empty %}
+                <div class="row text-center align-items-center">
+                    <div class="col-md-12">
+                        <div class="single-service-item">
+                            <p>No trucks</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="horizontal_line">
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section id="other_driver_trucks" class="other-truck">
+    <div class="container">
+        <div class="section-header">
+            <h2>Other Drivers' Trucks</h2>
+        </div>
+        <div class="row">
+            <div class="owl-carousel testimonial-carousel">
+                {% for truck in other_driver_trucks %}
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="other-truck-box">
+                            <div class="testimonial-description">
+                                <div class="testimonial-info">
+                                    <div class="other-truck-img">
+                                        <img src="{{ truck.overall_view.url }}" alt="Truck image">
+                                    </div>
+                                </div>
+                                <div class="other-truck-comment">
+                                    <p>
+                                        <b>{{ truck.truck_model }}</b><br>
+                                        <b>Capacity:</b> <br>{{ truck.capacity }} Kg(s)<br>
+                                
+
+                                        <b>Driver:</b> <br>{{ truck.driver.user.first_name }}{{ truck.driver.user.last_name }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="other-truck-box">
+                            <div class="testimonial-description">
+                                <p>No trucks</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

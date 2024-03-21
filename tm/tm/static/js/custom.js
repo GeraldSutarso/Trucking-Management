@@ -56,6 +56,10 @@ $(document).ready(function(){
 	
 	// 3. owl carousel
 
+			$('.owl-carousel').owlCarousel({
+				nav: true,
+				navText: ["<", ">"]
+			});
 		// i.  new-trucks-carousel
 		
 			$("#new-trucks-carousel").owlCarousel({

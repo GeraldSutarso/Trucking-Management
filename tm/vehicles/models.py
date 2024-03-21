@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 from django.contrib import admin
 from accounts.models import *
 
@@ -17,6 +18,9 @@ def get_back_view_path(instance, filename):
 
 def get_top_view_path(instance, filename):
     return truck_image_directory_path(instance, 'topview', filename)
+
+def get_overall_view_path(instance, filename):
+    return truck_image_directory_path(instance, 'overall', filename)
 class Truck(models.Model):
     status_choices= (
         ("OK", "OK"),
@@ -25,7 +29,7 @@ class Truck(models.Model):
     )
     truck_model = models.CharField(max_length=255)
     license_plate = models.CharField(max_length=20)
-    driver = models.OneToOneField('accounts.Driver', on_delete=models.SET_NULL, null=True,related_name="truck_driver")
+    driver = models.ForeignKey('accounts.Driver', on_delete=models.SET_NULL, null=True,related_name="truck_driver")
     capacity = models.IntegerField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(choices=status_choices, max_length = 10)
@@ -34,9 +38,16 @@ class Truck(models.Model):
     side_view = models.ImageField(upload_to=get_side_view_path, blank=True, null=True)
     back_view = models.ImageField(upload_to=get_back_view_path, blank=True, null=True)
     top_view = models.ImageField(upload_to=get_top_view_path, blank=True, null=True)
+    overall_view=models.ImageField(upload_to=get_overall_view_path, blank=True, null=True)
+    truck_accepted = models.BooleanField(blank=True, default=False)
+    truck_available=models.BooleanField(blank=True, default=True)
     
     def __str__(self):
         return self.truck_model
+class TruckForm(forms.ModelForm):
+    class Meta:
+        model = Truck
+        fields = ['truck_model', 'license_plate', 'driver', 'capacity', 'location', 'status', 'last_maintained', 'front_view', 'side_view', 'back_view', 'top_view', 'overall_view', 'truck_accepted', 'truck_available']
     
 class Maintenance(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name="truck_maintenance")
