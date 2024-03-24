@@ -32,7 +32,7 @@ class Truck(models.Model):
     driver = models.ForeignKey('accounts.Driver', on_delete=models.SET_NULL, null=True,related_name="truck_driver")
     capacity = models.IntegerField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
-    status = models.CharField(choices=status_choices, max_length = 10)
+    status = models.CharField(choices=status_choices, max_length = 10, default="OK")
     last_maintained = models.DateField(blank = True, null = True)
     front_view = models.ImageField(upload_to=get_front_view_path, blank=True, null=True)
     side_view = models.ImageField(upload_to=get_side_view_path, blank=True, null=True)
@@ -40,7 +40,7 @@ class Truck(models.Model):
     top_view = models.ImageField(upload_to=get_top_view_path, blank=True, null=True)
     overall_view=models.ImageField(upload_to=get_overall_view_path, blank=True, null=True)
     truck_accepted = models.BooleanField(blank=True, default=False)
-    truck_available=models.BooleanField(blank=True, default=True)
+    truck_available=models.BooleanField(blank=True, default=False)
     
     def __str__(self):
         return self.truck_model

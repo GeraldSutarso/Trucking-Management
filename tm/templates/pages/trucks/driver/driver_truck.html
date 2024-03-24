@@ -48,46 +48,104 @@ function previewImage(input, imgId, textId) {
         text.textContent = 'No file chosen';
     }
 }
+
 $(document).ready(function() {
     $('#addTruckForm').on('submit', function(event) {
         event.preventDefault();
+        var formData = new FormData(this);
         $.ajax({
-            url: $(this).attr('action'),
-            type: $(this).attr('method'),
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
+            url: $(this).attr('action'),  // get the action attribute from the form
+            type: 'POST',
+            data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
             success: function(data) {
-                // Close the modal
-                $('#addTruckModal').modal('hide');
+                if (data.status === 'success') {
+                    alert('Truck added successfully');
 
-                // Create new truck element and append it to the list
-                var newTruck = `
-                <div id="truck-${data.truck.id}" class="row text-center row-centered">
-                    <hr class="horizontal_line">
-                    <div class="col-md-8 col-centered">
-                        <div class="single-service-icon">
-                            <img src="${data.truck.overall_view.url}" alt="Truck image" width="400" height="400">
+                    // Close the modal
+                    $('#addTruckModal').modal('hide');
+
+                    // Create new truck element and append it to the list
+                    var newTruck = `
+                    <div id="truck-${data.truck.id}" class="row text-center row-centered">
+                        <div class="col-md-8 col-centered">
+                            <div class="single-service-icon">
+                                <img src="${data.truck.overall_view_url}" alt="Truck image" width="400" height="400">
+                            </div>
+                        </div>
+                        <div class="col-md-8 single-service-item" style="position: relative;${data.truck.truck_available == 0 || data.truck.truck_accepted == 0 ? 'border: 2px solid red;' : ''}">
+                            <button class="btn btn-danger delete-button pull-right" data-truck-id="${data.truck.id}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                              </svg></button>
+                            <h1 class="${data.truck.status == 'OK' ? 'text-success' : data.truck.status == 'WARNING' ? 'text-warning' : 'text-danger'}">${data.truck.status}</h1>
+                            <h2><a href='/trucks'>${data.truck.truck_model}<br><br>${data.truck.license_plate}</a></h2>
+                            <p>
+                                Capacity:<br>
+                                ${data.truck.capacity} Kg(s)
+                            </p>
                         </div>
                     </div>
-                    <div class="col-md-8 single-service-item" style="position: relative;">
-                        <button class="btn btn-danger delete-button pull-right" data-truck-id="${data.truck.id}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                          </svg></button>
-                        <h1 class="${data.truck.status}">${data.truck.status}</h1>
-                        <h2><a href='{% url "trucks" %}'>${data.truck.truck_model}<br><br>${data.truck.license_plate}</a></h2>
-                        <p>
-                            Capacity:<br>
-                            ${data.truck.capacity} Kg(s)
-                        </p>
-                    </div>
-                </div>
-                `;
-                $('.service-content').append(newTruck);
+                    <hr class="horizontal_line">
+                    `;
+                    $('.service-content').append(newTruck);
+                } else {
+                    alert('Error: ' + JSON.stringify(data.errors));
+                }
             }
         });
     });
 });
+{% comment %} document.getElementById('addTruckForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formData = new FormData(this);
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Truck added successfully');
+
+            // Close the modal
+            $('#addTruckModal').modal('hide');
+
+            // Create new truck element and append it to the list
+            var newTruck = `
+            <div id="truck-${data.truck.id}" class="row text-center row-centered">
+                <div class="col-md-8 col-centered">
+                    <div class="single-service-icon">
+                        <img src="${data.truck.overall_view_url}" alt="Truck image" width="400" height="400">
+                    </div>
+                </div>
+                <div class="col-md-8 single-service-item" style="position: relative;${data.truck.truck_available == 0 || data.truck.truck_accepted == 0 ? 'border: 2px solid red;' : ''}">
+                    <button class="btn btn-danger delete-button pull-right" data-truck-id="${data.truck.id}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                      </svg></button>
+                    <h1 class="${data.truck.status == 'OK' ? 'text-success' : data.truck.status == 'WARNING' ? 'text-warning' : 'text-danger'}">${data.truck.status}</h1>
+                    <h2><a href='/trucks'>${data.truck.truck_model}<br><br>${data.truck.license_plate}</a></h2>
+                    <p>
+                        Capacity:<br>
+                        ${data.truck.capacity} Kg(s)
+                    </p>
+                </div>
+            </div>
+            <hr class="horizontal_line">
+                `;
+            $('.service-content').append(newTruck);
+        } else {
+            alert('Error: ' + JSON.stringify(data.errors));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}); {% endcomment %}
 </script>
 <section id="home" class="welcome-hero" style="position: relative; background:url({% static 'img/mantap.gif' %})no-repeat; background-position: center; background-size: cover; z-index: 1;">
 
@@ -234,9 +292,9 @@ $(document).ready(function() {
         <div class="section-header">
             <h2>Your Trucks</h2>
         </div>
-        <div class="service-content"  style="position: relative;">
-            <button class="btn btn-success" data-toggle="modal" data-target="#addTruckModal" style="position: absolute; top: 0; left: 0;">+</button>
-
+        <br><br><br>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addTruckModal" style="position: relative; top: 0; left: 0;">+</button>
+        <br><br><br>
             <!-- Add Truck Modal -->
             <div id="addTruckModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -292,6 +350,10 @@ $(document).ready(function() {
                                 <img id="overallPreview" style="display: none; width: 100px; height: 100px;">
                                 <p id="overallText"></p>
                             </div>
+                             <!-- Hidden field for status -->
+                            <input type="hidden" name="status" value="OK">
+                           <!-- Hidden field for driver. Assuming you have access to the current user's id in the template -->
+                            <input type="hidden" name="driver" value="{{ request.user.id }}">
                             
                     </div>
 
@@ -304,19 +366,20 @@ $(document).ready(function() {
 
             </div>
             </div>
+
+        <div class="service-content"  style="position: relative;  overflow-y: auto;  height: 500px; width: 100%; margin: auto;display: flex; flex-direction: column;">
             {% for truck in current_driver_trucks %}
                 <div id="truck-{{ truck.id }}" class="row text-center row-centered">
-                    <hr class="horizontal_line">
                     <div class="col-md-8 col-centered">
                         <div class="single-service-icon">
-                            <img src="{{ truck.overall_view.url }}" alt="Truck image" width="400" height="400">
+                            <img src="{{ truck.overall_view.url }}" alt="Truck image" max-width="400px" max-height="400px">
                         </div>
                     </div>
-                    <div class="col-md-8 single-service-item" style="position: relative;">
-                        <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <div class="col-md-8 single-service-item" style="position: relative;{% if truck.truck_available == 0 or truck.truck_accepted == 0 %}border: 2px solid red;{% endif %}">
+                        <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                           </svg></button>
-                        <h1 class="{% if truck.status == 'OK' %}text-success{% elif truck.status == 'WARNING' %}text-warning{% elif truck.status == 'DANGER' %}text-danger{% endif %}">{{ truck.status }}</h1>
+                        <h2><a class="{% if truck.status == 'OK' %}text-success{% elif truck.status == 'WARNING' %}text-warning{% elif truck.status == 'DANGER' %}text-danger{% endif %}"> Condition: {{ truck.status }} </a></h2>
                         <h2><a href='{% url "trucks" %}'>{{ truck.truck_model }}<br><br>{{ truck.license_plate }}</a></h2>
                         <p>
                             Capacity:<br>
@@ -324,11 +387,11 @@ $(document).ready(function() {
                         </p>
                     </div>
                 </div>
-                
+                <hr class="horizontal_line">
             {% empty %}
-                <div class="row text-center align-items-center">
-                    <div class="col-md-12">
-                        <div class="single-service-item">
+                <div class="row text-center row-centered">
+                    <div class="col-md-8 col-centered">
+                        <div class="single-service-item" style="position: relative; top: 0; right: 0;">
                             <p>No trucks</p>
                         </div>
                     </div>
@@ -345,6 +408,8 @@ $(document).ready(function() {
             <h2>Other Drivers' Trucks</h2>
         </div>
         <div class="row">
+            {% comment %} <button class="owl-prev">←</button>
+            <button class="owl-next">→</button> {% endcomment %}
             <div class="owl-carousel testimonial-carousel">
                 {% for truck in other_driver_trucks %}
                     <div class="col-sm-3 col-xs-12">

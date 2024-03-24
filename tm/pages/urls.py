@@ -31,7 +31,7 @@ urlpatterns = [
     path('trucks' , views.trucks, name ='trucks'),
     path('customer/trucks', views.customer_trucks, name= 'customer_trucks'),
     path('driver/trucks', views.driver_trucks, name='driver_trucks'),
-    path('/delete_truck/', views.delete_truck, name='delete_truck'),
+    path('delete_truck/', views.delete_truck, name='delete_truck'),
     path('add_truck/', views.add_truck, name='add_truck'),
 
     

@@ -56,10 +56,11 @@ $(document).ready(function(){
 	
 	// 3. owl carousel
 
-			$('.owl-carousel').owlCarousel({
-				nav: true,
-				navText: ["<", ">"]
-			});
+			// $('.owl-carousel').owlCarousel({
+			// 	nav: true,
+			// 	navText: ["<", ">"]
+			// });
+
 		// i.  new-trucks-carousel
 		
 			$("#new-trucks-carousel").owlCarousel({
@@ -84,7 +85,8 @@ $(document).ready(function(){
 			owl.owlCarousel({
 				items:3,
 				margin:0,
-				
+				nav: true,
+        		navText: ["<", ">"],
 				loop:true,
 				autoplay:true,
 				smartSpeed:1000,
@@ -92,7 +94,7 @@ $(document).ready(function(){
 				//nav:false,
 				//navText:["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
 				
-				dots:false,
+				dots:true,
 				autoplayHoverPause:false,
 			
 				responsiveClass:true,

@@ -241,7 +241,7 @@ def driver_trucks(request):
         # Handle the case where the driver does not exist
         return redirect('go_home')
     current_driver_trucks = Truck.objects.filter(driver=request.user.user_driver)
-    other_driver_trucks = Truck.objects.exclude(driver=request.user.user_driver).exclude(truck_available=False).exclude(truck_accepted=False).exclude(driver__availability=False).exclude(driver__profile_picture_confirmed=False)
+    other_driver_trucks = Truck.objects.exclude(driver=request.user.user_driver) #.exclude(truck_available=False).exclude(truck_accepted=False).exclude(driver__availability=False).exclude(driver__profile_picture_confirmed=False)
     return render(request, 'pages/trucks/driver/driver_truck.html', {'current_driver_trucks': current_driver_trucks, 'other_driver_trucks': other_driver_trucks})
 
 @login_required(login_url = 'login')
@@ -259,8 +259,26 @@ def add_truck(request):
     if request.method == 'POST':
         form = TruckForm(request.POST, request.FILES)
         if form.is_valid():
-            truck = form.save()
-            return JsonResponse({'status': 'success'})
+            if form.is_valid():
+                truck = form.save()
+
+                return JsonResponse({
+                    'status': 'success',
+                    'truck': {
+                        'id': truck.id,
+                        'overall_view_url': truck.overall_view.url,
+                        'front_view_url': truck.front_view.url,
+                        'side_view_url': truck.side_view.url,
+                        'back_view_url': truck.back_view.url,
+                        'top_view_url': truck.top_view.url,
+                        'truck_available': truck.truck_available,
+                        'truck_accepted': truck.truck_accepted,
+                        'status': truck.status,
+                        'truck_model': truck.truck_model,
+                        'license_plate': truck.license_plate,
+                        'capacity': truck.capacity,
+                    }
+                })
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
