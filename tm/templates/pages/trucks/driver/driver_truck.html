@@ -297,7 +297,7 @@ $(document).ready(function() {
         <br><br><br>
             <!-- Add Truck Modal -->
             <div id="addTruckModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+            <div class="modal-dialog centered">
 
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -367,7 +367,7 @@ $(document).ready(function() {
             </div>
             </div>
 
-        <div class="service-content"  style="position: relative;  overflow-y: auto;  height: 500px; width: 100%; margin: auto;display: flex; flex-direction: column;">
+        <div class="service-content"  style="padding-right: 15px; margin-right: -15px; position: relative;  overflow-y: auto; overflow-x: visible;  height: 500px; width: 100%; margin: auto;display: flex; flex-direction: column;">
             {% for truck in current_driver_trucks %}
                 <div id="truck-{{ truck.id }}" class="row text-center row-centered">
                     <div class="col-md-8 col-centered">
