@@ -6,6 +6,57 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
+{% comment %} $(document).ready(function() {
+    $('.edit-truck').on('click', function() {
+        var truckId = $(this).data('truck-id');
+
+        $.ajax({
+            url: '/edit_truck/',  // Replace with your server-side endpoint.
+            type: 'GET',
+            data: {
+                '{{ truck.id }}': truckId
+            },
+            success: function(data) {
+                // Populate the modal fields with the truck data.
+                $('#editTruckForm input[name="truck_model"]').val(data.truck_model);
+                $('#editTruckForm input[name="capacity"]').val(data.capacity);
+                $('#editTruckForm input[name="license_plate"]').val(data.license_plate);
+                $('#editTruckForm input[name="status"]').val(data.status);
+                $('#editTruckForm input[name="last_maintained"]').val(data.last_maintained);
+                $('#editTruckForm input[name="truck_available"]').val(data.truck_available);
+                $('#editTruckForm input[name="truck_accepted"]').val(data.truck_accepted);
+                $('#editTruckForm input[name="driver"]').val(data.driver);
+
+                // For the image fields, we need to update the src attribute of the img tag and the text of the p tag
+                $('#overallPreview').attr('src', data.overall_view.url);
+                $('#overallText').text(data.overall_view);
+
+                $('#frontPreview').attr('src', data.front_view.url);
+                $('#frontText').text(data.front_view);
+
+                $('#sidePreview').attr('src', data.side_view.url);
+                $('#sideText').text(data.side_view);
+
+                $('#backPreview').attr('src', data.back_view.url);
+                $('#backText').text(data.back_view);
+
+                $('#topPreview').attr('src', data.top_view.url);
+                $('#topText').text(data.top_view);
+
+                // For the radio buttons, we need to check the appropriate one based on the truck_available value
+                if(data.truck_available) {
+                    $('#editTruckForm input[name="truck_available"][value="True"]').prop('checked', true);
+                } else {
+                    $('#editTruckForm input[name="truck_available"][value="False"]').prop('checked', true);
+                }
+
+                // Show the modal.
+                $('#editTruckModal').modal('show');
+            }
+        });
+
+    });
+}); {% endcomment %}
 $(document).ready(function(){
     $(".delete-button").click(function(e){
         e.preventDefault();
@@ -367,7 +418,7 @@ $(document).ready(function() {
             </div>
             </div>
 
-        <div class="service-content"  style="padding-right: 15px; margin-right: -15px; position: relative;  overflow-y: auto; overflow-x: visible;  height: 500px; width: 100%; margin: auto;display: flex; flex-direction: column;">
+        <div class="service-content"  style="padding-right: 15px; margin-right: -15px; position: relative;  overflow-y: auto; box-shadow: 0 12px 30px 0px rgba(0,1,193,.2); overflow-x: visible;  height: 500px; width: 100%; margin: auto;display: flex; flex-direction: column;">
             {% for truck in current_driver_trucks %}
                 <div id="truck-{{ truck.id }}" class="row text-center row-centered">
                     <div class="col-md-8 col-centered">
@@ -375,7 +426,7 @@ $(document).ready(function() {
                             <img src="{{ truck.overall_view.url }}" alt="Truck image" max-width="400px" max-height="400px">
                         </div>
                     </div>
-                    <div class="col-md-8 single-service-item" style="position: relative;{% if truck.truck_available == 0 or truck.truck_accepted == 0 %}border: 2px solid red;{% endif %}">
+                    <div class="col-md-8 single-service-item edit-truck" onclick="window.location.href='{% url "edit_truck" truck.id %}'" style="position: relative;{% if truck.truck_available == 0 or truck.truck_accepted == 0 %}border: 2px solid red;{% endif %}">
                         <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                           </svg></button>
@@ -385,6 +436,8 @@ $(document).ready(function() {
                             Capacity:<br>
                             {{ truck.capacity }} Kg(s)
                         </p>
+
+                        
                     </div>
                 </div>
                 <hr class="horizontal_line">
@@ -445,4 +498,96 @@ $(document).ready(function() {
         </div>
     </div>
 </section>
+
 {% endblock content %}
+
+{% comment %} <div id="editTruckModal" class="modal fade" role="dialog">
+                            <div class="modal-dialog centered">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Edit Truck</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editTruckForm" action="{% url 'edit_truck' truck.id %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="overall_view">Overall View</label>
+                                                <input type="file" name="overall_view" class="form-control-file" required onchange="previewImage(this, 'overallPreview', 'overallText')">
+                                                <img id="overallPreview" style="display: none; width: 100px; height: 100px;" src="{{ truck.overall_view.url }}">
+                                                <p id="overallText">{{ truck.overall_view }}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="truck_model">Truck Model</label>
+                                                <input type="text" name="truck_model" class="form-control" value="{{ truck.truck_model }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="capacity">Capacity</label>
+                                                <input type="number" name="capacity" class="form-control" value="{{ truck.capacity }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="license_plate">License Plate</label>
+                                                <input type="text" name="license_plate" class="form-control" value="{{ truck.license_plate }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status">Status</label>
+                                                <input type="text" name="status" class="form-control" value="{{ truck.status }}" required readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="last_maintained">Last Maintained</label>
+                                                <input type="date" name="last_maintained" class="form-control" value="{{ truck.last_maintained }}" required readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="front_view">Front View</label>
+                                                <input type="file" name="front_view" class="form-control-file" required onchange="previewImage(this, 'frontPreview', 'frontText')">
+                                                <img id="frontPreview" style="display: none; width: 100px; height: 100px;" src="{{ truck.front_view.url }}">
+                                                <p id="frontText">{{ truck.front_view }}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="side_view">Side View</label>
+                                                <input type="file" name="side_view" class="form-control-file" required onchange="previewImage(this, 'sidePreview', 'sideText')">
+                                                <img id="sidePreview" style="display: none; width: 100px; height: 100px;" src="{{ truck.side_view.url }}">
+                                                <p id="sideText">{{ truck.side_view }}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="back_view">Back View</label>
+                                                <input type="file" name="back_view" class="form-control-file" required onchange="previewImage(this, 'backPreview', 'backText')">
+                                                <img id="backPreview" style="display: none; width: 100px; height: 100px;" src="{{ truck.back_view.url }}">
+                                                <p id="backText">{{ truck.back_view }}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="top_view">Top View</label>
+                                                <input type="file" name="top_view" class="form-control-file" required onchange="previewImage(this, 'topPreview', 'topText')">
+                                                <img id="topPreview" style="display: none; width: 100px; height: 100px;" src="{{ truck.top_view.url }}">
+                                                <p id="topText">{{ truck.top_view }}</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="truck_available" class="col-form-label">Truck Available</label>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-success">
+                                                        <input type="radio" name="truck_available" id="yes" autocomplete="off" value="True" onchange="document.getElementById('truck_available_display').value = this.value" {% if truck.truck_available %}checked{% endif %}>True
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="truck_available" id="no" autocomplete="off" value="False" onchange="document.getElementById('truck_available_display').value = this.value" {% if not truck.truck_available %}checked{% endif %}>False
+                                                    </label>
+                                                </div>
+                                                <input type="text" id="truck_available_display" class="form-control" style="margin-top: 10px;" value="{{ truck.truck_available }}" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="truck_accepted">Truck Accepted</label>
+                                                <input type="text" name="truck_accepted" class="form-control" value="{{ truck.truck_accepted }}" required readonly>
+                                            </div>
+                                           <!-- Hidden field for driver. Assuming you have access to the current user's id in the template -->
+                                           <input type="hidden" name="driver" value="{{ truck.driver.id }}">
+                                            
+                                            <!-- Make sure to pre-fill these fields with the current truck data -->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Save Changes</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> {% endcomment %}

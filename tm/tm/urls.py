@@ -30,6 +30,7 @@ urlpatterns = [
     # path('accounts/', include("django.contrib.auth.urls")),
     path('accounts/', include('accounts.urls')),
     path('',include('pages.urls')),
+    path('',include('booking.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
 ]
