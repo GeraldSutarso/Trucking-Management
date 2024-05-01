@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from accounts.models import User, Driver, Customer
 from vehicles.models import Truck, TruckForm, Maintenance
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.http import require_GET
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -233,12 +234,12 @@ def customer_profile(request):
 @user_passes_test(im_driver, login_url='/')
 # @user_passes_test(initely, login_url='/login')
 def driver_trucks(request):
-    try:
+    try: #Check whether the driver is already accepted or not
         user_driver = Driver.objects.get(user=request.user.user_driver)
-        if user_driver.accepted != 1:
+        if user_driver.accepted != 1: #If not accepted, redirect to the registration thanks page
          return render(request, 'pages/registration_thanks.html')
     except ObjectDoesNotExist:
-        # Handle the case where the driver does not exist
+        #Now, if the driver not NOT Accepted, redirect to the home page
         return redirect('go_home')
     current_driver_trucks = Truck.objects.filter(driver=request.user.user_driver)
     other_driver_trucks = Truck.objects.exclude(driver=request.user.user_driver) #.exclude(truck_available=False).exclude(truck_accepted=False).exclude(driver__availability=False).exclude(driver__profile_picture_confirmed=False)
@@ -285,8 +286,6 @@ def add_truck(request):
         form = TruckForm()
     return render(request, 'driver/driver_truck.html', {'form': form})
 @login_required(login_url = 'login')
-<<<<<<< Updated upstream
-=======
 @user_passes_test(im_driver, login_url='/')
 def save_truck(request, truck_id):
     try:
@@ -304,6 +303,17 @@ def save_truck(request, truck_id):
     if request.method == 'POST':
         form = TruckForm(request.POST, request.FILES)
         if form.is_valid():
+            truck = form.save(commit=False)
+            truck.overall_view = request.FILES['overall_view']
+            truck.front_view = request.FILES['front_view']
+            truck.side_view = request.FILES['side_view']
+            truck.back_view = request.FILES['back_view']
+            truck.top_view = request.FILES['top_view']
+            truck.model = request.POST['truck_model']
+            truck.license_plate = request.POST['license_plate']
+            truck.capacity = request.POST['capacity']
+            # truck.availab
+            truck.save()
             if form.is_valid():
                 truck = form.save()
 
@@ -380,7 +390,6 @@ def edit_truck(request, truck_id):
     
 
 @login_required(login_url = 'login')
->>>>>>> Stashed changes
 @user_passes_test(im_customer, login_url='/')
 # @user_passes_test(initely, login_url='/login')
 def customer_trucks(request):
