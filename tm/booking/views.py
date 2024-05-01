@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from accounts.models import User, Driver, Customer
 from vehicles.models import Truck, TruckForm, Maintenance
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.http import require_GET
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -24,4 +25,5 @@ def im_driver(user):
 @user_passes_test(im_customer, login_url='/')
 def customer_booking(request):
     
-        return render(request,'booking/booking_customer.html')
+    return render(request,'booking/booking_customer.html')
+    

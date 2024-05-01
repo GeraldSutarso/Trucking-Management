@@ -33,6 +33,9 @@ urlpatterns = [
     path('driver/trucks', views.driver_trucks, name='driver_trucks'),
     path('delete_truck/', views.delete_truck, name='delete_truck'),
     path('add_truck/', views.add_truck, name='add_truck'),
+    path('edit_truck/<int:truck_id>/', views.edit_truck, name='edit_truck'),
+    path('save_truck/', views.save_truck, name='save_truck'),
+    
 
     
 ]
