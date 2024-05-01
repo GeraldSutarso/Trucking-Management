@@ -285,6 +285,102 @@ def add_truck(request):
         form = TruckForm()
     return render(request, 'driver/driver_truck.html', {'form': form})
 @login_required(login_url = 'login')
+<<<<<<< Updated upstream
+=======
+@user_passes_test(im_driver, login_url='/')
+def save_truck(request, truck_id):
+    try:
+        driver = Driver.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        # Handle the case where the driver does not exist
+        return redirect('go_home')
+    
+    request.session['editTruckId'] = truck_id
+    truck = Truck.objects.get(id=truck_id)
+    if truck.driver_id != driver.user_id:
+        return redirect('driver_trucks')
+    
+    
+    if request.method == 'POST':
+        form = TruckForm(request.POST, request.FILES)
+        if form.is_valid():
+            if form.is_valid():
+                truck = form.save()
+
+                return JsonResponse({
+                    'status': 'success',
+                    'truck': {
+                        'id': truck.id,
+                        'overall_view_url': truck.overall_view.url,
+                        'front_view_url': truck.front_view.url,
+                        'side_view_url': truck.side_view.url,
+                        'back_view_url': truck.back_view.url,
+                        'top_view_url': truck.top_view.url,
+                        'truck_available': truck.truck_available,
+                        'truck_accepted': truck.truck_accepted,
+                        'status': truck.status,
+                        'truck_model': truck.truck_model,
+                        'license_plate': truck.license_plate,
+                        'capacity': truck.capacity,
+                    }
+                })
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    else:
+        form = TruckForm()
+    return redirect('edit_truck')
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/')
+@require_GET
+def edit_truck(request, truck_id):
+    try:
+        driver = Driver.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        # Handle the case where the driver does not exist
+        return redirect('go_home')
+    
+    request.session['editTruckId'] = truck_id
+    truck = Truck.objects.get(id=truck_id)
+    if truck.driver_id != driver.user_id:
+        return redirect('driver_trucks')
+    
+    request.session['truck_model'] = truck.truck_model
+    request.session['license_plate'] = truck.license_plate
+    request.session['driver'] = truck.driver.username() if truck.driver else None
+    request.session['capacity'] = truck.capacity
+    request.session['location'] = truck.location
+    request.session['status'] = truck.status
+    request.session['last_maintained'] = truck.last_maintained.isoformat() if truck.last_maintained else None
+    request.session['front_view'] = truck.front_view.url if truck.front_view else None
+    request.session['side_view'] = truck.side_view.url if truck.side_view else None
+    request.session['back_view'] = truck.back_view.url if truck.back_view else None
+    request.session['top_view'] = truck.top_view.url if truck.top_view else None
+    request.session['overall_view'] = truck.overall_view.url if truck.overall_view else None
+    request.session['truck_accepted'] = truck.truck_accepted
+    request.session['truck_available'] = truck.truck_available
+    # truck_id = request.GET.get('id')
+    # truck = get_object_or_404(Truck, id=truck_id)
+    # data = {
+    #         'truck_model': truck.truck_model,
+    #         'capacity': truck.capacity,
+    #         'license_plate': truck.license_plate,
+    #         'status': truck.status,
+    #         'last_maintained': truck.last_maintained.isoformat(),
+    #         'truck_available': truck.truck_available,
+    #         'truck_accepted': truck.truck_accepted,
+    #         'driver': truck.driver.id,
+    #         'overall_view': truck.overall_view.url,
+    #         'front_view': truck.front_view.url,
+    #         'side_view': truck.side_view.url,
+    #         'back_view': truck.back_view.url,
+    #         'top_view': truck.top_view.url,
+    #     }
+    # return JsonResponse(data)
+    return render(request, 'pages/trucks/driver/edit_truck.html' )
+    
+
+@login_required(login_url = 'login')
+>>>>>>> Stashed changes
 @user_passes_test(im_customer, login_url='/')
 # @user_passes_test(initely, login_url='/login')
 def customer_trucks(request):
