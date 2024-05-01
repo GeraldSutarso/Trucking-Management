@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'jazzmin',
     'accounts',
     'vehicles',
+    'booking',
+    'payment',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

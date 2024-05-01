@@ -1,0 +1,150 @@
+{% extends 'base.html' %} {% block title %} | Truck Booking {% endblock %} {% block content %} {% load static %}
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                  <h3>Truck Booking</h3>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %} {% for message in messages %}
+                    <div class="text-danger">{{ message }}</div>
+                    {% endfor %} {% endif %}
+                    <form action="{% url 'customer_booking' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="col-md-12">
+                        <div class="form-group form-box">
+                          <label for="customer_email" class="col-form-label">Email</label>
+                          <input type="text" name="customer_email" class="form-control" placeholder="Enter customer email" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="customer_name" class="col-form-label">Nama Pemesan</label>
+                          <input type="text" name="customer_name" class="form-control" placeholder="Enter customer name" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="customer_number" class="col-form-label">Nomor kontak</label>
+                          <input type="text" name="customer_number" class="form-control" placeholder="Enter customer number" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="lokasi_penjemputan" class="col-form-label">Lokasi penjemputan</label>
+                          <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="form-control" placeholder="Tuliskan Lokasi Penjemputan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="pickup_location" class="col-form-label">Pickup Location</label>
+                          <div id="pickup-map" style="height: 300px"></div>
+                          <input type="hidden" id="pickup_lat" name="pickup_lat" />
+                          <input type="hidden" id="pickup_lng" name="pickup_lng" />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="tujuan" class="col-form-label">Tujuan</label>
+                          <input type="text" name="tujuan" id="tujuan" class="form-control" placeholder="Tuliskan Lokasi Tujuan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="destination" class="col-form-label">Destination</label>
+                          <div id="destination-map" style="height: 300px"></div>
+                          <input type="hidden" id="destination_lat" name="destination_lat" />
+                          <input type="hidden" id="destination_lng" name="destination_lng" />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="date_time" class="col-form-label">Date & Time</label>
+                          <input type="datetime-local" name="date_time" class="form-control" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="truck_type" class="col-form-label">Truck Type</label>
+                          <select name="truck_type" class="form-control" required>
+                            <option value="small">Small Truck</option>
+                            <option value="medium">Medium Truck</option>
+                            <option value="large">Large Truck</option>
+                          </select>
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="Muatan" class="col-form-label">Muatan</label>
+                          <input type="text" name="Muatan" class="form-control" placeholder="Tuliskan Muatan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="berat_muatan" class="col-form-label">berat muatan</label>
+                          <input type="text" name="berat_muatan" class="form-control" placeholder="Tuliskan Berat Muatan " required />
+                        </div>
+                        <div class="form-group mb-0 text-center">
+                          <button type="submit" class="btn btn-success custom-btn">Submit Booking</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initMap() {
+    // Map options
+    var mapOptions = {
+      center: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
+      zoom: 12,
+      mapTypeControl: false, // Remove map type control
+      streetViewControl: false, // Remove street view control
+    };
+
+    // Create map
+    var pickupMap = new google.maps.Map(document.getElementById('pickup-map'), mapOptions);
+    var destinationMap = new google.maps.Map(document.getElementById('destination-map'), mapOptions);
+
+    // Create marker with custom icon
+    var pickupMarker = new google.maps.Marker({
+      map: pickupMap,
+      draggable: true,
+      position: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
+      icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Custom marker icon
+    });
+    var destinationMarker = new google.maps.Marker({
+      map: destinationMap,
+      draggable: true,
+      position: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
+      icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Custom marker icon
+    });
+
+    // Function to update marker position and input field value based on address input
+    function geocodeAddress(address, map, marker, latInput, lngInput) {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: address }, function (results, status) {
+        if (status === 'OK') {
+          map.setCenter(results[0].geometry.location);
+          marker.setPosition(results[0].geometry.location);
+          latInput.value = results[0].geometry.location.lat();
+          lngInput.value = results[0].geometry.location.lng();
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }
+
+    // Update pickup location marker and input field when address input changes
+    document.getElementById('lokasi_penjemputan').addEventListener('change', function () {
+      var address = document.getElementById('lokasi_penjemputan').value;
+      geocodeAddress(address, pickupMap, pickupMarker, document.getElementById('pickup_lat'), document.getElementById('pickup_lng'));
+    });
+
+    // Update destination marker and input field when address input changes
+    document.getElementById('tujuan').addEventListener('change', function () {
+      var address = document.getElementById('tujuan').value;
+      geocodeAddress(address, destinationMap, destinationMarker, document.getElementById('destination_lat'), document.getElementById('destination_lng'));
+    });
+  }
+</script>
+
+<!-- Load Google Maps API with Indonesian settings -->
+<script src="https://maps.googleapis.com/maps/api/js?language=id-ID&region=id&callback=initMap" async defer></script>
+
+{% endblock %}
