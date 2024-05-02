@@ -312,32 +312,9 @@ def save_truck(request, truck_id):
             truck.model = request.POST['truck_model']
             truck.license_plate = request.POST['license_plate']
             truck.capacity = request.POST['capacity']
-            # truck.availab
+            truck.truck_available = request.POST['truck_available']
             truck.save()
-            if form.is_valid():
-                truck = form.save()
-
-                return JsonResponse({
-                    'status': 'success',
-                    'truck': {
-                        'id': truck.id,
-                        'overall_view_url': truck.overall_view.url,
-                        'front_view_url': truck.front_view.url,
-                        'side_view_url': truck.side_view.url,
-                        'back_view_url': truck.back_view.url,
-                        'top_view_url': truck.top_view.url,
-                        'truck_available': truck.truck_available,
-                        'truck_accepted': truck.truck_accepted,
-                        'status': truck.status,
-                        'truck_model': truck.truck_model,
-                        'license_plate': truck.license_plate,
-                        'capacity': truck.capacity,
-                    }
-                })
-        else:
-            return JsonResponse({'status': 'error', 'errors': form.errors})
-    else:
-        form = TruckForm()
+            
     return redirect('edit_truck')
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
