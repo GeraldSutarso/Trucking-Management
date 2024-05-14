@@ -427,11 +427,11 @@ $(document).ready(function() {
                         </div>
                     </div>
                     <div class="col-md-8 single-service-item edit-truck" onclick="window.location.href='{% url "edit_truck" truck.id %}'" style="position: relative;{% if truck.truck_available == 0 or truck.truck_accepted == 0 %}border: 2px solid red;{% endif %}">
-                        <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <button class="btn btn-danger delete-button pull-right" data-truck-id="{{ truck.id }}" style="position: absolute; top: 0; right: 0;" onclick="event.stopPropagation();"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                           </svg></button>
                         <h2><a class="{% if truck.status == 'OK' %}text-success{% elif truck.status == 'WARNING' %}text-warning{% elif truck.status == 'DANGER' %}text-danger{% endif %}"> Condition: {{ truck.status }} </a></h2>
-                        <h2><a href='{% url "trucks" %}'>{{ truck.truck_model }}<br><br>{{ truck.license_plate }}</a></h2>
+                        <h2>{{ truck.truck_model }}<br><br>{{ truck.license_plate }}</h2>
                         <p>
                             Capacity:<br>
                             {{ truck.capacity }} Kg(s)
@@ -441,7 +441,7 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <hr class="horizontal_line">
-            {% empty %}
+            {% comment %} {% empty %}
                 <div class="row text-center row-centered">
                     <div class="col-md-8 col-centered">
                         <div class="single-service-item" style="position: relative; top: 0; right: 0;">
@@ -449,7 +449,7 @@ $(document).ready(function() {
                         </div>
                     </div>
                 </div>
-                <hr class="horizontal_line">
+                <hr class="horizontal_line"> {% endcomment %}
             {% endfor %}
         </div>
     </div>

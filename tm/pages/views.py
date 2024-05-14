@@ -117,7 +117,6 @@ def customer_home(request):
 #profile
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
-# @user_passes_test(initely, login_url='/login')
 def driver_profile(request):
     try:
         driver = Driver.objects.get(user=request.user)
@@ -287,35 +286,37 @@ def add_truck(request):
     return render(request, 'driver/driver_truck.html', {'form': form})
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
-def save_truck(request, truck_id):
+def save_truck(request):
     try:
         driver = Driver.objects.get(user=request.user)
     except ObjectDoesNotExist:
         # Handle the case where the driver does not exist
         return redirect('go_home')
     
-    request.session['editTruckId'] = truck_id
+    truck_id = request.session['truck_id']
     truck = Truck.objects.get(id=truck_id)
     if truck.driver_id != driver.user_id:
         return redirect('driver_trucks')
     
     
     if request.method == 'POST':
-        form = TruckForm(request.POST, request.FILES)
-        if form.is_valid():
-            truck = form.save(commit=False)
+        if 'overall_view' in request.FILES:
             truck.overall_view = request.FILES['overall_view']
+        if 'front_view' in request.FILES:
             truck.front_view = request.FILES['front_view']
+        if 'side_view' in request.FILES:
             truck.side_view = request.FILES['side_view']
+        if 'back_view' in request.FILES:
             truck.back_view = request.FILES['back_view']
+        if 'top_view' in request.FILES:
             truck.top_view = request.FILES['top_view']
-            truck.model = request.POST['truck_model']
-            truck.license_plate = request.POST['license_plate']
-            truck.capacity = request.POST['capacity']
-            truck.truck_available = request.POST['truck_available']
-            truck.save()
+        truck.model = request.POST['truck_model']
+        truck.license_plate = request.POST['license_plate']
+        truck.capacity = request.POST['capacity']
+        truck.truck_available = request.POST['truck_available']
+        truck.save()
             
-    return redirect('edit_truck')
+    return redirect('edit_truck', truck_id)
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
 @require_GET
@@ -326,7 +327,7 @@ def edit_truck(request, truck_id):
         # Handle the case where the driver does not exist
         return redirect('go_home')
     
-    request.session['editTruckId'] = truck_id
+    request.session['truck_id'] = truck_id
     truck = Truck.objects.get(id=truck_id)
     if truck.driver_id != driver.user_id:
         return redirect('driver_trucks')
