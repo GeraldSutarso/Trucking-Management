@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% block title %} | Truck Booking {% endblock %} {% block content %} {% load static %}
+
 <section id="home" class="welcome-hero">
   <div class="container" style="padding-top: 50px; padding-bottom: 50px">
     <div class="container-fluid">
@@ -14,54 +15,47 @@
                 <div class="card-body" style="margin: 15px">
                   <div class="row">
                     {% if messages %} {% for message in messages %}
-                    <div class="text-danger">{{ message }}</div>
+                    <div class="alert alert-danger">{{ message }}</div>
                     {% endfor %} {% endif %}
                     <form action="{% url 'customer_booking' %}" method="POST">
                       {% csrf_token %}
                       <div class="col-md-12">
                         <div class="form-group form-box">
-                          <label for="customer_email" class="col-form-label">Email</label>
-                          <input type="text" name="customer_email" class="form-control" placeholder="Enter customer email" required />
+                          <label for="email" class="col-form-label">Email</label>
+                          <input type="email" name="email" class="form-control" placeholder="What is your email?" value="{{ request.user.email }}" required disabled>
+                          <i class="flaticon-mail"></i>
                         </div>
                         <div class="form-group form-box">
                           <label for="customer_name" class="col-form-label">Nama Pemesan</label>
-                          <input type="text" name="customer_name" class="form-control" placeholder="Enter customer name" required />
+                          <input type="text" name="customer_name" class="form-control" placeholder="Enter customer name" value="{{ request.user.first_name }} {{ request.user.last_name }}" required disabled>
                         </div>
                         <div class="form-group form-box">
-                          <label for="customer_number" class="col-form-label">Nomor kontak</label>
-                          <input type="text" name="customer_number" class="form-control" placeholder="Enter customer number" required />
+                          <label for="phone_number" class="col-form-label">Nomor Kontak</label>
+                          <input type="tel" name="phone_number" class="form-control" placeholder="Enter customer number" value="{{ request.user.phone_number }}" required disabled>
                         </div>
                         <div class="form-group form-box">
-                          <label for="lokasi_penjemputan" class="col-form-label">Lokasi penjemputan</label>
-                          <input type="text" name="lokasi_penjemputan" id="lokasi_penjemputan" class="form-control" placeholder="Tuliskan Lokasi Penjemputan" required />
+                          <label for="pickup" class="col-form-label">Pick-up Location</label>
+                          <input type="text" name="pickup" id="pickup" class="form-control" placeholder="Pick-up Location" required />
                         </div>
                         <div class="form-group form-box">
-                          <label for="tujuan" class="col-form-label">Tujuan</label>
-                          <input type="text" name="tujuan" id="tujuan" class="form-control" placeholder="Tuliskan Lokasi Tujuan" required />
+                          <label for="destination" class="col-form-label">Destination</label>
+                          <input type="text" name="destination" id="destination" class="form-control" placeholder="Tuliskan lokasi tujuan" required />
                         </div>
                         <div class="form-group form-box">
-                          <label for="jarak" class="col-form-label">Jarak</label>
-                          <input type="text" name="jarak" id="tujujarakan" class="form-control" placeholder="Tuliskan Jarak antara penjemputan dan tujuan" required />
+                          <label for="distance" class="col-form-label">Distance (Km)</label>
+                          <input type="number" name="distance" id="distance" class="form-control" placeholder="Tuliskan jarak antara penjemputan dan tujuan" required />
                         </div>
                         <div class="form-group form-box">
-                          <label for="date_time" class="col-form-label">Date & Time</label>
-                          <input type="datetime-local" name="date_time" class="form-control" required />
+                          <label for="date" class="col-form-label">Delivery Date</label>
+                          <input type="date" name="date" class="form-control" required />
                         </div>
                         <div class="form-group form-box">
-                          <label for="truck_type" class="col-form-label">Truck Type</label>
-                          <select name="truck_type" class="form-control" required>
-                            <option value="small">Small Truck</option>
-                            <option value="medium">Medium Truck</option>
-                            <option value="large">Large Truck</option>
-                          </select>
+                          <label for="details" class="col-form-label">Details</label>
+                          <input type="text" name="details" class="form-control" placeholder="Write the details of the booking (load, information, needs, time, etc.)" required />
                         </div>
                         <div class="form-group form-box">
-                          <label for="Muatan" class="col-form-label">Muatan</label>
-                          <input type="text" name="Muatan" class="form-control" placeholder="Tuliskan Muatan" required />
-                        </div>
-                        <div class="form-group form-box">
-                          <label for="berat_muatan" class="col-form-label">berat muatan</label>
-                          <input type="text" name="berat_muatan" class="form-control" placeholder="Tuliskan Berat Muatan " required />
+                          <label for="weight" class="col-form-label">Load Weight (Tons)</label>
+                          <input type="number" name="weight" class="form-control" placeholder="Tuliskan berat muatan" required />
                         </div>
                         <div class="form-group mb-0 text-center">
                           <button type="submit" class="btn btn-success custom-btn">Submit Booking</button>
@@ -78,65 +72,5 @@
     </div>
   </div>
 </section>
-
-<script>
-  function initMap() {
-    // Map options
-    var mapOptions = {
-      center: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
-      zoom: 12,
-      mapTypeControl: false, // Remove map type control
-      streetViewControl: false, // Remove street view control
-    };
-
-    // Create map
-    var pickupMap = new google.maps.Map(document.getElementById('pickup-map'), mapOptions);
-    var destinationMap = new google.maps.Map(document.getElementById('destination-map'), mapOptions);
-
-    // Create marker with custom icon
-    var pickupMarker = new google.maps.Marker({
-      map: pickupMap,
-      draggable: true,
-      position: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
-      icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // Custom marker icon
-    });
-    var destinationMarker = new google.maps.Marker({
-      map: destinationMap,
-      draggable: true,
-      position: { lat: -6.2088, lng: 106.8456 }, // Jakarta coordinates
-      icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Custom marker icon
-    });
-
-    // Function to update marker position and input field value based on address input
-    function geocodeAddress(address, map, marker, latInput, lngInput) {
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: address }, function (results, status) {
-        if (status === 'OK') {
-          map.setCenter(results[0].geometry.location);
-          marker.setPosition(results[0].geometry.location);
-          latInput.value = results[0].geometry.location.lat();
-          lngInput.value = results[0].geometry.location.lng();
-        } else {
-          alert('Geocode was not successful for the following reason: ' + status);
-        }
-      });
-    }
-
-    // Update pickup location marker and input field when address input changes
-    document.getElementById('lokasi_penjemputan').addEventListener('change', function () {
-      var address = document.getElementById('lokasi_penjemputan').value;
-      geocodeAddress(address, pickupMap, pickupMarker, document.getElementById('pickup_lat'), document.getElementById('pickup_lng'));
-    });
-
-    // Update destination marker and input field when address input changes
-    document.getElementById('tujuan').addEventListener('change', function () {
-      var address = document.getElementById('tujuan').value;
-      geocodeAddress(address, destinationMap, destinationMarker, document.getElementById('destination_lat'), document.getElementById('destination_lng'));
-    });
-  }
-</script>
-
-<!-- Load Google Maps API with Indonesian settings -->
-<script src="https://maps.googleapis.com/maps/api/js?language=id-ID&region=id&callback=initMap" async defer></script>
 
 {% endblock %}
