@@ -2,9 +2,9 @@ from django.contrib import admin
 from vehicles.models import *
 
 class TruckAdmin(admin.ModelAdmin):
-    search_fields = ("truck_model", "driver","status")
-    list_display = ("truck_model", "driver","status")
-    list_filter = ("status",)
+    search_fields = ("truck_model", "driver","status", "truck_available", "truck_accepted")
+    list_display = ("truck_model", "driver","status" , "truck_available", "truck_accepted")
+    list_filter = ("status", "truck_available", "truck_accepted")
     
     def get_driver_first_name(self, obj):
         return obj.driver.user.first_name
