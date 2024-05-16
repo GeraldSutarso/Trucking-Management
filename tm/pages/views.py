@@ -378,3 +378,19 @@ def customer_trucks(request):
         return redirect('go_home')
     trucks = Truck.objects.filter(truck_available=1)
     return render(request, 'pages/trucks/customer/customer_truck.html', {'trucks': trucks})
+
+@login_required(login_url = 'login')
+@user_passes_test(im_customer, login_url='/')
+# @user_passes_test(initely, login_url='/login')
+def booking(request, truck_id):
+    try: #Check whether the driver is already accepted or not
+        user = Customer.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        #Now, if the driver not NOT Accepted, redirect to the home page
+        return redirect('go_home')
+
+    truck = Truck.objects.get(id=truck_id)
+
+    
+    return render(request, 'booking/booking_customer.html', {'truck': truck})
+

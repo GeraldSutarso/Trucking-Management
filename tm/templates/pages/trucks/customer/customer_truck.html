@@ -1,4 +1,7 @@
-{% extends 'base.html' %} {% block title %} | Customer Home {% endblock %} {% block content %} {% load static %}
+{% extends 'base.html' %}
+{% block title %} | Customer Home {% endblock %}
+{% block content %}
+{% load static %}
 
 <section id="home" class="welcome-hero" style="position: relative; background: url({% static 'img/mantap.gif' %}) no-repeat; background-position: center; background-size: cover; z-index: 1">
   <!-- top-area Start -->
@@ -7,9 +10,9 @@
 
   <div class="container">
     <div class="welcome-hero-txt">
-      <h2></h2>
+      <h2> select your truck for booking</h2>
       <br /><br />
-      <p>Hey, {{ request.user.first_name }}, select your trucks here</p>
+      <p></p>
       <button class="welcome-btn" onclick="window.location.href='#trucks'">See trucks</button>
     </div>
   </div>
@@ -23,288 +26,141 @@
   </div>
 </section>
 
-<section id="trucks" class="other-truck">
-  <div class="container">
-    <div class="section-header">
-      <h2>Other Drivers' Trucks</h2>
-    </div>
-    <div class="row">
-      {% comment %} <button class="owl-prev">←</button> <button class="owl-next">→</button> {% endcomment %}
-      <div class="owl-carousel testimonial-carousel">
-        {% for truck in trucks %}
-        <div class="col-sm-3 col-xs-12">
-          <div class="other-truck-box">
-            <div class="testimonial-description">
-              <div class="testimonial-info">
-                <div class="other-truck-img">
-                  <img src="{{ truck.overall_view.url }}" alt="Truck image" />
-                </div>
-              </div>
-              <div class="other-truck-comment">
-                <p>
-                  <b>{{ truck.truck_model }}</b><br />
-                  <b>Capacity:</b> <br />{{ truck.capacity }} ton(s)<br />
-                  <b>Driver:</b> <br />{{ truck.driver.user.first_name }}{{ truck.driver.user.last_name }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% empty %}
-        <div class="col-sm-3 col-xs-12">
-          <div class="other-truck-box">
-            <div class="testimonial-description">
-              <p>No trucks</p>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</section>
 
-{% comment %} <!--featured-trucks start -->
 <section id="featured-trucks" class="featured-trucks">
-  <div class="container">
+  <div id="trucks" class="container">
     <div class="section-header">
-      <p>checkout <span>the</span> featured trucks</p>
-      <h2>featured trucks</h2>
-    </div><!--/.section-header-->
-    <div class="featured-trucks-content">
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc1.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">BMW 6-series gran coupe</a></h2>
-              <h3>$89,395</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc2.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">chevrolet camaro <span>wmv20</span></a></h2>
-              <h3>$66,575</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc3.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">lamborghini <span>v520</span></a></h2>
-              <h3>$125,250</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc4.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">audi <span> a3</span> sedan</a></h2>
-              <h3>$95,500</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc4.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">infiniti <span>z5</span></a></h2>
-              <h3>$36,850</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc5.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">porsche <span>718</span> cayman</a></h2>
-              <h3>$48,500</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc7.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#"><span>bmw 8-</span>series coupe</a></h2>
-              <h3>$56,000</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="single-featured-trucks">
-            <div class="featured-img-box">
-              <div class="featured-trucks-img">
-                <img src="{% static "images/featured-trucks/fc8.png" %}" alt="trucks">
-              </div>
-              <div class="featured-model-info">
-                <p>
-                  model: 2017
-                  <span class="featured-mi-span"> 3100 mi</span> 
-                  <span class="featured-hp-span"> 240HP</span>
-                   automatic
-                </p>
-              </div>
-            </div>
-            <div class="featured-trucks-txt">
-              <h2><a href="#">BMW <span> x</span>series-6</a></h2>
-              <h3>$75,800</h3>
-              <p>
-                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non. 
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!--/.container-->
-
-</section><!--/.featured-trucks-->
-<!--featured-trucks end --> {% endcomment %}
-<!--featured-trucks start -->
-<section id="featured-trucks" class="featured-trucks">
-  <div class="container">
-    <div class="section-header">
-      <p>checkout <span>the</span> featured trucks</p>
-      <h2>featured trucks</h2>
+      <p>checkout <span>the</span> available trucks</p>
+      <h2>select truck</h2>
     </div><!--/.section-header-->
     <div class="featured-trucks-content">
       <div class="row">
         {% for truck in trucks %}
-        <div class="col-lg-3 col-md-4 col-sm-6">
+        <div id="truck-{{ truck.id }}" class="col-lg-3 col-md-4 col-sm-6">
           <div class="single-featured-trucks">
-            <div class="featured-img-box">
+            <div class="featured-img-box" onclick="window.location.href='{% url "book_truck" truck.id %}'">
               <div class="featured-trucks-img">
                 <img src="{{ truck.overall_view.url }}" alt="truck">
               </div>
               <div class="featured-model-info">
                 <p>
                   model: {{ truck.truck_model }}
-                  <span class="featured-mi-span"> {{ truck.capacity }} Kg</span> 
+                  <span class="featured-mi-span"> {{ truck.capacity }} Tons</span> 
                   <span class="featured-hp-span"> {{ truck.status }}</span>
                   {{ truck.driver.user.first_name }} {{ truck.driver.user.last_name }}
                 </p>
               </div>
             </div>
             <div class="featured-trucks-txt">
-              <h2><a href="#"> Truck: {{ truck.truck_model }}</a></h2>
-              <h3>Capacity: {{ truck.capacity }} Tons</h3>
+              <p><h2> {{ truck.truck_model }}</h2></p><br>
+              <p><h3>Capacity: {{ truck.capacity }} Tons</h3></p>
               <p>Driver: {{ truck.driver.user.first_name }} {{ truck.driver.user.last_name }}</p>
+              <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ truck.id }}">Truck Details</button>
             </div>
           </div>
         </div>
+
+        <!-- Modal -->
+<div id="myModal{{ truck.id }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Truck Details</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tr>
+            <th>Model:</th>
+            <td>{{ truck.truck_model }}</td>
+          </tr>
+          <tr>
+            <th>License Plate:</th>
+            <td>{{ truck.license_plate }}</td>
+          </tr>
+          <tr>
+            <th>Driver:</th>
+            <td>{{ truck.driver.user.first_name }} {{ truck.driver.user.last_name }}</td>
+          </tr>
+          <tr>
+            <th>Capacity:</th>
+            <td>{{ truck.capacity }}</td>
+          </tr>
+          <tr>
+            <th>Status:</th>
+            <td>{{ truck.status }}</td>
+          </tr>
+          <tr>
+            <th>Last Maintained:</th>
+            <td>
+              {% if truck.last_maintained %}
+                {{ truck.last_maintained.isoformat }}
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Front View:</th>
+            <td>
+              {% if truck.front_view %}
+                <img src="{{ truck.front_view.url }}" alt="Front View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Side View:</th>
+            <td>
+              {% if truck.side_view %}
+                <img src="{{ truck.side_view.url }}" alt="Side View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Back View:</th>
+            <td>
+              {% if truck.back_view %}
+                <img src="{{ truck.back_view.url }}" alt="Back View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Top View:</th>
+            <td>
+              {% if truck.top_view %}
+                <img src="{{ truck.top_view.url }}" alt="Top View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Overall View:</th>
+            <td>
+              {% if truck.overall_view %}
+                <img src="{{ truck.overall_view.url }}" alt="Overall View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
         {% endfor %}
       </div>
     </div>
