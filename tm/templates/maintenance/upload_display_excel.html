@@ -1,4 +1,7 @@
-{% extends 'base.html' %} {% block title %}Maintenance Page {% endblock %} 
+{% extends 'base.html' %}
+
+{% block title %}Maintenance Page{% endblock %}
+
 {% block content %}
 <h1>Push it down</h1>
 <h1>Push it down</h1>
@@ -8,20 +11,22 @@
 <h1>Push it down</h1>
 <h1>Upload Excel File</h1>
 <form method="post" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
+  {% csrf_token %}
+  {{ form.as_p }}
   <button type="submit">Upload</button>
 </form>
+
+{% if error_message %}
+<div style="color: red;">Error: {{ error_message }}</div>
+{% endif %}
 
 {% if data_to_display %}
 <hr />
 <h2>Processed Data</h2>
 <div>{{ data_to_display|safe }}</div>
-{% endif %} {% if data %}
+{% endif %}
+
+{% if data %}
 <hr />
-<h2>Uploaded Data</h2>
-<ul>
-  {% for item in data %}
-  <li>{{ item.file.name }}</li>
-  {% endfor %}
-</ul>
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}
