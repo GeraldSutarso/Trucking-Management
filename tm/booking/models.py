@@ -14,6 +14,7 @@ class Booking(models.Model):
     date = models.DateField(null=True, blank=True)
     details = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f"Booking by {self.customer.user.username} on {self.date}"

@@ -402,6 +402,7 @@ def booking(request, truck_id):
         customer_id = user.user_id
         driver_id = truck.driver_id
         truck_id = truck_id
+        price = request.POST['price']
         
         request.session['pickup'] = pickup
         request.session['destination'] = destination
@@ -409,8 +410,9 @@ def booking(request, truck_id):
         request.session['date'] = date
         request.session['details'] = details
         request.session['weight'] = weight
+        request.session['price'] = price
         
-        booking = Booking.objects.create(pickup = pickup, destination = destination, distance = distance, date = date, details = details, weight = weight, customer_id = customer_id, driver_id = driver_id, truck_id = truck_id)
+        booking = Booking.objects.create(pickup = pickup, destination = destination, distance = distance, date = date, details = details, weight = weight, customer_id = customer_id, driver_id = driver_id, truck_id = truck_id, price = price)
         booking.save()
         # messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
         return redirect('booking_result')
