@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from accounts.models import User, Driver, Customer
+from booking.models import Booking
 from vehicles.models import Truck, TruckForm, Maintenance
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_GET
@@ -391,6 +392,44 @@ def booking(request, truck_id):
 
     truck = Truck.objects.get(id=truck_id)
 
-    
+    if request.method == 'POST':
+        pickup = request.POST['pickup']
+        destination = request.POST['destination']
+        distance = request.POST['distance']
+        date = request.POST['date']
+        details = request.POST['details']
+        weight = request.POST['weight']
+        customer_id = user.user_id
+        driver_id = truck.driver_id
+        truck_id = truck_id
+        price = request.POST['price']
+        
+        request.session['pickup'] = pickup
+        request.session['destination'] = destination
+        request.session['distance'] = distance
+        request.session['date'] = date
+        request.session['details'] = details
+        request.session['weight'] = weight
+        request.session['price'] = price
+        
+        booking = Booking.objects.create(pickup = pickup, destination = destination, distance = distance, date = date, details = details, weight = weight, customer_id = customer_id, driver_id = driver_id, truck_id = truck_id, price = price)
+        booking.save()
+        # messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
+        return redirect('booking_result')
+
     return render(request, 'booking/booking_customer.html', {'truck': truck})
+
+@login_required(login_url = 'login')
+@user_passes_test(im_customer, login_url='/')
+# @user_passes_test(initely, login_url='/login')
+def booking_result(request, truck_id):
+    try: #Check whether the driver is already accepted or not
+        user = Customer.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        #Now, if the driver not NOT Accepted, redirect to the home page
+        return redirect('go_home')
+
+    truck = Truck.objects.get(id=truck_id)
+
+    return render(request, 'booking/booking_result.html', {'truck': truck})
 

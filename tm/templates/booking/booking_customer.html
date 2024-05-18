@@ -61,6 +61,10 @@
                           <label for="weight" class="col-form-label">Load Weight (Tons)</label>
                           <input type="number" name="weight" class="form-control" placeholder="Tuliskan berat muatan" required />
                         </div>
+                        <div class="form-group form-box">
+                          <label for="price" class="col-form-label">Price (Rp)</label>
+                          <input type="number" name="price" id="price" class="form-control" placeholder="Harga" readonly/>
+                        </div>
                         <div class="form-group mb-0 text-center">
                           <button type="submit" class="btn btn-success custom-btn">Submit Booking</button>
                         </div>
@@ -181,4 +185,11 @@
         
           </div>
         </div>
+        <script>
+          document.getElementById('distance').addEventListener('input', function() {
+            const distance = parseFloat(this.value) || 0;
+            const price = distance * 10000;
+            document.getElementById('price').value = price;
+          });
+        </script>
 {% endblock %}
