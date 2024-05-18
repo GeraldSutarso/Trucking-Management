@@ -36,6 +36,9 @@ urlpatterns = [
     path('edit_truck/<int:truck_id>/', views.edit_truck, name='edit_truck'),
     path('save_truck/', views.save_truck, name='save_truck'),
     
+    #booking
+    path('book_truck/<int:truck_id>/', views.booking, name='book_truck'),
+    
 
     
 ]

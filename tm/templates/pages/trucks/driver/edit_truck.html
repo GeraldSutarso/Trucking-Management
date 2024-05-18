@@ -36,7 +36,7 @@ z-index: 1;">
                                     </div>
                                 {% endfor %}
                             {% endif %}
-                            <form action="{% url 'save_truck' %}" method="POST" enctype="multipart/form-data">
+                            <form action="{% url 'save_truck'%}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="overall_view" style="display: block; margin-bottom: 10px;">Upload Overall View</label>
@@ -103,7 +103,7 @@ z-index: 1;">
                                     <button type="submit" class="btn btn-success custom-btn">Save</button>
                                 </div>
                                 <div class="form-group mb-0 text-center">
-                                    <button type="button" onclick="location.href='driver/trucks'" class="btn btn-danger custom-btn">Back</button>
+                                    <button type="button" onclick="window.location.href='{% url "driver_trucks" %}'" class="btn btn-danger custom-btn">Back</button>
                                 </div>
                             </form>
                             </div>
