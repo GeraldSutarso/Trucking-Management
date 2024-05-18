@@ -39,6 +39,9 @@ urlpatterns = [
     #booking
     path('book_truck/<int:truck_id>/', views.booking, name='book_truck'),
     
+    path('book_summary/<int:truck_id>/', views.booking_result, name='booking_result'),
+    
+    
 
     
 ]
