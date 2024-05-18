@@ -1,0 +1,25 @@
+<!-- payment.html -->
+
+{% extends 'base.html' %} {% block title %}Maintenance Page{% endblock %}
+{%block content %}
+<h1>Hi</h1>
+<h1>Hi</h1>
+<h1>Hi</h1>
+<h1>Hi</h1>
+<h1>Hi</h1>
+<h1>Hi</h1>
+<h1>Checking Maintece of Truck Condition, Please upload your excel file</h1>
+
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h4>Select & Upload File</h4>
+  <input type="file" required name="files" />
+  <button type="submit">Submit</button>
+</form>
+
+{% if data_to_display %}
+<div>
+  <h2>Uploaded Data</h2>
+  {{ data_to_display | safe }}
+</div>
+{% endif %} {% endblock %}
