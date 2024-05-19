@@ -13,7 +13,8 @@
             <div class="col-lg-12">
               <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
                 <div class="card-header text-center">
-                  <br><h1>Booking History{{ booking.id }}</h1>
+                  <br><h1>Booking {{ booking.id }}</h1>
+                  <br><h1>Payment Successful</h1>
                 </div>
                 <div class="card-body" style="margin: 15px">
                   <div class="row">
@@ -23,32 +24,38 @@
                       {% endfor %}
                     {% endif %}
                     <div class="card-body" style="margin: 15px">
-                      {% for truck in booking.trucks.all %}
-                        <h3>Truck {{ forloop.counter }} Details:</h3>
-                        <p><strong>Model:</strong> {{ truck.truck_model }}</p>
-                        <p><strong>License Plate:</strong> {{ truck.license_plate }}</p>
-                        <p><strong>Driver:</strong> {{ truck.driver.user.get_full_name }}</p>
-                        <p><strong>Capacity:</strong> {{ truck.capacity }}</p>
-                        <p><strong>Status:</strong> {{ truck.status }}</p>
-                        <h3>Truck {{ forloop.counter }} Images:</h3>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <img src="{{ truck.front_view.url }}" alt="Front View" class="img-fluid">
-                            <p>Front View</p>
-                          </div>
-                          <div class="col-md-4">
-                            <img src="{{ truck.side_view.url }}" alt="Side View" class="img-fluid">
-                            <p>Side View</p>
-                          </div>
-                          <div class="col-md-4">
-                            <img src="{{ truck.back_view.url }}" alt="Back View" class="img-fluid">
-                            <p>Back View</p>
-                          </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Model</th>
+                                        <th>License Plate</th>
+                                        <th>Driver</th>
+                                        <th>Capacity</th>
+                                        <th>Status</th>
+                                        <th>Pick-up Location</th>
+                                        <th>Destination</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for truck in booking.trucks.all %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ truck.truck_model }}</td>
+                                        <td>{{ truck.license_plate }}</td>
+                                        <td>{{ truck.driver.user.get_full_name }}</td>
+                                        <td>{{ truck.capacity }}</td>
+                                        <td>{{ truck.status }}</td>
+                                        <td>{{ truck.Pick-up Location }}</td>
+                                        <td>{{ truck.Destination }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <hr>
-                      {% endfor %}
-                      <a href="{% url 'go_home' %}" class="btn btn-primary">Return to Home</a>
-                    </div>
+                        <a href="{% url 'go_home' %}" class="btn btn-primary">Return to Home</a>
+                    </div>                    
                   </div>
                 </div>      
               </div>
