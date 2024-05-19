@@ -41,15 +41,18 @@ def select_payment(request):
 
 def create_payment(request):
     booking_id = request.session['booking_id']
+
     try:
         user = Customer.objects.get(user=request.user)
         booking = Booking.objects.get(id=booking_id)
+        if booking.payment_method:
+            return redirect('payment_status', booking_id=booking.id)
         booking.customer_id == user.user_id
     except ObjectDoesNotExist:
         return redirect('go_home')
     if not booking_id:
         messages.error(request, 'No booking found in session.')
-        return redirect('select_payment')
+        return redirect('go_home')
     
     booking = Booking.objects.get(id=booking_id)
 
@@ -75,6 +78,16 @@ def create_payment(request):
             messages.error(request, 'Please select a payment method.')
     
     return render(request, 'booking/payment_form.html', {'price': booking.price})
+
+def payment_status(request):
+    if not request.user.is_authenticated:
+        return redirect('go_home')
+    if request.user.is_customer:
+        return redirect('customer_trucks')
+    elif request.user.is_superuser:
+        return redirect(request, 'admin/base_site.html')
+    elif request.user.is_driver:
+        return redirect('driver_trucks')
 
 def payment_success(request):
     return render(request, 'booking/payment_success.html')

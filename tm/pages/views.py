@@ -485,5 +485,5 @@ def notification_customer(request):
 
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
-def notification_customer(request):
+def notification_driver(request):
     return render(request, 'notification/notification_driver.html')
