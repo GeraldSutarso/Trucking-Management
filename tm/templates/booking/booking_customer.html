@@ -17,7 +17,7 @@
                     {% if messages %} {% for message in messages %}
                     <div class="alert alert-danger">{{ message }}</div>
                     {% endfor %} {% endif %}
-                    <form action="{% url 'customer_booking' %}" method="POST">
+                    <form action="{% url 'book_truck' %}" method="POST">
                       {% csrf_token %}
                       <div class="col-md-12">
                         <div class="form-group form-box">
