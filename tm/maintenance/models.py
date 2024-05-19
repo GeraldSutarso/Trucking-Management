@@ -32,6 +32,7 @@ class ColumnAverages(models.Model):
     
     # Timestamp for the record
     created_at = models.DateTimeField(auto_now_add=True)
+    driver_id = models.ForeignKey('accounts.Driver', on_delete=models.SET_NULL, null=True,related_name="maintenance_driver")
 
     def __str__(self):
         return f"Averages and Status as of {self.created_at}"
