@@ -468,3 +468,7 @@ def booking_result(request, booking_id):
     return render(request, 'booking/booking_result.html', {'booking': booking})
 
 
+@login_required(login_url = 'login')
+@user_passes_test(im_customer, login_url='/')
+def notification_customer(request):
+    return render(request, 'notification/notification_customer.html')

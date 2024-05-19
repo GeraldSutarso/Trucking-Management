@@ -64,13 +64,13 @@ def create_payment(request):
                     booking.transfer_receipt = transfer_receipt
                     booking.payment_status = 'pending'  # Set to pending until verified
                     booking.save()
-                    return redirect('payment_success')
+                    return redirect('payment_pending')
                 else:
                     messages.error(request, 'Please upload the transfer receipt.')
             elif payment_method == 'cash':
                 booking.payment_status = 'pending'  # Assume cash payment is immediate
                 booking.save()
-                return render('payment_success')
+                return redirect('payment_pending')
         else:
             messages.error(request, 'Please select a payment method.')
     
@@ -78,6 +78,9 @@ def create_payment(request):
 
 def payment_success(request):
     return render(request, 'booking/payment_success.html')
+
+def payment_pending(request):
+    return render(request,'booking/payment_pending.html')
 
 
 

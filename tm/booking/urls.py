@@ -6,4 +6,5 @@ urlpatterns = [
     path('select-payment/', views.select_payment, name='select_payment'),
     path('create-payment/', views.create_payment, name='create_payment'),
     path('payment-success/', views.payment_success, name='payment_success'),
+    path('payment-pending/', views.payment_pending, name='payment_pending'),
 ]
