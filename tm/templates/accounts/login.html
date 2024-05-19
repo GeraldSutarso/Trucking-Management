@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %} | Login {% endblock %}
+{% block content %}
+{% load static %}
+<section id="home" class="welcome-hero">
+    {% comment %} <div class="welcome-hero-txt"> {% endcomment %}
+    <br><br><br><br><br><br>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="login-hero-txt card" style="background-color: #0000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px;">
+                        <div class="card-header text-center">
+                        </div>
+                        <div class="card-body" style="margin: 15px;">
+                            <h2>Sign In</h2>
+                            <p>
+                                Login if you have previously registered as a user of this website
+                            </p>
+                            <button class="login-btn" onclick="window.location.href='#login-box'">login </button><br>
+                            <button class="welcome-btn" onclick="window.location.href='{% url "register_customer" %}'">Register as customer </button><br>
+                            <button class="driver-btn" onclick="window.location.href='{% url "register_driver" %}'">Register as driver </button><br>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br><br id="login-box"><br><br><br><br>
+                <div class="col-lg-6" >
+                    <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px;">
+                        <div class="card-header text-center">
+                            <div class="logo-2">
+                                <a href="#">
+                                    <img src="{% static 'img/logos/PWF.gif' %}" alt="logo" class="img-fluid">
+                                </a>
+                            </div>
+                            <h3>Log In</h3>
+                        </div>
+                        <div class="card-body" style="margin: 15px;"  >
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="text-danger">
+                                        {{ message }}
+                                    </div>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                            <form action="{% url 'login' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group form-box">
+                                    <label for="username" class="col-form-label">Username:</label>
+                                    <input type="text" name="username" class="form-control" placeholder="Username" value="{{ request.session.username }}" required>
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="password" class="col-form-label">Password:</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                    <i class="flaticon-lock"></i>
+                                </div>
+                                <div class="form-group mb-0 text-center">
+                                    <button type="submit" class="login-btn">Login</button>
+                                </div>
+                                <div class="extra-login clearfix mt-2 text-center">
+                                    <span><p style="color: #000;">Don't have an account? <a href="{% url 'register_customer' %}" class="thembo" style="color: red;"> Register here</a></p></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<br>
+</section>
+{% endblock %}

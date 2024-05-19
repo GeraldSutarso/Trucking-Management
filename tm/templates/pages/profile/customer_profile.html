@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %} | Profile {% endblock %}
+{% block content %}
+{% load static %}
+<section id="home" class="welcome-hero">
+    {% comment %} <div class="welcome-hero-txt"> {% endcomment %}
+    <br><br><br><br><br><br>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="col">
+                <br><br id="register-box"><br>
+                <div class="col-lg-12" >
+                    <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px;">
+                        <div class="card-header text-center">
+                            <div class="logo-2">
+                                <a href="#">
+                                    <img src="{% static 'img/logos/PWF.gif' %}" alt="logo" class="img-fluid">
+                                </a>
+                            </div>
+                            <h3>Edit Profile</h3>
+                        </div>
+                        <div class="card-body" style="margin: 15px;"  >
+                            <div class="row">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="text-danger">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <form action="{% url 'customer_profile' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-md-4 text-center">
+                                    <img id="preview" src="{% if request.session.profile_picture %}{{ request.session.profile_picture }}{% else %}{% static 'img/avatar/user.png' %}{% endif %}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px;">
+                                    <div class="form-group">
+                                        <label for="profile_picture" style="display: block; margin-bottom: 10px;">Change Profile Picture</label>
+                                        <input type="file" class="form-control-file" id="profile_picture" name="profile_picture" style="display: none;" accept="image/*" onchange="previewFile()">
+                                        <button type="button" class="btn btn-primary" onclick="document.getElementById('profile_picture').click();">Choose File</button>
+                                    </div>
+                                    <hr class="horizontal-line">
+                                    <div class="form-group mb-0 text-center">
+                                        <button type="submit" class="btn btn-success custom-btn">Save</button>
+                                    </div>
+                                    <div class="form-group mb-0 text-center">
+                                        <button type="button" onclick="location.href='/home'" class="btn btn-danger custom-btn">Back to Home</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                <div class="form-group form-box">
+                                    <label for="firstname" class="col-form-label">First Name</label>
+                                    <input type="text" name="firstname" class="form-control" placeholder="What is your first name?" value="{{ request.session.firstname }}" required>
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="lastname" class="col-form-label">Last Name</label>
+                                    <input type="text" name="lastname" class="form-control" placeholder="What is your last name?" value="{{ request.session.lastname }}" required>
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="username" class="col-form-label">Username</label>
+                                    <input type="text" name="username" class="form-control" placeholder="What will be your username?" value = "{{ request.session.username }}" required>
+                                    <i class="flaticon-user-2"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="email" class="col-form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" placeholder="What is your email?" value="{{ request.session.email }}" required>
+                                    <i class="flaticon-mail"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="phone_number" class="col-form-label">Phone Number</label>
+                                    <input type="tel" name="phone_number" class="form-control" placeholder="xxxx-xxxx-xxxx"  pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}" value="{{ request.session.phone_number }}" required>
+                                    <i class="flaticon-phone"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="address" class="col-form-label">Address</label>
+                                    <input type="text" name="address" class="form-control" placeholder="Enter your address" value="{{ request.session.address }}">
+                                    <i class="flaticon-user"></i>
+                                </div>
+                                {% comment %} <div class="form-group form-box">
+                                    <label for="password" class="col-form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Password has to be strong" required>
+                                    <i class="flaticon-lock"></i>
+                                </div>
+                                <div class="form-group form-box">
+                                    <label for="confirm_password" class="col-form-label">Confirm Password</label>
+                                    <input type="password" name="confirm_password" class="form-control" placeholder="Re-Type your Password" required>
+                                    <i class="flaticon-lock"></i>
+                                </div> {% endcomment %}
+                            </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<br>
+</section>
+<style>
+    .custom-btn {
+        width: 150px;
+        height: 50px;
+        transition: transform .2s; /* Animation */
+    }
+    
+    .custom-btn:hover {
+        transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    }
+    .horizontal-line {
+        border-top: 1px solid #D3D3D3;
+        width: 100%;
+        margin: 20px 0;
+    }
+    
+    </style>
+    <script>
+        function previewFile() {
+            const preview = document.querySelector('#preview');
+            const file = document.querySelector('#profile_picture').files[0];
+            const reader = new FileReader();
+        
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                preview.src = reader.result;
+            }, false);
+        
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+        </script>
+{% endblock %}

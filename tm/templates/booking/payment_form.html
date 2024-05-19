@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %} | Truck Booking {% endblock %}
+{% block content %}
+{% load static %}
+
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                  <br><h1>Select Payment Method</h1>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                      {% endfor %}
+                    {% endif %}
+                    <div class="card-body" style="margin: 15px">
+                      <h6 class="text-center">Total Price: Rp {{ price }}</h6>
+                      <h6 class="text-center">Booking ID: {{ booking_id }}</h6>
+                      <form method="POST" action="{% url 'create_payment' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="text-center" style="margin: 20px 0;">
+                          <label>
+                            <input type="radio" name="payment_method" value="cash" onclick="showPaymentDetails()"> Cash
+                          </label>
+                          &nbsp;&nbsp;
+                          <label>
+                            <input type="radio" name="payment_method" value="bank_transfer" onclick="showPaymentDetails()"> Bank Transfer
+                          </label>
+                        </div>
+                        <div id="cash_details" style="display: none;">
+                          <div class="card">
+                            <div class="card-header text-center">
+                              <h3>Cash Payment</h3>
+                            </div>
+                            <div class="card-body text-center">
+                              <p>Please pay the amount in cash to the driver upon delivery.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="bank_transfer_details" style="display: none;">
+                          <div class="card">
+                            <div class="card-header text-center">
+                              <h3>Bank Transfer</h3>
+                            </div>
+                            <div class="card-body text-center">
+                              <p>Transfer the payment to the following bank account:</p>
+                              <table class="table table-bordered">
+                                <tr>
+                                  <th>Bank Name:</th>
+                                  <td>BANK BCA</td>
+                                </tr>
+                                <tr>
+                                  <th>Account Number:</th>
+                                  <td>7635303204</td>
+                                </tr>
+                                <tr>
+                                  <th>Account Name:</th>
+                                  <td>PT. Truck Booking</td>
+                                </tr>
+                              </table>
+                              <p>Please use your booking ID as the payment reference.</p>
+                              <div class="form-group">
+                                <label for="transfer_receipt">Upload Transfer Receipt:</label>
+                                <input type="file" class="form-control" id="transfer_receipt" name="transfer_receipt" required>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="text-center" style="margin-top: 20px;">
+                          <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>      
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function showPaymentDetails() {
+    var selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    var cashDetails = document.getElementById('cash_details');
+    var bankTransferDetails = document.getElementById('bank_transfer_details');
+    
+    if (selectedMethod === 'cash') {
+      cashDetails.style.display = 'block';
+      bankTransferDetails.style.display = 'none';
+    } else if (selectedMethod === 'bank_transfer') {
+      cashDetails.style.display = 'none';
+      bankTransferDetails.style.display = 'block';
+    }
+  }
+</script>
+
+{% endblock %}

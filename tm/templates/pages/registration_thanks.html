@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} | Driver Home {% endblock %}
+{% block content %}
+{% load static %}
+<section id="home" class="welcome-hero" 
+        style="position: relative;
+        background:url({% static "/img/mantap.gif" %})no-repeat;
+        background-position: center;
+        background-size: cover;
+        z-index: 1;">
+<div class="container">
+    <div class="welcome-hero-txt">
+        <h2>Thank you for Registrating as a Driver</h2>
+        <p>
+            Please wait for us to contact you. This page will turn into the driver's home page after you are accepted.
+        </p>
+        <button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+    </div>
+</div>
+</section>
+{% endblock %}

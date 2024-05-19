@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %} | Home {% endblock %}
+{% block content %}
+
+{% load static %}
+
+		<!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+	
+		<!--welcome-hero start -->
+		<section id="home" class="welcome-hero">
+
+			<!-- top-area Start -->
+			
+			<!-- top-area End -->
+
+			<div class="container">
+				<div class="welcome-hero-txt">
+					<h2>deliver loads by booking our trucks</h2>
+					<p>
+						Our trucks are good. Our trucks are the best. Our trucks beat other trucks. You won't be disappointed. We won't disappoint. Trust our trucks. We will take control of the world. Autobots roll out.
+					</p>
+					<button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						
+					</div>
+				</div>
+			</div>
+
+		</section><!--/.welcome-hero-->
+		<!--welcome-hero end -->
+
+	
+		<!--new-trucks start -->
+		<section id="new-trucks" class="new-trucks">
+			<div class="container">
+				<div class="section-header">
+					<p>checkout <span>the</span> most used trucks</p>
+					<h2>most used trucks</h2>
+				</div><!--/.section-header-->
+				<div class="new-trucks-content">
+					<div class="owl-carousel owl-theme" id="new-trucks-carousel">
+						<div class="new-trucks-item">
+							<div class="single-new-trucks-item">
+								<div class="row">
+									<div class="col-md-7 col-sm-12">
+										<div class="new-trucks-img">
+											<img src="{% static 'img/truk/optimumpride.jpeg' %}" alt="img"/>
+										</div><!--/.new-trucks-img-->
+									</div>
+									<div class="col-md-5 col-sm-12">
+										<div class="new-trucks-txt">
+											<h2><a href="#">I am Optimus Prime <span></span></a></h2>
+											<p>
+												Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+											</p>
+											<p class="new-trucks-para2">
+												Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. 
+											</p>
+											<button class="welcome-btn new-trucks-btn" onclick="window.location.href='#'">
+												view details
+											</button>
+										</div><!--/.new-trucks-txt-->	
+									</div><!--/.col-->
+								</div><!--/.row-->
+							</div><!--/.single-new-trucks-item-->
+						</div><!--/.new-trucks-item-->
+						<div class="new-trucks-item">
+							<div class="single-new-trucks-item">
+								<div class="row">
+									<div class="col-md-7 col-sm-12">
+										<div class="new-trucks-img">
+											<img src="{% static "img/truk/mack.jpeg" %}" alt="img"/>
+										</div><!--/.new-trucks-img-->
+									</div>
+									<div class="col-md-5 col-sm-12">
+										<div class="new-trucks-txt">
+											<h2><a href="#">Life is a Highway</a></h2>
+											<p>
+												Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+											</p>
+											<p class="new-trucks-para2">
+												Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. 
+											</p>
+											<button class="welcome-btn new-trucks-btn" onclick="window.location.href='#'">
+												view details
+											</button>
+										</div><!--/.new-trucks-txt-->	
+									</div><!--/.col-->
+								</div><!--/.row-->	
+							</div><!--/.single-new-trucks-item-->
+						</div><!--/.new-trucks-item-->
+						<div class="new-trucks-item">
+							<div class="single-new-trucks-item">
+								<div class="row">
+									<div class="col-md-7 col-sm-12">
+										<div class="new-trucks-img">
+											<img src="{% static "img/truk/hino.jpeg" %}" alt="img"/>
+										</div><!--/.new-trucks-img-->
+									</div>
+									<div class="col-md-5 col-sm-12">
+										<div class="new-trucks-txt">
+											<h2><a href="#">ferrari 488 superfast</a></h2>
+											<p>
+												Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+											</p>
+											<p class="new-trucks-para2">
+												Sed ut pers unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. 
+											</p>
+											<button class="welcome-btn new-trucks-btn" onclick="window.location.href='#'">
+												view details
+											</button>
+										</div><!--/.new-trucks-txt-->	
+									</div><!--/.col-->
+								</div><!--/.row-->
+							</div><!--/.single-new-trucks-item-->
+						</div><!--/.new-trucks-item-->
+					</div><!--/#new-trucks-carousel-->
+				</div><!--/.new-trucks-content-->
+			</div><!--/.container-->
+
+		</section><!--/.new-trucks-->
+		<!--new-trucks end -->
+
+		<!--featured-trucks start -->
+		
+		<!--featured-trucks end -->
+
+		<!-- clients-say strat -->
+		<section id="clients-say"  class="clients-say">
+			<div class="container">
+				<div class="section-header">
+					<h2>Our best drivers</h2>
+				</div><!--/.section-header-->
+				<div class="row">
+					<div class="owl-carousel testimonial-carousel">
+						<div class="col-sm-3 col-xs-12">
+							<div class="single-testimonial-box">
+								<div class="testimonial-description">
+									<div class="testimonial-info">
+										<div class="testimonial-img">
+											<img src="{% static "images/clients/c1.png" %}" alt="image of clients person" />
+										</div><!--/.testimonial-img-->
+									</div><!--/.testimonial-info-->
+									<div class="testimonial-comment">
+										<p>
+											Sed ut pers unde omnis iste natus error sit voluptatem accusantium dolor laudan rem aperiam, eaque ipsa quae ab illo inventore verit. 
+										</p>
+									</div><!--/.testimonial-comment-->
+									<div class="testimonial-person">
+										<h2><a href="#">tomas lili</a></h2>
+										<h4>5 Stars</h4>
+									</div><!--/.testimonial-person-->
+								</div><!--/.testimonial-description-->
+							</div><!--/.single-testimonial-box-->
+						</div><!--/.col-->
+						<div class="col-sm-3 col-xs-12">
+							<div class="single-testimonial-box">
+								<div class="testimonial-description">
+									<div class="testimonial-info">
+										<div class="testimonial-img">
+											<img src="{% static "images/clients/c2.png" %}" alt="image of clients person" />
+										</div><!--/.testimonial-img-->
+									</div><!--/.testimonial-info-->
+									<div class="testimonial-comment">
+										<p>
+											Sed ut pers unde omnis iste natus error sit voluptatem accusantium dolor laudan rem aperiam, eaque ipsa quae ab illo inventore verit. 
+										</p>
+									</div><!--/.testimonial-comment-->
+									<div class="testimonial-person">
+										<h2><a href="#">romi rain</a></h2>
+										<h4>4.8 Stars</h4>
+									</div><!--/.testimonial-person-->
+								</div><!--/.testimonial-description-->
+							</div><!--/.single-testimonial-box-->
+						</div><!--/.col-->
+						<div class="col-sm-3 col-xs-12">
+							<div class="single-testimonial-box">
+								<div class="testimonial-description">
+									<div class="testimonial-info">
+										<div class="testimonial-img">
+											<img src="{% static "images/clients/c3.png" %}" alt="image of clients person" />
+										</div><!--/.testimonial-img-->
+									</div><!--/.testimonial-info-->
+									<div class="testimonial-comment">
+										<p>
+											Sed ut pers unde omnis iste natus error sit voluptatem accusantium dolor laudan rem aperiam, eaque ipsa quae ab illo inventore verit. 
+										</p>
+									</div><!--/.testimonial-comment-->
+									<div class="testimonial-person">
+										<h2><a href="#">john doe</a></h2>
+										<h4>4.7 Stars</h4>
+									</div><!--/.testimonial-person-->
+								</div><!--/.testimonial-description-->
+							</div><!--/.single-testimonial-box-->
+						</div><!--/.col-->
+					</div><!--/.testimonial-carousel-->
+				</div><!--/.row-->
+			</div><!--/.container-->
+
+		</section><!--/.clients-say-->	
+		<!-- clients-say end -->
+
+		<!--brand strat -->
+		<section id="brand"  class="brand">
+			<div class="container">
+				<div class="brand-area">
+					<div class="owl-carousel owl-theme brand-item">
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br1.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br2.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br3.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br4.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br5.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+
+						<div class="item">
+							<a href="#">
+								<img src="{% static "images/brand/br6.png" %}" alt="brand-image" />
+							</a>
+						</div><!--/.item-->
+					</div><!--/.owl-carousel-->
+				</div><!--/.clients-area-->
+
+			</div><!--/.container-->
+
+		</section><!--/brand-->	
+		<!--brand end -->
+
+		<!--blog start -->
+		<section id="blog" class="blog"></section><!--/.blog-->
+		<!--blog end -->
+
+		<!--contact start-->
+
+
+{% endblock %}

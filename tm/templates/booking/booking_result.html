@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% block title %} | Truck Booking {% endblock %} {% block content %} {% load static %}
+
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                    <br><h1>Booking Result</h1>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %} {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %} {% endif %}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Booking ID</td>
+                                <td>{{ request.session.booking_id }}</td>
+                            </tr>
+                            <tr>
+                                <td>Pick-up Location</td>
+                                <td>{{ request.session.pickup }}</td>
+                            </tr>
+                            <tr>
+                                <td>Destination</td>
+                                <td>{{ request.session.destination }}</td>
+                            </tr>
+                            <tr>
+                                <td>Distance (Km)</td>
+                                <td>{{ request.session.distance }}</td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Date</td>
+                                <td>{{ request.session.date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Details</td>
+                                <td>{{ request.session.details }}</td>
+                            </tr>
+                            <tr>
+                                <td>Load Weight (Tons)</td>
+                                <td>{{ request.session.weight }}</td>
+                            </tr>
+                            <tr>
+                                <td>Price (Rp)</td>
+                                <td>{{ request.session.price }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <a href="{% url 'create_payment' %}" class="btn btn-primary">Payment</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <script>
+          document.getElementById('distance').addEventListener('input', function() {
+            const distance = parseFloat(this.value) || 0;
+            const price = distance * 10000;
+            document.getElementById('price').value = price;
+          });
+        </script>
+{% endblock %}

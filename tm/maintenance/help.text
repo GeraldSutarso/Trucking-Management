@@ -1,0 +1,62 @@
+def load_data(file_path):
+    # Load the data from the file
+    df = pd.read_excel(file_path)
+    print("Shape of DataFrame before preprocessing:", df.shape)
+    print("Columns before preprocessing:", df.columns)
+    return df
+
+def preprocess_data(df):
+    # Retain columns specified in numerical_columns and ENGINE_RUNTIME during preprocessing
+    columns_to_keep = ['ALTITUDE', 'ENGINE_LOAD', 'BAROMETRIC_PRESSURE',
+                       'ENGINE_COOLANT_TEMP', 'AMBIENT_AIR_TEMP', 'ENGINE_RPM',
+                       'INTAKE_MANIFOLD_PRESSURE', 'MAF', 'AIR_INTAKE_TEMP', 'SPEED', 'THROTTLE_POS', 'ENGINE_RUNTIME']
+    df_preprocessed = df[columns_to_keep].copy()
+
+    df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].fillna('00:00:00')
+    df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].apply(lambda x: datetime.strptime(str(x), "%H:%M:%S"))
+    df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].dt.hour * 3600 + df_preprocessed['ENGINE_RUNTIME'].dt.minute * 60 + df_preprocessed['ENGINE_RUNTIME'].dt.second
+    
+    # Extract numeric values from columns and convert to float
+    for column in columns_to_keep:
+        # Use regex to extract numeric part from each value
+        df_preprocessed[column] = df_preprocessed[column].astype(str).str.extract(r'(\d+\.?\d*)').astype(float)
+    
+    # Update numerical_columns after preprocessing
+    numerical_columns_updated = df_preprocessed.select_dtypes(include=np.number).columns.tolist()
+    
+    return df_preprocessed, numerical_columns_updated  
+
+def handle_missing_values(df, numerical_columns):
+    # Imputation code for selected numerical columns
+    imputer = SimpleImputer(strategy='mean')
+    imputed_values = imputer.fit_transform(df[numerical_columns])
+
+    # Reconstruct DataFrame with imputed values
+    df_imputed = pd.DataFrame(imputed_values, columns=numerical_columns)
+
+    return df_imputed
+
+def train_isolation_forest(df, numerical_columns):
+    # Using Isolation Forest for outlier detection
+    isolation_forest = IsolationForest(contamination="auto", random_state=42)
+    outliers = isolation_forest.fit_predict(df[numerical_columns])
+
+    return isolation_forest, outliers
+
+def upload_display_excel(request):
+    data = None
+    if request.method == 'POST':
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES['excel_file']
+            df = pd.read_excel(excel_file)
+            # Process the data using your provided code
+            # ...
+            # Once processing is done, save the uploaded file
+            new_upload = ExcelData(data=excel_file)
+            new_upload.save()
+            # Retrieve data to display
+            data = ExcelData.objects.all()
+    else:
+        form = ExcelUploadForm()
+    return render(request, 'maintenance/upload_display_excel.html', {'form': form, 'data': data})

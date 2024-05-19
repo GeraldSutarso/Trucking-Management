@@ -1,0 +1,195 @@
+{% extends 'base.html' %} {% block title %} | Truck Booking {% endblock %} {% block content %} {% load static %}
+
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                  <h3>Truck Booking</h3>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %} {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %} {% endif %}
+                    <form action="{% url 'book_truck' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="col-md-12">
+                        <div class="form-group form-box">
+                          <label for="customer_name" class="col-form-label">Nama Pemesan</label>
+                          <input type="text" name="customer_name" class="form-control" placeholder="Enter customer name" value="{{ request.user.first_name }} {{ request.user.last_name }}" required disabled>
+                        </div>
+                      
+                          <div class="form-group form-box">
+                            <label for="email" class="col-form-label">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="What is your email?" value="{{ request.user.email }}" required disabled>
+                            <i class="flaticon-mail"></i>
+                          </div>
+                        <div class="form-group form-box">
+                          <label for="phone_number" class="col-form-label">Nomor Kontak</label>
+                          <input type="tel" name="phone_number" class="form-control" placeholder="Enter customer number" value="{{ request.user.phone_number }}" required disabled>
+                        </div>
+                        <div class="form-group mb-0 text-center">
+                          <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ truck.id }}">Truck Details</button>
+                      </div>
+                        <div class="form-group form-box">
+                          <label for="pickup" class="col-form-label">Pick-up Location</label>
+                          <input type="text" name="pickup" id="pickup" class="form-control" placeholder="Pick-up Location" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="destination" class="col-form-label">Destination</label>
+                          <input type="text" name="destination" id="destination" class="form-control" placeholder="Tuliskan lokasi tujuan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="distance" class="col-form-label">Distance (Km)</label>
+                          <input type="number" name="distance" id="distance" class="form-control" placeholder="Tuliskan jarak antara penjemputan dan tujuan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="date" class="col-form-label">Delivery Date</label>
+                          <input type="date" name="date" class="form-control" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="details" class="col-form-label">Details</label>
+                          <input type="text" name="details" class="form-control" placeholder="Write the details of the booking (load, information, needs, time, etc.)" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="weight" class="col-form-label">Load Weight (Tons)</label>
+                          <input type="number" name="weight" class="form-control" placeholder="Tuliskan berat muatan" required />
+                        </div>
+                        <div class="form-group form-box">
+                          <label for="price" class="col-form-label">Price (Rp)</label>
+                          <input type="number" name="price" id="price" class="form-control" placeholder="Harga" readonly/>
+                        </div>
+                        <div class="form-group mb-0 text-center">
+                          <button type="submit" class="btn btn-success custom-btn">Submit Booking</button>
+                        </div>
+                        <div class="form-group mb-0 text-center">
+                          <button type="button" onclick="window.location.href='{% url "customer_trucks" %}'" class="btn btn-danger custom-btn">Back</button>
+                      </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- Modal -->
+        <div id="myModal{{ truck.id }}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Truck Details</h4>
+              </div>
+              <div class="modal-body">
+                <table class="table">
+                  <tr>
+                    <th>Model:</th>
+                    <td>{{ truck.truck_model }}</td>
+                  </tr>
+                  <tr>
+                    <th>License Plate:</th>
+                    <td>{{ truck.license_plate }}</td>
+                  </tr>
+                  <tr>
+                    <th>Driver:</th>
+                    <td>{{ truck.driver.user.first_name }} {{ truck.driver.user.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <th>Capacity:</th>
+                    <td>{{ truck.capacity }}</td>
+                  </tr>
+                  <tr>
+                    <th>Status:</th>
+                    <td>{{ truck.status }}</td>
+                  </tr>
+                  <tr>
+                    <th>Last Maintained:</th>
+                    <td>
+                      {% if truck.last_maintained %}
+                        {{ truck.last_maintained.isoformat }}
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Front View:</th>
+                    <td>
+                      {% if truck.front_view %}
+                        <img src="{{ truck.front_view.url }}" alt="Front View">
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Side View:</th>
+                    <td>
+                      {% if truck.side_view %}
+                        <img src="{{ truck.side_view.url }}" alt="Side View">
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Back View:</th>
+                    <td>
+                      {% if truck.back_view %}
+                        <img src="{{ truck.back_view.url }}" alt="Back View">
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Top View:</th>
+                    <td>
+                      {% if truck.top_view %}
+                        <img src="{{ truck.top_view.url }}" alt="Top View">
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Overall View:</th>
+                    <td>
+                      {% if truck.overall_view %}
+                        <img src="{{ truck.overall_view.url }}" alt="Overall View">
+                      {% else %}
+                        None
+                      {% endif %}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+        <script>
+          document.getElementById('distance').addEventListener('input', function() {
+            const distance = parseFloat(this.value) || 0;
+            const price = distance * 10000;
+            document.getElementById('price').value = price;
+          });
+        </script>
+{% endblock %}
