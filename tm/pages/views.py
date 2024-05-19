@@ -391,6 +391,27 @@ def booking(request, truck_id):
         return redirect('go_home')
 
     truck = Truck.objects.get(id=truck_id)
+    request.session['truck_id']=truck_id
+    return render(request, 'booking/booking_customer.html', {'truck': truck})
+
+@login_required(login_url='login')
+@user_passes_test(im_customer, login_url='/')
+def book_truck(request):
+    try:
+        # Check whether the user is a Customer
+        user = Customer.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        # Redirect to the home page if the user is not a Customer
+        return redirect('go_home')
+
+    truck_id = request.session.get('truck_id')
+    if not truck_id:
+        return redirect('go_home')  # Handle the case where truck_id is not in session
+
+    try:
+        truck = Truck.objects.get(id=truck_id)
+    except Truck.DoesNotExist:
+        return redirect('go_home')  # Handle the case where truck does not exist
 
     if request.method == 'POST':
         pickup = request.POST['pickup']
@@ -399,11 +420,10 @@ def booking(request, truck_id):
         date = request.POST['date']
         details = request.POST['details']
         weight = request.POST['weight']
-        customer_id = user.user_id
-        driver_id = truck.driver_id
-        truck_id = truck_id
         price = request.POST['price']
-        
+        truck.truck_available=0
+
+        # Store the form data in session (optional)
         request.session['pickup'] = pickup
         request.session['destination'] = destination
         request.session['distance'] = distance
@@ -411,25 +431,40 @@ def booking(request, truck_id):
         request.session['details'] = details
         request.session['weight'] = weight
         request.session['price'] = price
-        
-        booking = Booking.objects.create(pickup = pickup, destination = destination, distance = distance, date = date, details = details, weight = weight, customer_id = customer_id, driver_id = driver_id, truck_id = truck_id, price = price)
-        booking.save()
-        # messages.success(request, 'You are registered successfully. Please wait for confirmation from the admin.')
-        return redirect('booking_result')
 
-    return render(request, 'booking/booking_customer.html', {'truck': truck})
+        # Create and save the booking
+        truck.save()
+        booking = Booking.objects.create(
+            pickup=pickup,
+            destination=destination,
+            distance=distance,
+            date=date,
+            details=details,
+            weight=weight,
+            customer=user,
+            driver=truck.driver,
+            truck=truck,
+            price=price
+        )
+
+        # Redirect to the booking result with the booking_id
+        return redirect('booking_result', booking_id=booking.id)
+
+    return redirect('go_home')
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
 # @user_passes_test(initely, login_url='/login')
-def booking_result(request, truck_id):
-    try: #Check whether the driver is already accepted or not
+def booking_result(request, booking_id):
+    try:
         user = Customer.objects.get(user=request.user)
+        booking = Booking.objects.get(id=booking_id)
+        booking.customer_id == user.user_id
     except ObjectDoesNotExist:
-        #Now, if the driver not NOT Accepted, redirect to the home page
         return redirect('go_home')
+    
+    request.session['booking_id']=booking_id
+    
+    return render(request, 'booking/booking_result.html', {'booking': booking})
 
-    truck = Truck.objects.get(id=truck_id)
-
-    return render(request, 'booking/booking_result.html', {'truck': truck})
 

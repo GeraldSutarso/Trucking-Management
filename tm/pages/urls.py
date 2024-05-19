@@ -37,9 +37,10 @@ urlpatterns = [
     path('save_truck/', views.save_truck, name='save_truck'),
     
     #booking
-    path('book_truck/<int:truck_id>/', views.booking, name='book_truck'),
+    path('book_truck/', views.book_truck, name='book_truck'),
+    path('booking/<int:truck_id>/', views.booking, name='booking'),
     
-    path('book_summary/<int:truck_id>/', views.booking_result, name='booking_result'),
+    path('book_summary/<int:booking_id>/', views.booking_result, name='booking_result'),
     
     
 
