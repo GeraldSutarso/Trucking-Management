@@ -9,63 +9,9 @@ from sklearn.ensemble import IsolationForest
 from datetime import datetime
 from django.conf import settings
 import os
+from django.http import FileResponse
+from django.conf import settings
 
-def import_data_to_db(request):
-    data_to_display = None
-    if request.method == 'POST':
-        if 'files' in request.FILES:
-            file = request.FILES['files']
-            obj = UploadedFile.objects.create(file=file)
-            path = obj.file.path
-            df = load_data(path)
-            df_preprocessed, numerical_columns_updated = preprocess_data(df)
-            df_imputed = handle_missing_values(df_preprocessed, numerical_columns_updated)
-            isolation_forest, _ = train_isolation_forest(df_imputed, numerical_columns_updated)
-            total_anomaly_score = sum_anomaly_scores(isolation_forest, df_imputed, numerical_columns_updated)
-            print("Total anomaly score for the input data:", total_anomaly_score)
-            print_anomaly_scores(isolation_forest, df_imputed, numerical_columns_updated)
-            input_outliers = detect_outliers(isolation_forest, df_imputed, numerical_columns_updated)
-            outlier_rows = compare_outliers(df, input_outliers)
-            print_column_averages(df_imputed)
-            non_outlier_rows = df.shape[0] - len(outlier_rows)
-            print("Non-outlier rows:", non_outlier_rows)
-            print("Outlier Rows:")
-            print(outlier_rows)
-            outlier_percentage = len(outlier_rows) / len(df) * 100
-            if outlier_percentage >= 10:
-                print("The vehicle needs maintenance.")
-            else:
-                print("Vehicle condition is good.")
-
-            # Calculate and save column averages and maintenance status
-            numeric_columns = df_imputed.select_dtypes(include=np.number).columns
-            column_averages = df_imputed[numeric_columns].mean()
-            maintenance_status = determine_maintenance_status(total_anomaly_score)
-            
-            ColumnAverages.objects.create(
-                altitude_avg=column_averages.get('ALTITUDE', 0),
-                engine_load_avg=column_averages.get('ENGINE_LOAD', 0),
-                barometric_pressure_avg=column_averages.get('BAROMETRIC_PRESSURE', 0),
-                engine_coolant_temp_avg=column_averages.get('ENGINE_COOLANT_TEMP', 0),
-                ambient_air_temp_avg=column_averages.get('AMBIENT_AIR_TEMP', 0),
-                engine_rpm_avg=column_averages.get('ENGINE_RPM', 0),
-                intake_manifold_pressure_avg=column_averages.get('INTAKE_MANIFOLD_PRESSURE', 0),
-                maf_avg=column_averages.get('MAF', 0),
-                air_intake_temp_avg=column_averages.get('AIR_INTAKE_TEMP', 0),
-                speed_avg=column_averages.get('SPEED', 0),
-                throttle_pos_avg=column_averages.get('THROTTLE_POS', 0),
-                engine_runtime_avg=column_averages.get('ENGINE_RUNTIME', 0),
-                maintenance_status=maintenance_status
-            )
-
-            data_to_display = df_imputed.to_html()
-    return render(request, 'maintenance/excel.html', {'data_to_display': data_to_display})
-
-def test(request):
-    return HttpResponse('Hi, this is working')
-
-def maintenance(request):
-    return render(request, 'maintenance/maintenance.html')
 
 def load_data(file_path):
     df = pd.read_excel(file_path)
@@ -78,13 +24,13 @@ def preprocess_data(df):
                        'ENGINE_COOLANT_TEMP', 'AMBIENT_AIR_TEMP', 'ENGINE_RPM',
                        'INTAKE_MANIFOLD_PRESSURE', 'MAF', 'AIR_INTAKE_TEMP', 'SPEED', 'THROTTLE_POS', 'ENGINE_RUNTIME']
     df_preprocessed = df[columns_to_keep].copy()
-
     df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].fillna('00:00:00')
     df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].apply(lambda x: datetime.strptime(str(x), "%H:%M:%S"))
     df_preprocessed['ENGINE_RUNTIME'] = df_preprocessed['ENGINE_RUNTIME'].dt.hour * 3600 + df_preprocessed['ENGINE_RUNTIME'].dt.minute * 60 + df_preprocessed['ENGINE_RUNTIME'].dt.second
     
     for column in columns_to_keep:
         df_preprocessed[column] = df_preprocessed[column].astype(str).str.extract(r'(\d+\.?\d*)').astype(float)
+        
     
     numerical_columns_updated = df_preprocessed.select_dtypes(include=np.number).columns.tolist()
     
@@ -128,9 +74,11 @@ def print_anomaly_scores(isolation_forest, df, numerical_columns):
         print(score)
 
 def upload_display_excel(request):
-    data = None
     data_to_display = None
     error_message = None
+    column_averages = None
+    maintenance_status = None
+
     if request.method == 'POST':
         form = ExcelUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -138,34 +86,37 @@ def upload_display_excel(request):
                 excel_file = request.FILES['excel_file']
                 new_upload = UploadedFile(file=excel_file)
                 new_upload.save()
+
                 train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'exp2_19drivers_1car_1route.xlsx')
-                train_df = load_data(train_file_path) 
+                train_df = load_data(train_file_path)
                 train_preprocessed, numerical_columns_updated = preprocess_data(train_df)
                 train_imputed = handle_missing_values(train_preprocessed, numerical_columns_updated)
+
                 isolation_forest, _ = train_isolation_forest(train_imputed, numerical_columns_updated)
+
                 file_path = new_upload.file.path
                 df = load_data(file_path)
                 df_preprocessed, numerical_columns_updated = preprocess_data(df)
                 df_imputed = handle_missing_values(df_preprocessed, numerical_columns_updated)
+
                 total_anomaly_score = sum_anomaly_scores(isolation_forest, df_imputed, numerical_columns_updated)
-                print("Total anomaly score for the input data:", total_anomaly_score)
-                print_anomaly_scores(isolation_forest, df_imputed, numerical_columns_updated)
                 input_outliers = detect_outliers(isolation_forest, df_imputed, numerical_columns_updated)
                 outlier_rows = compare_outliers(df, input_outliers)
-                print_column_averages(df_imputed)
+
+                # Calculate column averages
+                column_averages = df_imputed.mean().to_dict()
+
                 non_outlier_rows = df.shape[0] - len(outlier_rows)
-                print("Non-outlier rows:", non_outlier_rows)
-                print("Outlier Rows:")
-                print(outlier_rows)
                 outlier_percentage = len(outlier_rows) / len(df) * 100
 
-                # Determine maintenance status
-                maintenance_status = determine_maintenance_status(total_anomaly_score)
-                
-                # Calculate and save column averages and maintenance status
-                numeric_columns = df_imputed.select_dtypes(include=np.number).columns
-                column_averages = df_imputed[numeric_columns].mean()
-                
+                if total_anomaly_score <= -2:
+                    maintenance_status = "The vehicle desperately needs maintenance. Status: Severe"
+                elif total_anomaly_score <= 0:
+                    maintenance_status = "The vehicle needs maintenance. Status: Moderate"
+                else:
+                    maintenance_status = "Vehicle condition is good."
+
+                # Save to the database
                 ColumnAverages.objects.create(
                     altitude_avg=column_averages.get('ALTITUDE', 0),
                     engine_load_avg=column_averages.get('ENGINE_LOAD', 0),
@@ -182,13 +133,24 @@ def upload_display_excel(request):
                     maintenance_status=maintenance_status
                 )
 
-                data_to_display = df_imputed.to_html()
-                data = UploadedFile.objects.all()
+                # Prepare data to display in HTML format
+                data_to_display = outlier_rows.to_html()
             except Exception as e:
                 error_message = str(e)
+                print(f"Error: {error_message}")
     else:
         form = ExcelUploadForm()
-    return render(request, 'maintenance/upload_display_excel.html', {'form': form, 'data': data, 'data_to_display': data_to_display, 'error_message': error_message})
+
+    context = {
+        'form': form,
+        'data_to_display': data_to_display,
+        'error_message': error_message,
+        'column_averages': column_averages,
+        'maintenance_status': maintenance_status,
+    }
+
+    return render(request, 'maintenance/upload_display_excel.html', context)
+
 
 def determine_maintenance_status(anomaly_score):
     if anomaly_score <= -2:
@@ -200,10 +162,22 @@ def determine_maintenance_status(anomaly_score):
 
 def access_training_data(request):
     file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'exp2_19drivers_1car_1route.xlsx')
-    
+
     if os.path.exists(file_path):
         df = pd.read_excel(file_path)
         data = df.head().to_dict()
         return JsonResponse({'status': 'success', 'data': data})
     else:
         return JsonResponse({'status': 'error', 'message': 'File not found'})
+    
+
+def download_test_case_excel(request):
+    file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'Template.xlsx')
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as file:
+            response = FileResponse(file)
+            response['Content-Disposition'] = 'attachment; filename=Template.xlsx'
+            return response
+    else:
+        # Handle file not found error
+        return HttpResponse("File not found")
