@@ -1,3 +1,8 @@
-from django.shortcuts import render
+# In gps/views.py
 
-# Create your views here.
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def gps(request):
+    # Your view logic goes here
+    return render(request,"gps/gps.html")

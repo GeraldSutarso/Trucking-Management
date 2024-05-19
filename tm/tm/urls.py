@@ -33,8 +33,9 @@ urlpatterns = [
     path('',include('booking.urls')),
     path('',include('payment.urls')),
     path('',include('maintenance.urls')),
+    path('',include('gps.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
-    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ]
 
 if settings.DEBUG:

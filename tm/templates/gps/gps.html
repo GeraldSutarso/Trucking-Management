@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block title %} | Truck Booking {% endblock %} {% block content %} {% load static %}
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: black;
+        }
+
+        #map-layer {
+            margin: 100px 20px 20px 20px;
+                width: 155vh; /* Set width to 100% */
+                height: 100vh; /* Set height to 100% of the viewport height */
+                display: flex;
+                justify-content: center; /* Center horizontally */
+        }
+    </style>
+</head>
+<body>
+<div id="map-layer"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGqdGM_QrOaQIn1wTPKrCrUW9jRkH7gWs&callback=initMap"
+        async defer></script> <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
+
+<script>
+    function initMap() {
+        var mapLayer = document.getElementById("map-layer");
+        var centerCoordinates = new google.maps.LatLng(-33.890541, 151.274857);
+        var defaultOptions = { center: centerCoordinates, zoom: 10 };
+
+        var map = new google.maps.Map(mapLayer, defaultOptions);
+
+    }
+    
+</script>
+</body>
+</html>
+
+{% endblock %}
