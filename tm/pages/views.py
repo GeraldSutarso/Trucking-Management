@@ -43,6 +43,16 @@ def trucks(request):
     elif request.user.is_driver:
         return redirect('driver_trucks')
     
+def notification(request):
+    if not request.user.is_authenticated:
+        return redirect('go_home')
+    if request.user.is_customer:
+        return redirect('notification_customer')
+    elif request.user.is_superuser:
+        return redirect(request, 'admin/base_site.html')
+    elif request.user.is_driver:
+        return redirect('notification_driver')
+    
 #HEY USER, WHO ARE YOU??
 
 def im_customer(user):
@@ -472,3 +482,8 @@ def booking_result(request, booking_id):
 @user_passes_test(im_customer, login_url='/')
 def notification_customer(request):
     return render(request, 'notification/notification_customer.html')
+
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/')
+def notification_customer(request):
+    return render(request, 'notification/notification_driver.html')

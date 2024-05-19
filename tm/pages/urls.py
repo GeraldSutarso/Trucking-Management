@@ -43,7 +43,9 @@ urlpatterns = [
     path('book_summary/<int:booking_id>/', views.booking_result, name='booking_result'),
     
     #notification
+    path('notification' , views.notification, name ='notification'),
     path('customer-notification', views.notification_customer, name='notification_customer'),
+    path('driver-notification', views.notification_driver, name='notification_driver'),
     
     
 
