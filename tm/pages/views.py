@@ -480,8 +480,9 @@ def booking_result(request, booking_id):
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
-def notification_customer(request):
-    return render(request, 'notification/notification_customer.html')
+def notification_customer(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    return render(request, 'notification/notification_customer.html',{'booking':booking})
 
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
