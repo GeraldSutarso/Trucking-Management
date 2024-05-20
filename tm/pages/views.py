@@ -476,7 +476,7 @@ def booking_result(request, booking_id):
         return redirect('go_home')
     
     request.session['booking_id']=booking_id
-    request.session['truck_id']=truck.truck_id
+    request.session['truck_id']=truck.id
     request.session['pickup'] = booking.pickup
     request.session['destination'] = booking.destination
     request.session['distance'] = booking.distance
