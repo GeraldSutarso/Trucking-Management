@@ -481,8 +481,8 @@ def booking_result(request, booking_id):
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
 def history_customer(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
-    return render(request, 'b_history/booking-history_customer.html',{'booking':booking})
+    bookings = Booking.objects.filter(customer_id=request.user.id)
+    return render(request, 'b_history/booking-history_customer.html',{'bookings':bookings})
 
 
 

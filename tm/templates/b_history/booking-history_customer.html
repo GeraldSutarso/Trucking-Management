@@ -33,11 +33,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for truck in booking.trucks.all %}
-                                    <tr>
+                                    {% for booking in bookings %}
+                                    <tr id=booking-{{ booking.id }} onclick="window.location.href='{% url "booking_result" booking.id %}'">
                                         <td>{{ booking.id }}</td>
-                                        <td>{{ date }}</td>
-                                        <td>{{ payment }}</td>
+                                        <td>{{ booking.date }}</td>
+                                        <td>{{ booking.payment_status }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
