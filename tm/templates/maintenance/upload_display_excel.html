@@ -3,11 +3,21 @@
 {% block title %}Maintenance Page{% endblock %}
 
 {% block content %}
+{% load static %}
+<div style="border: 10px solid black;">
 <h1 style="text-align: center; margin-top: 200px;">Upload Excel File</h1>
 <div style="text-align: center;">
   <form method="post" enctype="multipart/form-data" style="display: inline-block; text-align: left;">
     {% csrf_token %}
     {{ form.as_p }}
+    
+    <!-- Dropdown for selecting truck type -->
+    <label for="truck_select">Select Truck:</label>
+    <select id="truck_select" name="truck_select">
+      <option value="truck1" {% if truck_select == 'truck1' %}selected{% endif %}>Truck 1</option>
+      <option value="truck2" {% if truck_select == 'truck2' %}selected{% endif %}>Truck 2</option>
+    </select>
+    <br>
     <button type="submit">Upload</button>
   </form>
 </div>
@@ -24,7 +34,6 @@
 <hr />
 <h1 style="text-align: center;">Outlier Rows</h1>
 <div style="text-align: center;">{{ data_to_display|safe }}</div>
-
 
 {% if column_averages %}
 <hr />
@@ -46,5 +55,5 @@
     <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
 </div>
 {% endif %}
-
+</div>
 {% endblock %}
