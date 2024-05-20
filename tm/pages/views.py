@@ -480,7 +480,7 @@ def booking_result(request, booking_id):
     request.session['pickup'] = booking.pickup
     request.session['destination'] = booking.destination
     request.session['distance'] = booking.distance
-    request.session['date'] = booking.date
+    request.session['date'] = booking.date.strftime('%Y-%m-%d')
     request.session['details'] = booking.details
     request.session['weight'] = booking.weight
     request.session['price'] = booking.price
