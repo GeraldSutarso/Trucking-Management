@@ -91,13 +91,16 @@ def payment_status(request, booking_id):
 
 
 def payment_success(request, booking_id):
-    return render(request, 'booking/payment_success.html', booking_id)
+    booking = booking = Booking.objects.get(id=booking_id)
+    return render(request, 'booking/payment_success.html', {'booking':booking})
 
 def payment_pending(request, booking_id):
-    return render(request,'booking/payment_pending.html', booking_id)
+    booking = Booking.objects.get(id=booking_id)
+    return render(request,'booking/payment_pending.html', {'booking':booking})
 
 def payment_declined(request, booking_id):
-    return render(request,'booking/payment_declined.html', booking_id)
+    booking = Booking.objects.get(id=booking_id)
+    return render(request,'booking/payment_declined.html', {'booking':booking})
 
 
 
