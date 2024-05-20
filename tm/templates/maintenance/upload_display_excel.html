@@ -14,11 +14,10 @@
     <!-- Dropdown for selecting truck type -->
     <label for="truck_select">Select Truck:</label>
     <select id="truck_select" name="truck_select">
-      <option value="truck1" {% if truck_select == 'truck1' %}selected{% endif %}>Truck 1</option>
-      <option value="truck2" {% if truck_select == 'truck2' %}selected{% endif %}>Truck 2</option>
-      <option value="truck3" {% if truck_select == 'truck3' %}selected{% endif %}>Truck 3</option>
+      <option value="truck1">Truck 1</option>
+      <option value="truck2">Truck 2</option>
     </select>
-    <br>
+    
     <button type="submit">Upload</button>
   </form>
 </div>
@@ -27,37 +26,34 @@
 <div style="color: red; text-align: center;">Error: {{ error_message }}</div>
 {% endif %}
 
-{% if data_to_display != None %}
-    <hr />
-    <h1 style="text-align: center;">Your Last Results Were:</h1>
+{% if data_to_display %}
+<hr />
+<h1 style="text-align: center;">Your Last Results Were:</h1>
 
-    {% if maintenance_status and maintenance_status != "Vehicle condition is good." %}
-        <hr />
-        <h1 style="text-align: center;">Outlier Rows</h1>
-        <div style="text-align: center;">{{ data_to_display|safe }}</div>
+{% if maintenance_status and maintenance_status != "Vehicle condition is good." %}
+<hr />
+<h1 style="text-align: center;">Outlier Rows</h1>
+<div style="text-align: center;">{{ data_to_display|safe }}</div>
 
-            {% if column_averages %}
-            <hr />
-            <h2 style="text-align: center;">Column Averages</h2>
-            <ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
-                {% for column, average in column_averages.items %}
-                <li>{{ column }}: {{ average }}</li> <br>
-                {% endfor %}
-            </ul>
-            {% endif %}
-    {% endif %}
+{% if column_averages %}
+<hr />
+<h2 style="text-align: center;">Column Averages</h2>
+<ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
+  {% for column, average in column_averages.items %}
+  <li>{{ column }}: {{ average }}</li> <br>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endif %}
 
-        <hr />
-        <h2 style="text-align: center;">Maintenance Status</h2>
-        <p style="text-align: center;">{{ maintenance_status }}</p>
-        {% if maintenance_status == "Vehicle condition is good." %}
-        <p> Good Conndition</p>
-        {% endif %}
-        {% else %}
-        <h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
-        <div style="text-align: center;">
-            <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
-        </div>
-    {% endif %}
+<hr />
+<h2 style="text-align: center;">Maintenance Status</h2>
+<p style="text-align: center;">{{ maintenance_status }}</p>
+{% else %}
+<h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
+<div style="text-align: center;">
+    <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
+</div>
+{% endif %}
 </div>
 {% endblock %}

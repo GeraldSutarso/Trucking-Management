@@ -5,31 +5,33 @@
 {% block content %}
 {% load static %}
 <div style="border: 10px solid black;">
-    <h1 style="text-align: center; margin-top: 200px;">Manual Data Input</h1>
+    <h1 style="text-align: center; margin-top: 200px; font-size: x-large;">Manual Truck Condition Check</h1>
+    <p style="text-align: center;">Please Enter the data manually in the form Below</p>
     <div style="text-align: center;">
         <form method="post" id="manual-input-form" style="display: inline-block; text-align: left;">
             {% csrf_token %}
             <div id="input-rows">
                 <!-- Initial row -->
                 <div class="input-row">
-                    <div class="form-group">{{ form.ALTITUDE.label_tag }} {{ form.ALTITUDE }}</div>
-                    <div class="form-group">{{ form.ENGINE_LOAD.label_tag }} {{ form.ENGINE_LOAD }}</div>
-                    <div class="form-group">{{ form.BAROMETRIC_PRESSURE.label_tag }} {{ form.BAROMETRIC_PRESSURE }}</div>
-                    <div class="form-group">{{ form.ENGINE_COOLANT_TEMP.label_tag }} {{ form.ENGINE_COOLANT_TEMP }}</div>
-                    <div class="form-group">{{ form.AMBIENT_AIR_TEMP.label_tag }} {{ form.AMBIENT_AIR_TEMP }}</div>
-                    <div class="form-group">{{ form.ENGINE_RPM.label_tag }} {{ form.ENGINE_RPM }}</div>
-                    <div class="form-group">{{ form.INTAKE_MANIFOLD_PRESSURE.label_tag }} {{ form.INTAKE_MANIFOLD_PRESSURE }}</div>
-                    <div class="form-group">{{ form.MAF.label_tag }} {{ form.MAF }}</div>
-                    <div class="form-group">{{ form.AIR_INTAKE_TEMP.label_tag }} {{ form.AIR_INTAKE_TEMP }}</div>
-                    <div class="form-group">{{ form.SPEED.label_tag }} {{ form.SPEED }}</div>
-                    <div class="form-group">{{ form.THROTTLE_POS.label_tag }} {{ form.THROTTLE_POS }}</div>
-                    <div class="form-group">{{ form.ENGINE_RUNTIME.label_tag }} {{ form.ENGINE_RUNTIME }}</div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ALTITUDE.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ALTITUDE }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ENGINE_LOAD.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ENGINE_LOAD }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.BAROMETRIC_PRESSURE.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.BAROMETRIC_PRESSURE }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ENGINE_COOLANT_TEMP.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ENGINE_COOLANT_TEMP }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.AMBIENT_AIR_TEMP.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.AMBIENT_AIR_TEMP }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ENGINE_RPM.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ENGINE_RPM }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.INTAKE_MANIFOLD_PRESSURE.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.INTAKE_MANIFOLD_PRESSURE }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.MAF.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.MAF }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.AIR_INTAKE_TEMP.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.AIR_INTAKE_TEMP }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.SPEED.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.SPEED }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.THROTTLE_POS.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.THROTTLE_POS }}</span></div>
+                    <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ENGINE_RUNTIME.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ENGINE_RUNTIME }}</span></div>
                     <button type="button" class="delete-button original-row" disabled>Delete</button>
                 </div>
                 <hr /> <!-- Horizontal line to separate rows -->
             </div>
-            <button type="button" onclick="addRow()">Add Row</button><br><br>
-            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }} <!-- Truck select dropdown -->
+           
+            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }}<br><!-- Truck select dropdown -->
+            <button type="button" onclick="addRow()">Add Row</button>
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -50,22 +52,49 @@
     {% if column_averages %}
     <hr />
     <h2 style="text-align: center;">Column Averages</h2>
+    <div style="display: flex; justify-content: center;">
     <ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
         {% for column, average in column_averages.items %}
-        <li>{{ column }}: {{ average }}</li> <br>
+       <li><span style="display: inline-block; width: 300px;">{{ column }}</span>: <span style="display: inline-block; width: 150px;">
+            {% if column == "ALTITUDE" %}{{ average }}{% endif %}
+            {% if column == "ENGINE_LOAD" %}{{ average }}%{% endif %}
+            {% if column == "BAROMETRIC_PRESSURE" %}{{ average }} kPa{% endif %}
+            {% if column == "INTAKE_MANIFOLD_PRESSURE" %}{{ average }} kPa{% endif %}
+            {% if column == "THROTTLE_POS" %}{{ average }}%{% endif %}
+            {% if column == "MAF" %}{{ average }} g/s{% endif %}
+            {% if column == "SPEED" %}{{ average }} km/h{% endif %}
+            {% if column == "ENGINE_RPM" %}{{ average }}RPM{% endif %}
+            {% if column == "ENGINE_COOLANT_TEMP" %}{{ average }} °C{% endif %}
+            {% if column == "AMBIENT_AIR_TEMP" %}{{ average }} °C{% endif %}
+            {% if column == "AIR_INTAKE_TEMP" %}{{ average }} °C{% endif %}
+            {% if column == "ENGINE_RUNTIME" %}
+                {{average}} seconds
+            {% endif %}
+            </span>
+        </li> <br>
         {% endfor %}
     </ul>
+    </div>
     {% endif %}
     {% endif %}
 
     <hr />
     <h2 style="text-align: center;">Maintenance Status</h2>
-    <p style="text-align: center;">{{ maintenance_status }}</p>
+    <p style="text-align: center;">
+        {% if maintenance_status == "Vehicle condition is good. Status: Good" %}
+        <span style="color: green;">{{ maintenance_status }}</span>{% endif %}
+        {% if maintenance_status == "The vehicle needs maintenance. Status: Moderate" %}
+        <span style="color: yellow;">{{ maintenance_status }}</span>{% endif %}
+        {% if maintenance_status == "The vehicle desperately needs maintenance. Status: Severe" %}
+        <span style="color: red;">{{ maintenance_status }}</span>{% endif %}
+    </p>
     {% else %}
     <h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
     {% endif %}
-    <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
-    <a href="{% url 'maintenance_page' %}">Upload Display Excel</a>
+    <div style="text-align: center;">
+        <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a><br>
+        <a href="{% url 'maintenance_page' %}">Upload Display Excel</a>
+    </div>
 </div>
 
 <script>
