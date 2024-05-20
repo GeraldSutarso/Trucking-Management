@@ -43,15 +43,15 @@ def trucks(request):
     elif request.user.is_driver:
         return redirect('driver_trucks')
     
-def notification(request):
+def history(request):
     if not request.user.is_authenticated:
         return redirect('go_home')
     if request.user.is_customer:
-        return redirect('notification_customer')
+        return redirect('customer_bookings')
     elif request.user.is_superuser:
         return redirect(request, 'admin/base_site.html')
     elif request.user.is_driver:
-        return redirect('notification_driver')
+        return redirect('driver_bookings')
     
 #HEY USER, WHO ARE YOU??
 
@@ -480,16 +480,13 @@ def booking_result(request, booking_id):
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
-<<<<<<< Updated upstream
-def notification_customer(request, booking_id):
+def history_customer(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
-    return render(request, 'notification/notification_customer.html',{'booking':booking})
-=======
-def notification_customer(request):
-    return render(request, 'b_history/booking_customer.html')
->>>>>>> Stashed changes
+    return render(request, 'b_history/booking-history_customer.html',{'booking':booking})
+
+
 
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
-def notification_driver(request):
+def history_driver(request):
     return render(request, 'b_history/booking_driver.html')
