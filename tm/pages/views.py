@@ -485,7 +485,7 @@ def booking_result(request, booking_id):
     request.session['weight'] = booking.weight
     request.session['price'] = booking.price
     
-    return render(request, 'booking/booking_result.html', {'booking': booking}, {'truck':truck})
+    return render(request, 'booking/booking_result.html', {'booking': booking, 'truck':truck})
 
 
 @login_required(login_url = 'login')
