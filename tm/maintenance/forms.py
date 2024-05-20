@@ -17,4 +17,4 @@ class ManualInputForm(forms.Form):
     SPEED = forms.FloatField(label='Speed')
     THROTTLE_POS = forms.FloatField(label='Throttle Position')
     ENGINE_RUNTIME = forms.CharField(label='Engine Runtime (HH:MM:SS)')
-    truck_select = forms.ChoiceField(choices=[('truck1', 'Truck 1'), ('truck2', 'Truck 2')], label='Select Truck')
+    TRUCK_SELECT = forms.ChoiceField(choices=[('truck1', 'Truck 1'), ('truck2', 'Truck 2'), ('truck3', 'Truck 3')], label='Select Truck')
