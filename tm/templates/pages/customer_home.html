@@ -45,123 +45,13 @@ No home?? :(
                     </div>
                     <br><br>
 					<p>
-                        Welcome, {{ request.user.first_name }} to the home page.
+                        Welcome to the home page, {{ request.user.first_name }}
                     </p>
 					<button class="welcome-btn" onclick="window.location.href='{% url "customer_trucks" %}'">Book a truck</button>
 				</div>
 			</div>
-
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="model-search-content">
-							<div class="row">
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>Select Truck Model</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">Truck Model</option><!-- /.option-->
-												<option value="Pick-Up">Pick-Up</option>
-											  	<option value="CDD">CDD</option><!-- /.option-->
-											  	<option value="FUSO">FUSO</option><!-- /.option-->
-											  	<option value="TRONTON">TRONTON</option><!-- /.option-->
-												<option value="WINGBOX">WINGBOX</option><!-- /.option-->
-												<option value="TRAILER">TRAILER</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-									{% comment %} <div class="single-model-search">
-										<h2>driver</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="a">a</option><!-- /.option-->
-
-											  	<option value="b">b</option><!-- /.option-->
-
-											  	<option value="c">c</option><!-- /.option-->
-											  	<option value="d">d</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div> {% endcomment %}
-								</div>
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>Truck Capacity</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">Capacity</option><!-- /.option-->
-											  	<option value="5-Ton">5-Ton</option><!-- /.option-->
-											  	<option value="15-Ton">15-Ton</option><!-- /.option-->
-											  	<option value="25-Ton">25-Ton</option><!-- /.option-->
-											  	<option value="35-Ton">35-Ton</option><!-- /.option-->
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-									{% comment %} <div class="single-model-search">
-										<h2>truck condition</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">condition</option><!-- /.option-->
-
-											  	<option value="something">something</option><!-- /.option-->
-
-											  	<option value="something">something</option><!-- /.option-->
-											  	<option value="something">something</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div> {% endcomment %}
-								</div>
-								<div class="col-md-offset-1 col-md-2 col-sm-12">
-									<div class="single-model-search">
-										<h2>Select Truck Merk</h2>
-										<div class="model-select-icon">
-											<select class="form-control">
-
-											  	<option value="default">model</option><!-- /.option-->
-											  	<option value="Mitsubishi">Mitsubishi</option><!-- /.option-->
-											  	<option value="Hino">Hino</option><!-- /.option-->
-											  	<option value="Isuzu">Isuzu</option><!-- /.option-->
-
-											</select><!-- /.select-->
-										</div><!-- /.model-select-icon -->
-									</div>
-								</div>
-								<div class="col-md-2 col-sm-12">
-									<div class="single-model-search text-center">
-										<button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
-											search
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 		</section><!--/.welcome-hero-->
 		<!--welcome-hero end -->
-
-		<!--service start -->
-		<section id="service" class="service">
-			<div class="container">
-				<div class="service-content">
-					<div class="row">
-						
-					</div>
-				</div>
-			</div><!--/.container-->
-
-		</section><!--/.service-->
-		<!--service end-->
 
 		<!--new-trucks start -->
 		<section id="new-trucks" class="new-trucks">
@@ -250,7 +140,6 @@ No home?? :(
 					</div><!--/#new-trucks-carousel-->
 				</div><!--/.new-trucks-content-->
 			</div><!--/.container-->
-
 		</section><!--/.new-trucks-->
 		<!--new-trucks end -->
 
@@ -330,7 +219,7 @@ No home?? :(
 		</section><!--/.clients-say-->	
 		<!-- clients-say end -->
 
-		<!--brand strat -->
+		{% comment %} <!--brand strat -->
 		<section id="brand"  class="brand">
 			<div class="container">
 				<div class="brand-area">
@@ -372,7 +261,7 @@ No home?? :(
 
 			</div><!--/.container-->
 
-		</section><!--/brand-->	
+		</section><!--/brand-->	 {% endcomment %}
 		<!--brand end -->
 
 		<!--blog start -->

@@ -27,27 +27,17 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Model</th>
-                                        <th>License Plate</th>
-                                        <th>Driver</th>
-                                        <th>Capacity</th>
-                                        <th>Status</th>
-                                        <th>Pick-up Location</th>
-                                        <th>Destination</th>
+                                        <th>Booking ID</th>
+                                        <th>Date</th>
+                                        <th>Payment Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for truck in booking.trucks.all %}
                                     <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ truck.truck_model }}</td>
-                                        <td>{{ truck.license_plate }}</td>
-                                        <td>{{ truck.driver.user.get_full_name }}</td>
-                                        <td>{{ truck.capacity }}</td>
-                                        <td>{{ truck.status }}</td>
-                                        <td>{{ truck.pickup }}</td>
-                                        <td>{{ truck.destination }}</td>
+                                        <td>{{ booking.id }}</td>
+                                        <td>{{ date }}</td>
+                                        <td>{{ payment }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
