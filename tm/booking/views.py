@@ -79,21 +79,25 @@ def create_payment(request):
     
     return render(request, 'booking/payment_form.html', {'price': booking.price})
 
-def payment_status(request):
-    if not request.user.is_authenticated:
-        return redirect('go_home')
-    if request.user.is_customer:
-        return redirect('customer_trucks')
-    elif request.user.is_superuser:
-        return redirect(request, 'admin/base_site.html')
-    elif request.user.is_driver:
-        return redirect('driver_trucks')
+def payment_status(request, booking_id):
+    booking_id = request.session['booking_id']
+    booking = Booking.objects.get(id=booking_id)
+    if booking.payment_status == "completed":
+        return redirect('payment_success', booking_id)
+    if booking.payment_status == "pending":
+        return redirect('payment_pending', booking_id)
+    if booking.payment_status == "declined":
+        return redirect('payment_declined', booking_id)
 
-def payment_success(request):
-    return render(request, 'booking/payment_success.html')
 
-def payment_pending(request):
-    return render(request,'booking/payment_pending.html')
+def payment_success(request, booking_id):
+    return render(request, 'booking/payment_success.html', booking_id)
+
+def payment_pending(request, booking_id):
+    return render(request,'booking/payment_pending.html', booking_id)
+
+def payment_declined(request, booking_id):
+    return render(request,'booking/payment_declined.html', booking_id)
 
 
 
