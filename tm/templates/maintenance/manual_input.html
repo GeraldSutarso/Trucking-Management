@@ -5,86 +5,106 @@
 {% block content %}
 {% load static %}
 <div style="border: 10px solid black;">
-<h1 style="text-align: center; margin-top: 200px;">Manual Data Input</h1>
-<div style="text-align: center;">
-  <form method="post" id="manual-input-form" style="display: inline-block; text-align: left;">
-    {% csrf_token %}
-    <div id="input-rows">
-      <!-- Initial row -->
-      <div class="input-row">
-        {{ form.as_p }}
-        <button type="button" onclick="deleteRow(this)">Delete</button>
-      </div>
-      <hr /> <!-- Horizontal line to separate rows -->
+    <h1 style="text-align: center; margin-top: 200px;">Manual Data Input</h1>
+    <div style="text-align: center;">
+        <form method="post" id="manual-input-form" style="display: inline-block; text-align: left;">
+            {% csrf_token %}
+            <div id="input-rows">
+                <!-- Initial row -->
+                <div class="input-row">
+                    <div class="form-group">{{ form.ALTITUDE.label_tag }} {{ form.ALTITUDE }}</div>
+                    <div class="form-group">{{ form.ENGINE_LOAD.label_tag }} {{ form.ENGINE_LOAD }}</div>
+                    <div class="form-group">{{ form.BAROMETRIC_PRESSURE.label_tag }} {{ form.BAROMETRIC_PRESSURE }}</div>
+                    <div class="form-group">{{ form.ENGINE_COOLANT_TEMP.label_tag }} {{ form.ENGINE_COOLANT_TEMP }}</div>
+                    <div class="form-group">{{ form.AMBIENT_AIR_TEMP.label_tag }} {{ form.AMBIENT_AIR_TEMP }}</div>
+                    <div class="form-group">{{ form.ENGINE_RPM.label_tag }} {{ form.ENGINE_RPM }}</div>
+                    <div class="form-group">{{ form.INTAKE_MANIFOLD_PRESSURE.label_tag }} {{ form.INTAKE_MANIFOLD_PRESSURE }}</div>
+                    <div class="form-group">{{ form.MAF.label_tag }} {{ form.MAF }}</div>
+                    <div class="form-group">{{ form.AIR_INTAKE_TEMP.label_tag }} {{ form.AIR_INTAKE_TEMP }}</div>
+                    <div class="form-group">{{ form.SPEED.label_tag }} {{ form.SPEED }}</div>
+                    <div class="form-group">{{ form.THROTTLE_POS.label_tag }} {{ form.THROTTLE_POS }}</div>
+                    <div class="form-group">{{ form.ENGINE_RUNTIME.label_tag }} {{ form.ENGINE_RUNTIME }}</div>
+                    <button type="button" class="delete-button original-row" disabled>Delete</button>
+                </div>
+                <hr /> <!-- Horizontal line to separate rows -->
+            </div>
+            <button type="button" onclick="addRow()">Add Row</button><br><br>
+            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }} <!-- Truck select dropdown -->
+            <button type="submit">Submit</button>
+        </form>
     </div>
-    <button type="button" onclick="addRow()">Add Row</button><br>
-    <button type="submit">Submit</button>
-  </form>
-</div>
 
-{% if error_message %}
-<div style="color: red; text-align: center;">Error: {{ error_message }}</div>
-{% endif %}
+    {% if error_message %}
+    <div style="color: red; text-align: center;">Error: {{ error_message }}</div>
+    {% endif %}
 
-{% if data_to_display %}
-<hr />
-<h1 style="text-align: center;">Your Last Results Were:</h1>
+    {% if data_to_display %}
+    <hr />
+    <h1 style="text-align: center;">Your Last Results Were:</h1>
 
-{% if maintenance_status and maintenance_status != "Vehicle condition is good." %}
-<hr />
-<h1 style="text-align: center;">Outlier Rows</h1>
-<div style="text-align: center;">{{ data_to_display|safe }}</div>
+    {% if maintenance_status and maintenance_status != "Vehicle condition is good." %}
+    <hr />
+    <h1 style="text-align: center;">Outlier Rows</h1>
+    <div style="text-align: center;">{{ data_to_display|safe }}</div>
 
-{% if column_averages %}
-<hr />
-<h2 style="text-align: center;">Column Averages</h2>
-<ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
-  {% for column, average in column_averages.items %}
-  <li>{{ column }}: {{ average }}</li> <br>
-  {% endfor %}
-</ul>
-{% endif %}
-{% endif %}
+    {% if column_averages %}
+    <hr />
+    <h2 style="text-align: center;">Column Averages</h2>
+    <ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
+        {% for column, average in column_averages.items %}
+        <li>{{ column }}: {{ average }}</li> <br>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
 
-<hr />
-<h2 style="text-align: center;">Maintenance Status</h2>
-<p style="text-align: center;">{{ maintenance_status }}</p>
-{% else %}
-<h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
-{% endif %}
-<a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
-<a href="{% url 'upload_display_excel' %}">Download Test Case Excel</a>
+    <hr />
+    <h2 style="text-align: center;">Maintenance Status</h2>
+    <p style="text-align: center;">{{ maintenance_status }}</p>
+    {% else %}
+    <h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
+    {% endif %}
+    <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
+    <a href="{% url 'maintenance_page' %}">Upload Display Excel</a>
 </div>
 
 <script>
-  function addRow() {
-    const form = document.getElementById('manual-input-form');
-    const newRow = document.querySelector('.input-row').cloneNode(true);
-    const inputs = newRow.querySelectorAll('input, select');
-    inputs.forEach(input => {
-      input.value = ''; // Clear the input fields
-      const name = input.getAttribute('name');
-      if (name) {
-        const newName = name.replace(/\d+/, function (match) {
-          return parseInt(match) + 1; // Increment the index for new row
+    function addRow() {
+        const form = document.getElementById('manual-input-form');
+        const newRow = document.querySelector('.input-row').cloneNode(true);
+        const inputs = newRow.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            if (input.getAttribute('name') !== 'TRUCK_SELECT') { // Skip truck_select
+                input.value = ''; // Clear the input fields
+                const name = input.getAttribute('name');
+                if (name) {
+                    const newName = name.replace(/\d+/, function (match) {
+                        return parseInt(match) + 1; // Increment the index for new row
+                    });
+                    input.setAttribute('name', newName);
+                }
+            } else {
+                input.remove(); // Remove the truck_select dropdown
+            }
         });
-        input.setAttribute('name', newName);
-      }
-    });
-    newRow.querySelector('button').textContent = 'Delete';
-    newRow.querySelector('button').setAttribute('onclick', 'deleteRow(this)');
-    document.getElementById('input-rows').appendChild(newRow);
-    document.getElementById('input-rows').appendChild(document.createElement('hr'));
-  }
-
-  function deleteRow(button) {
-    const row = button.parentElement;
-    row.parentNode.removeChild(row);
-    // Remove the horizontal line before the deleted row
-    const hr = row.nextElementSibling;
-    if (hr && hr.tagName === 'HR') {
-      hr.parentNode.removeChild(hr);
+        const deleteButton = newRow.querySelector('.delete-button');
+        deleteButton.disabled = false;
+        deleteButton.classList.remove('original-row');
+        deleteButton.setAttribute('onclick', 'deleteRow(this)');
+        document.getElementById('input-rows').appendChild(newRow);
+        document.getElementById('input-rows').appendChild(document.createElement('hr'));
     }
-  }
+
+    function deleteRow(button) {
+        if (!button.classList.contains('original-row')) {
+            const row = button.parentElement;
+            const hr = row.nextElementSibling;
+            row.parentNode.removeChild(row);
+            // Remove the horizontal line after the deleted row
+            if (hr && hr.tagName === 'HR') {
+                hr.parentNode.removeChild(hr);
+            }
+        }
+    }
 </script>
 {% endblock %}

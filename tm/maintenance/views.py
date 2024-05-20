@@ -94,7 +94,8 @@ def upload_display_excel(request):
 
     if request.method == 'POST':
         form = ExcelUploadForm(request.POST, request.FILES)
-        truck_select = request.POST.get('truck_select', 'truck1')
+        truck_select = request.POST.get('TRUCK_SELECT', 'truck1')
+        print(truck_select)
         if form.is_valid():
             try:
                 excel_file = request.FILES['excel_file']
@@ -152,6 +153,8 @@ def upload_display_excel(request):
 
                 # Prepare data to display in HTML format
                 data_to_display = outlier_rows.to_html()
+                print(data_to_display)
+                print(outlier_rows)
             except Exception as e:
                 error_message = str(e)
                 print(f"Error: {error_message}")
@@ -217,34 +220,38 @@ def manual_input_view(request):
         form = ManualInputForm(request.POST)
         if form.is_valid():
             try:
-                truck_select = form.cleaned_data['truck_select']
-                
+                truck_select = form.cleaned_data['TRUCK_SELECT']
+                print(truck_select)
                 # Convert form data to DataFrame
                 data = {field: [value] for field, value in form.cleaned_data.items() if field != 'truck_select'}
                 print(data)
                 df = pd.DataFrame(data)
+                print("Columns in the DataFrame:", df.columns)
 
                 # Load and preprocess training data
                 if truck_select == 'truck2':
-                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'badData.xlsx')
+                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'Truck2.xlsx')
+                elif truck_select == 'truck3':
+                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'Truck3.xlsx')
                 else:
                     train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'exp2_19drivers_1car_1route.xlsx')
                 train_df = load_data(train_file_path)
                 train_preprocessed, numerical_columns_updated = preprocess_data(train_df)
                 train_imputed = handle_missing_values(train_preprocessed, numerical_columns_updated)
-
+                print(train_imputed)
                 # Train Isolation Forest model
                 isolation_forest, _ = train_isolation_forest(train_imputed, numerical_columns_updated)
 
                 # Preprocess input data
                 df_preprocessed, numerical_columns_updated = preprocess_data(df)
                 df_imputed = handle_missing_values(df_preprocessed, numerical_columns_updated)
-
+                print(df_imputed)
                 # Detect anomalies
                 total_anomaly_score = sum_anomaly_scores(isolation_forest, df_imputed, numerical_columns_updated)
                 input_outliers = detect_outliers(isolation_forest, df_imputed, numerical_columns_updated)
                 outlier_rows = compare_outliers(df, input_outliers)
-
+                print(outlier_rows)
+                print(total_anomaly_score)
                 # Calculate column averages
                 column_averages = df_imputed.mean().to_dict()
 
@@ -270,6 +277,7 @@ def manual_input_view(request):
 
                 # Prepare data to display in HTML format
                 data_to_display = outlier_rows.to_html()
+                print(data_to_display)
             except Exception as e:
                 error_message = str(e)
                 print(f"Error: {error_message}")
