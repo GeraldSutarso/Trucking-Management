@@ -69,11 +69,11 @@
                         {% if not booking.payment_status %}
                             <a href="{% url 'create_payment' %}" class="btn btn-primary">Payment</a>
                         {% elif booking.payment_status == "pending"  %}
-                            <a href="{% url 'payment_pending' booking_id %}" class="btn btn-primary">Payment</a>
+                            <a href="{% url 'payment_pending' booking.id %}" class="btn btn-primary">Payment</a>
                         {% elif booking.payment_status == "completed"  %}
-                            <a href="{% url 'payment_success' booking_id %}" class="btn btn-primary">Payment</a>
+                            <a href="{% url 'payment_success' booking.id %}" class="btn btn-primary">Payment</a>
                         {% elif booking.payment_status == "failed"  %}
-                            <a href="{% url 'payment_declined' booking_id %}" class="btn btn-primary">Payment</a>
+                            <a href="{% url 'payment_declined' booking.id %}" class="btn btn-primary">Payment</a>
                         {% endif %}
                     </div>
                   </div>
