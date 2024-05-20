@@ -66,10 +66,14 @@
                     </table>
 
                     <div class="text-center">
-                        {% if not booking.payment_method %}
+                        {% if not booking.payment_status %}
                             <a href="{% url 'create_payment' %}" class="btn btn-primary">Payment</a>
-                        {% else %}
-                            <a href="{% url 'payment' %}" class="btn btn-primary">Payment</a>
+                        {% else if booking.payment_status == "pending"  %}
+                            <a href="{% url 'payment_pending' %}" class="btn btn-primary">Payment</a>
+                        {% else if booking.payment_status == "completed"  %}
+                            <a href="{% url 'payment_success' %}" class="btn btn-primary">Payment</a>
+                        {% else if booking.payment_status == "failed"  %}
+                            <a href="{% url 'payment_declined' %}" class="btn btn-primary">Payment</a>
                         {% endif %}
                     </div>
                   </div>
