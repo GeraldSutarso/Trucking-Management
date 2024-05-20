@@ -470,12 +470,22 @@ def booking_result(request, booking_id):
         user = Customer.objects.get(user=request.user)
         booking = Booking.objects.get(id=booking_id)
         booking.customer_id == user.user_id
+        truck = Truck.objects.get(id=booking.truck_id)
+        
     except ObjectDoesNotExist:
         return redirect('go_home')
     
     request.session['booking_id']=booking_id
+    request.session['truck_id']=truck.truck_id
+    request.session['pickup'] = booking.pickup
+    request.session['destination'] = booking.destination
+    request.session['distance'] = booking.distance
+    request.session['date'] = booking.date
+    request.session['details'] = booking.details
+    request.session['weight'] = booking.weight
+    request.session['price'] = booking.price
     
-    return render(request, 'booking/booking_result.html', {'booking': booking})
+    return render(request, 'booking/booking_result.html', {'booking': booking}, {'truck':truck})
 
 
 @login_required(login_url = 'login')
