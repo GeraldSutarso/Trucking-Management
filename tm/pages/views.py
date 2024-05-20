@@ -480,11 +480,16 @@ def booking_result(request, booking_id):
 
 @login_required(login_url = 'login')
 @user_passes_test(im_customer, login_url='/')
+<<<<<<< Updated upstream
 def notification_customer(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     return render(request, 'notification/notification_customer.html',{'booking':booking})
+=======
+def notification_customer(request):
+    return render(request, 'b_history/booking_customer.html')
+>>>>>>> Stashed changes
 
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
 def notification_driver(request):
-    return render(request, 'notification/notification_driver.html')
+    return render(request, 'b_history/booking_driver.html')

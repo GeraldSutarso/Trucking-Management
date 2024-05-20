@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %} | Truck Booking {% endblock %}
+{% block content %}
+{% load static %}
+
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                  <br><h1>Booking History{{ booking.id }}</h1>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                      {% endfor %}
+                    {% endif %}
+                    <div class="card-body" style="margin: 15px">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Date</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for truck in booking.trucks.all %}
+                                    <tr>
+                                        <td>{{ booking.id }}</td>
+                                        <td>{{ booking.date }}</td>
+                                        <td>{{ booking.details }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="{% url 'go_home' %}" class="btn btn-primary">Return to Home</a>
+                    </div>                    
+                  </div>
+                </div>      
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
