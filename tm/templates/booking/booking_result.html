@@ -76,10 +76,10 @@
                     </table>
                     {% if request.user.is_customer %}
                     <div class="text-center">
-                        {% if not booking.payment_status %}
+                        {% if booking.payment_status == "pending" %}
                             <a href="{% url 'create_payment' %}" class="btn btn-primary">Payment</a>
-                        {% elif booking.payment_status == "pending"  %}
-                            <a href="{% url 'payment_pending' booking.id %}" class="btn btn-primary">Payment</a>
+                        {% comment %} {% elif booking.payment_status == "pending"  %}
+                            <a href="{% url 'payment_pending' booking.id %}" class="btn btn-primary">Payment</a> {% endcomment %}
                         {% elif booking.payment_status == "completed"  %}
                             <a href="{% url 'payment_success' booking.id %}" class="btn btn-primary">Payment</a>
                         {% elif booking.payment_status == "failed"  %}
