@@ -510,5 +510,4 @@ def history_customer(request):
 @user_passes_test(im_driver, login_url='/')
 def history_driver(request):
     bookings = Booking.objects.filter(driver_id=request.user.id)
-    customers = Customer.objects.filter(id = bookings.customer_id)
-    return render(request, 'b_history/booking_driver.html',{'bookings':bookings, 'customer':customers})
+    return render(request, 'b_history/booking_driver.html',{'bookings':bookings})

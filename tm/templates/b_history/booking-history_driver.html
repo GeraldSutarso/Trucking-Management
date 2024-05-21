@@ -29,7 +29,7 @@
                                     <tr>
                                         <th>Booking ID</th>
                                         <th>Date</th>
-                                        <th>Customer</th>
+                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,7 +37,7 @@
                                     <tr id=booking-{{ booking.id }} onclick="window.location.href='{% url "booking_result" booking.id %}'">
                                         <td>{{ booking.id }}</td>
                                         <td>{{ booking.date }}</td>
-                                        <td>{{ customer.user.firstname }} {{ customer.user.lastname }}</td>
+                                        <td>{{ booking.details }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
