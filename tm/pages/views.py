@@ -465,6 +465,7 @@ def book_truck(request):
 @login_required(login_url = 'login')
 # @user_passes_test(initely, login_url='/login')
 def booking_result(request, booking_id):
+    customer= None
     if request.user.is_customer:
         try:
             user = Customer.objects.get(user=request.user)
