@@ -1,8 +1,6 @@
 from django import forms
-
-class ExcelUploadForm(forms.Form):
-    excel_file = forms.FileField(label='Insert your data here')
-
+from django import forms
+from django.forms import formset_factory
 
 class ManualInputForm(forms.Form):
     ALTITUDE = forms.FloatField(label='Altitude')
@@ -17,4 +15,8 @@ class ManualInputForm(forms.Form):
     SPEED = forms.FloatField(label='Speed (km/h)')
     THROTTLE_POS = forms.FloatField(label='Throttle Position (%)')
     ENGINE_RUNTIME = forms.CharField(label='Engine Runtime (HH:MM:SS)')
-    TRUCK_SELECT = forms.ChoiceField(choices=[('truck1', 'Truck 1'), ('truck2', 'Truck 2'), ('truck3', 'Truck 3')], label='Select Truck')
+
+ManualInputFormSet = formset_factory(ManualInputForm, extra=1)
+
+class ExcelUploadForm(forms.Form):
+    excel_file = forms.FileField(label='Insert your data here')

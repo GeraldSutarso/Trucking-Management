@@ -29,8 +29,12 @@
                 </div>
                 <hr  style="height: 20px;"/> <!-- Horizontal line to separate rows -->
             </div>
-           
-            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }}<br><br>
+            <label for="truck_select">Select Truck:</label>
+           <select id="truck_select" name="truck_select">
+                    <option value="truck1">ISUZU ELF NMR</option>
+                    <option value="truck2">Grand Max</option>
+                    <option value="truck3">ISUZU ELM NMR 2</option>
+                </select>
             <button type="button" onclick="addRow()" style="font-size: 20px; padding: 10px; background-color: gainsboro; color: white; border-radius: 30px; border: 1px solid white; padding: 10px;">Add Row</button>
             <button type="submit" style="background-color: #2a2d54; font-size: 20px; border-radius: 30px; padding: 10px; color: white;">Submit</button>
         </form>

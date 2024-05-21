@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
-from .forms import ExcelUploadForm, ManualInputForm
+from .forms import ExcelUploadForm, ManualInputForm, ManualInputFormSet
 from .models import ExcelData, UploadedFile, ColumnAverages
 import pandas as pd
 import numpy as np
@@ -90,11 +90,10 @@ def upload_display_excel(request):
     error_message = None
     column_averages = None
     maintenance_status = None
-    truck_select = 'truck1'  # Default selection
-
+    truck_select = 'truck1'
     if request.method == 'POST':
         form = ExcelUploadForm(request.POST, request.FILES)
-        truck_select = request.POST.get('TRUCK_SELECT', 'truck1')
+        truck_select = request.POST.get('truck_select')
         print(truck_select)
         if form.is_valid():
             try:
@@ -103,7 +102,9 @@ def upload_display_excel(request):
                 new_upload.save()
 
                 if truck_select == 'truck2':
-                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'badData.xlsx')
+                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'Truck2.xlsx')
+                elif truck_select == 'truck3':
+                    train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'Truck3.xlsx')
                 else:
                     train_file_path = os.path.join(settings.MEDIA_ROOT, 'training_data', 'exp2_19drivers_1car_1route.xlsx')
                 train_df = load_data(train_file_path)
@@ -167,7 +168,7 @@ def upload_display_excel(request):
         'error_message': error_message,
         'column_averages': column_averages,
         'maintenance_status': maintenance_status,
-        'truck_select': truck_select  # Add this line to pass the selected truck type
+        'truck_select': truck_select  
     }
 
     return render(request, 'maintenance/upload_display_excel.html', context)
@@ -215,12 +216,14 @@ def manual_input_view(request):
     error_message = None
     column_averages = None
     maintenance_status = None
+    truck_select = "truck1"
 
     if request.method == 'POST':
         form = ManualInputForm(request.POST)
+        truck_select = request.POST.get('truck_select')
+        print(truck_select)
         if form.is_valid():
             try:
-                truck_select = form.cleaned_data['TRUCK_SELECT']
                 print(truck_select)
                 # Convert form data to DataFrame
                 data = {field: [value] for field, value in form.cleaned_data.items() if field != 'truck_select'}
@@ -293,4 +296,3 @@ def manual_input_view(request):
     }
 
     return render(request, 'maintenance/manual_input.html', context)
-

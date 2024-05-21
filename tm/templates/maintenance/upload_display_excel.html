@@ -5,20 +5,20 @@
 {% block content %}
 {% load static %}
 <div style="border: 10px solid black;">
-    <h1 style="text-align: center; margin-top: 200px;">Upload Excel File</h1>
+    <h1 style="text-align: center; margin-top: 200px; margin-bottom: 200px; font-size: 50px;">Upload Excel File</h1>
     <div style="text-align: center;">
         <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
             {% csrf_token %}
             <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px;">
-               <span> {{ form.excel_file.label_tag }}</span><span>{{ form.excel_file }}</span>
+               <span style="display: inline-block;"> {{ form.excel_file.label_tag }}</span><span style="display: inline-block; margin-left: 50px;">{{ form.excel_file }}</span>
             </div>
             <!-- Dropdown for selecting truck type -->
             <div style="margin-top: 20px;">
                 <label for="truck_select">Select Truck:</label>
                 <select id="truck_select" name="truck_select">
-                    <option value="truck1">Truck 1</option>
-                    <option value="truck2">Truck 2</option>
-                    <option value="truck3">Truck 3</option>
+                    <option value="truck1">ISUZU ELF NMR</option>
+                    <option value="truck2">Grand Max</option>
+                    <option value="truck3">ISUZU ELF NMR 2</option>
                 </select>
             </div>
             <button type="submit" style="margin-top: 20px; background-color: #2a2d54; font-size: 20px; border-radius: 30px; padding: 10px; color: white;">Upload Excel File</button>
