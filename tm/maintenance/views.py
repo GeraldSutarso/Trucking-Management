@@ -132,7 +132,7 @@ def upload_display_excel(request):
                 elif total_anomaly_score <= 0:
                     maintenance_status = "The vehicle needs maintenance. Status: Moderate"
                 else:
-                    maintenance_status = "Vehicle condition is good."
+                    maintenance_status = "Vehicle condition is good. Status: Good"
 
                 # Save to the database
                 ColumnAverages.objects.create(

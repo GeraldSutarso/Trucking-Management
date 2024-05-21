@@ -5,55 +5,75 @@
 {% block content %}
 {% load static %}
 <div style="border: 10px solid black;">
-<h1 style="text-align: center; margin-top: 200px;">Upload Excel File</h1>
-<div style="text-align: center;">
-  <form method="post" enctype="multipart/form-data" style="display: inline-block; text-align: left;">
-    {% csrf_token %}
-    {{ form.as_p }}
-    
-    <!-- Dropdown for selecting truck type -->
-    <label for="truck_select">Select Truck:</label>
-    <select id="truck_select" name="truck_select">
-      <option value="truck1">Truck 1</option>
-      <option value="truck2">Truck 2</option>
-    </select>
-    
-    <button type="submit">Upload</button>
-  </form>
-</div>
+    <h1 style="text-align: center; margin-top: 200px;">Upload Excel File</h1>
+    <div style="text-align: center;">
+        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
+            {% csrf_token %}
+            <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px;">
+               <span> {{ form.excel_file.label_tag }}</span><span>{{ form.excel_file }}</span>
+            </div>
+            <!-- Dropdown for selecting truck type -->
+            <div style="margin-top: 20px;">
+                <label for="truck_select">Select Truck:</label>
+                <select id="truck_select" name="truck_select">
+                    <option value="truck1">Truck 1</option>
+                    <option value="truck2">Truck 2</option>
+                    <option value="truck3">Truck 3</option>
+                </select>
+            </div>
+            <button type="submit" style="margin-top: 20px; background-color: #2a2d54; font-size: 20px; border-radius: 30px; padding: 10px; color: white;">Upload Excel File</button>
+        </form>
+    </div>
 
-{% if error_message %}
-<div style="color: red; text-align: center;">Error: {{ error_message }}</div>
-{% endif %}
+    {% if error_message %}
+    <div style="color: red; text-align: center;">Error: {{ error_message }}</div>
+    {% endif %}
 
-{% if data_to_display %}
-<hr />
-<h1 style="text-align: center;">Your Last Results Were:</h1>
+    {% if data_to_display %}
+    <hr />
+    <h1 style="text-align: center;">Your Last Results Were:</h1>
 
-{% if maintenance_status and maintenance_status != "Vehicle condition is good." %}
-<hr />
-<h1 style="text-align: center;">Outlier Rows</h1>
-<div style="text-align: center;">{{ data_to_display|safe }}</div>
+    {% if maintenance_status and maintenance_status != "Vehicle condition is good. Status: Good" %}
+    <hr />
+    <h1 style="text-align: center;">Outlier Rows</h1>
+    <div style="text-align: center;">{{ data_to_display|safe }}</div>
 
-{% if column_averages %}
-<hr />
-<h2 style="text-align: center;">Column Averages</h2>
-<ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
-  {% for column, average in column_averages.items %}
-  <li>{{ column }}: {{ average }}</li> <br>
-  {% endfor %}
-</ul>
-{% endif %}
-{% endif %}
+    {% if column_averages %}
+    <hr />
+    <h2 style="text-align: center;">Column Averages</h2>
+    <ul style="list-style-type: none; padding: 0; text-align: left; display: inline-block;">
+        {% for column, average in column_averages.items %}
+        <li>{{ column }}: {{ average }}</li> <br>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
 
-<hr />
-<h2 style="text-align: center;">Maintenance Status</h2>
-<p style="text-align: center;">{{ maintenance_status }}</p>
-{% else %}
-<h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
-<div style="text-align: center;">
-    <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a>
-</div>
-{% endif %}
+    <hr style="border: none; height: 10px; background-color: black;"/>
+    <h2 style="text-align: center;">Maintenance Status</h2>
+    <p style="text-align: center;">
+        {% if maintenance_status %}
+            {% if maintenance_status == "Vehicle condition is good. Status: Good" %}
+            <span style="color: green !important;">{{ maintenance_status }}</span>
+            {% elif maintenance_status == "The vehicle needs maintenance. Status: Moderate" %}
+            <span style="color: yellow !important;">{{ maintenance_status }}</span>
+            {% elif maintenance_status == "The vehicle desperately needs maintenance. Status: Severe" %}
+            <span style="color: red !important;">{{ maintenance_status }}</span>
+            {% else %}
+            <span>{{ maintenance_status }}</span>
+            {% endif %}
+        {% else %}
+        <span>No maintenance status available.</span>
+        {% endif %}
+    </p>
+    {% else %}
+    <h1 style="text-align: center; margin-top: 200px;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
+    {% endif %}
+    <div style="text-align: center; margin-top: 200px;">
+        <p style="font-size: 14px;">Please Upload your Excel File using the template below</p>
+        <a href="{% url 'download_test_case_excel' %}" download style="text-decoration: underline; color: blue; font-size: 14px;">Download Test Case Template</a><br>
+        <p style="font-size: 14px;">If you would like to manually input data, Please use the form below</p>
+        <a href="{% url 'manual_input' %}" style="text-decoration: underline; color: blue; font-size: 14px;">Manual Input Check</a>
+    </div>
 </div>
 {% endblock %}

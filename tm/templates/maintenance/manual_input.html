@@ -8,7 +8,7 @@
     <h1 style="text-align: center; margin-top: 200px; font-size: x-large;">Manual Truck Condition Check</h1>
     <p style="text-align: center;">Please Enter the data manually in the form Below</p>
     <div style="text-align: center;">
-        <form method="post" id="manual-input-form" style="display: inline-block; text-align: left;">
+        <form method="post" id="manual-input-form" style="display: inline-block; text-align: left; width: 800px">
             {% csrf_token %}
             <div id="input-rows">
                 <!-- Initial row -->
@@ -25,14 +25,14 @@
                     <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.SPEED.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.SPEED }}</span></div>
                     <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.THROTTLE_POS.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.THROTTLE_POS }}</span></div>
                     <div class="form-group"><span style="display: inline-block; width: 300px;">{{ form.ENGINE_RUNTIME.label_tag }}</span> <span style="display: inline-block; width: 100px;">{{ form.ENGINE_RUNTIME }}</span></div>
-                    <button type="button" class="delete-button original-row" disabled>Delete</button>
+                    <button type="button" class="delete-button original-row" disabled hidden style="background-color: red; color: white; font-size: 20px; border-radius: 30px; padding: 10px;">Delete</button>
                 </div>
-                <hr /> <!-- Horizontal line to separate rows -->
+                <hr  style="height: 20px;"/> <!-- Horizontal line to separate rows -->
             </div>
            
-            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }}<br><!-- Truck select dropdown -->
-            <button type="button" onclick="addRow()">Add Row</button>
-            <button type="submit">Submit</button>
+            {{ form.TRUCK_SELECT.label_tag }} {{ form.TRUCK_SELECT }}<br><br>
+            <button type="button" onclick="addRow()" style="font-size: 20px; padding: 10px; background-color: gainsboro; color: white; border-radius: 30px; border: 1px solid white; padding: 10px;">Add Row</button>
+            <button type="submit" style="background-color: #2a2d54; font-size: 20px; border-radius: 30px; padding: 10px; color: white;">Submit</button>
         </form>
     </div>
 
@@ -89,11 +89,11 @@
         <span style="color: red;">{{ maintenance_status }}</span>{% endif %}
     </p>
     {% else %}
-    <h1 style="text-align: center;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
+    <h1 style="text-align: center; margin-top: 200px;">You Haven't Entered Data Yet, Please Enter Data so that the results can be displayed here</h1>
     {% endif %}
-    <div style="text-align: center;">
-        <a href="{% url 'download_test_case_excel' %}" download>Download Test Case Excel</a><br>
-        <a href="{% url 'maintenance_page' %}">Upload Display Excel</a>
+    <div style="text-align: center; margin-top: 200px;">
+        <p style="font-size: 14px;">If you would like to upload an excel file instead, Click Below</p>
+        <a href="{% url 'maintenance_page' %}" style="text-decoration: underline; color: blue; font-size: 14px;">Excel Maintenance Check</a>
     </div>
 </div>
 
@@ -118,6 +118,7 @@
         });
         const deleteButton = newRow.querySelector('.delete-button');
         deleteButton.disabled = false;
+        deleteButton.hidden = false;
         deleteButton.classList.remove('original-row');
         deleteButton.setAttribute('onclick', 'deleteRow(this)');
         document.getElementById('input-rows').appendChild(newRow);

@@ -9,7 +9,7 @@ urlpatterns = [
     path('maintenance2/', views.upload_display_excel),
     path('access-training-data/', views.access_training_data, name='access_training_data'),
     path('download-test-case-excel/', views.download_test_case_excel, name='download_test_case_excel'),
-    path('manual-input/', views.manual_input_view, name='manual_input'),
+    path('manual-maintenance/', views.manual_input_view, name='manual_input'),
 ]
 
 if settings.DEBUG:
