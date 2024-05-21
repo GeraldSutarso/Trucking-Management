@@ -14,7 +14,7 @@
               <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
                 <div class="card-header text-center">
                   <br><h1>Booking {{ request.session.booking_id }}</h1>
-                  <br><h1>Payment Pending</h1>
+                  <br><h1>Payment Failed</h1>
                 </div>
                 <div class="card-body" style="margin: 15px">
                   <div class="row">
@@ -24,7 +24,7 @@
                       {% endfor %}
                     {% endif %}
                     <div class="card-body" style="margin: 15px">
-                      <p>Your payment is still Pending. Please make payment immediately or Please wait for admin Confirmation!</p>
+                      <p>Your payment has been declined. Please consult with admin for more detailed information.</p>
                       <a href="{% url 'go_home' %}" class="btn btn-primary">Return to Home</a>
                     </div>
                   </div>

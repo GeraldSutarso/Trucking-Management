@@ -463,17 +463,27 @@ def book_truck(request):
     return redirect('go_home')
 
 @login_required(login_url = 'login')
-@user_passes_test(im_customer, login_url='/')
 # @user_passes_test(initely, login_url='/login')
 def booking_result(request, booking_id):
-    try:
-        user = Customer.objects.get(user=request.user)
-        booking = Booking.objects.get(id=booking_id)
-        booking.customer_id == user.user_id
-        truck = Truck.objects.get(id=booking.truck_id)
-        
-    except ObjectDoesNotExist:
-        return redirect('go_home')
+    if request.user.is_customer:
+        try:
+            user = Customer.objects.get(user=request.user)
+            booking = Booking.objects.get(id=booking_id)
+            booking.customer_id == user.id
+            truck = Truck.objects.get(id=booking.truck_id)
+            
+        except ObjectDoesNotExist:
+            return redirect('go_home')
+    elif request.user.is_driver:
+        try:
+            user = Driver.objects.get(user=request.user)
+            booking = Booking.objects.get(id=booking_id)
+            booking.driver_id == user.id
+            truck = Truck.objects.get(id=booking.truck_id)
+            customer = Customer.objects.get(id = booking.customer_id)
+            
+        except ObjectDoesNotExist:
+            return redirect('go_home')
     
     request.session['booking_id']=booking_id
     request.session['truck_id']=truck.id
@@ -485,7 +495,7 @@ def booking_result(request, booking_id):
     request.session['weight'] = booking.weight
     request.session['price'] = booking.price
     
-    return render(request, 'booking/booking_result.html', {'booking': booking, 'truck':truck})
+    return render(request, 'booking/booking_result.html', {'booking': booking, 'truck':truck, 'customer': customer})
 
 
 @login_required(login_url = 'login')
@@ -499,4 +509,6 @@ def history_customer(request):
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/')
 def history_driver(request):
-    return render(request, 'b_history/booking_driver.html')
+    bookings = Booking.objects.filter(driver_id=request.user.id)
+    customers = Customer.objects.filter(id = bookings.customer_id)
+    return render(request, 'b_history/booking_driver.html',{'bookings':bookings, 'customer':customers})
