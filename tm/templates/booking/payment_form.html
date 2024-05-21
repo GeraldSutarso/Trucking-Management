@@ -25,7 +25,7 @@
                     <div class="card-body" style="margin: 15px">
                       <h6 class="text-center">Total Price: Rp {{ price }}</h6>
                       <h6 class="text-center">Booking ID: {{ booking_id }}</h6>
-                      <form method="POST" action="{% url 'create_payment' %}" enctype="multipart/form-data">
+                      <form method="POST" action="{% url 'create_payment' booking.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="text-center" style="margin: 20px 0;">
                           <label>

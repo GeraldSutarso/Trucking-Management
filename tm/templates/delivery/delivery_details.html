@@ -1,0 +1,203 @@
+{% extends 'base.html' %} {% block title %} | Truck Delivery {% endblock %} {% block content %} {% load static %}
+
+<section id="home" class="welcome-hero">
+  <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="col">
+            <br /><br id="register-box" /><br />
+            <div class="col-lg-12">
+              <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #ddd; border-radius: 10px">
+                <div class="card-header text-center">
+                    <br><h1>Delivery Details</h1>
+                </div>
+                <div class="card-body" style="margin: 15px">
+                  <div class="row">
+                    {% if messages %} {% for message in messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %} {% endif %}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Booking ID</td>
+                                <td>{{ request.session.booking_id }}</td>
+                            </tr>
+                            {% if request.user.is_driver %}
+                            <tr>
+                              <td>Customer Name</td>
+                              <td>{{ customer.user.first_name }} {{ customer.user.last_name }}</td>
+                             </tr>
+                             <tr>
+                            <td>Customer Phone Number</td>
+                            <td>{{ customer.user.phone_number }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                            <div class="form-group mb-0 text-center">
+                              <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal{{ truck.id }}">Truck Details</button>
+                            </div>
+                            </tr>
+                            <tr>
+                                <td>Pick-up Location</td>
+                                <td>{{ request.session.pickup }}</td>
+                            </tr>
+                            <tr>
+                                <td>Destination</td>
+                                <td>{{ request.session.destination }}</td>
+                            </tr>
+                            <tr>
+                                <td>Distance (Km)</td>
+                                <td>{{ request.session.distance }}</td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Date</td>
+                                <td>{{ request.session.date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Details</td>
+                                <td>{{ request.session.details }}</td>
+                            </tr>
+                            <tr>
+                                <td>Load Weight (Tons)</td>
+                                <td>{{ request.session.weight }}</td>
+                            </tr>
+                            <tr>
+                                <td>Price (Rp)</td>
+                                <td>{{ request.session.price }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                            <a href="{% url 'gps' %}" class="btn btn-primary">Location</a>  
+                    </div>
+                    <div class="text-center">
+                          <a href="{% url 'delivery' %}" class="btn btn-danger">Back</a>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<!-- Modal -->
+<div id="myModal{{ truck.id }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Truck Details</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tr>
+            <th>Model:</th>
+            <td>{{ truck.truck_model }}</td>
+          </tr>
+          <tr>
+            <th>License Plate:</th>
+            <td>{{ truck.license_plate }}</td>
+          </tr>
+          <tr>
+            <th>Driver:</th>
+            <td>{{ truck.driver.user.first_name }} {{ truck.driver.user.last_name }}</td>
+          </tr>
+          <tr>
+            <th>Capacity:</th>
+            <td>{{ truck.capacity }}</td>
+          </tr>
+          <tr>
+            <th>Status:</th>
+            <td>{{ truck.status }}</td>
+          </tr>
+          <tr>
+            <th>Last Maintained:</th>
+            <td>
+              {% if truck.last_maintained %}
+                {{ truck.last_maintained.isoformat }}
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Front View:</th>
+            <td>
+              {% if truck.front_view %}
+                <img src="{{ truck.front_view.url }}" alt="Front View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Side View:</th>
+            <td>
+              {% if truck.side_view %}
+                <img src="{{ truck.side_view.url }}" alt="Side View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Back View:</th>
+            <td>
+              {% if truck.back_view %}
+                <img src="{{ truck.back_view.url }}" alt="Back View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Top View:</th>
+            <td>
+              {% if truck.top_view %}
+                <img src="{{ truck.top_view.url }}" alt="Top View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Overall View:</th>
+            <td>
+              {% if truck.overall_view %}
+                <img src="{{ truck.overall_view.url }}" alt="Overall View">
+              {% else %}
+                None
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+        <script>
+          document.getElementById('distance').addEventListener('input', function() {
+            const distance = parseFloat(this.value) || 0;
+            const price = distance * 10000;
+            document.getElementById('price').value = price;
+          });
+        </script>
+{% endblock %}

@@ -42,12 +42,16 @@ urlpatterns = [
     
     path('book_summary/<int:booking_id>/', views.booking_result, name='booking_result'),
     
-    #notification
+    #history
     path('history' , views.history, name ='history'),
     path('customer-bookings', views.history_customer, name='customer_bookings'),
     path('driver-bookings', views.history_driver, name='driver_bookings'),
     
-    
+    #delivery
+    path('delivery' , views.delivery, name ='delivery'),
+    path('delivery/customer', views.delivery_customer, name='delivery_customer'),
+    path('delivery/driver', views.delivery_driver, name='delivery_driver'),
+    path('delivery/details/<int:booking_id>/', views.delivery_details, name='delivery_details'),
 
     
 ]
