@@ -469,7 +469,7 @@ def booking_result(request, booking_id):
         try:
             user = Customer.objects.get(user=request.user)
             booking = Booking.objects.get(id=booking_id)
-            booking.customer_id == user.id
+            # booking.customer_id == user.id
             truck = Truck.objects.get(id=booking.truck_id)
             
         except ObjectDoesNotExist:
@@ -478,7 +478,7 @@ def booking_result(request, booking_id):
         try:
             user = Driver.objects.get(user=request.user)
             booking = Booking.objects.get(id=booking_id)
-            booking.driver_id == user.id
+            # booking.driver_id == user.id
             truck = Truck.objects.get(id=booking.truck_id)
             customer = Customer.objects.get(id = booking.customer_id)
             
