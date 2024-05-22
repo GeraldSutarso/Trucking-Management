@@ -72,8 +72,11 @@
 							</div>
 							<div class="col-md-3">
 								<button type="button" class="btn btn-primary" id="resetButton" style="display: none;" >Reset</button>
+                                <br>
+                                <button onclick="goBack()" class="btn btn-primary">Back</button>
 							</div>
-							
+                            
+				
 						</div>
                     </div>
                 </div>
@@ -141,6 +144,7 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+        
 		
 		function updateMap(data) {
 			// Extract latitude and longitude from the API response
@@ -274,7 +278,13 @@
 
         startPolylineButton.addEventListener('click', startPolyline);
 		resetButton.addEventListener('click', resetMap);
+
+        function goBack() {
+            window.history.back();
+        }
     </script>
+
+
 </body>
 </html>
 {% endblock %}
