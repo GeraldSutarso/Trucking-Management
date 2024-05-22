@@ -18,11 +18,11 @@
 
 			<div class="container">
 				<div class="welcome-hero-txt">
-					<h2>deliver loads by booking our trucks</h2>
+					<h2>join the future of trucking today</h2>
 					<p>
-						Our trucks are good. Our trucks are the best. Our trucks beat other trucks. You won't be disappointed. We won't disappoint. Trust our trucks. We will take control of the world. Autobots roll out.
+						Manage your driver and trucks efficiently while providing a connection between the drivers and the customers.
 					</p>
-					<button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+					<button class="welcome-btn" onclick="window.location.href='{% url "register_customer" %}'">Book a truck now!</button>
 				</div>
 			</div>
 
@@ -38,7 +38,7 @@
 		<!--welcome-hero end -->
 
 	
-		<!--new-trucks start -->
+		{% comment %} <!--new-trucks start -->
 		<section id="new-trucks" class="new-trucks">
 			<div class="container">
 				<div class="section-header">
@@ -251,7 +251,7 @@
 			</div><!--/.container-->
 
 		</section><!--/brand-->	
-		<!--brand end -->
+		<!--brand end --> {% endcomment %}
 
 		<!--blog start -->
 		<section id="blog" class="blog"></section><!--/.blog-->

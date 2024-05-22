@@ -23,10 +23,11 @@
                       {% endfor %}
                     {% endif %}
                     <div class="card-body" style="margin: 15px">
-                      <h6 class="text-center">Total Price: Rp {{ price }}</h6>
-                      <h6 class="text-center">Booking ID: {{ booking_id }}</h6>
-                      <form method="POST" action="{% url 'create_payment' booking.id %}" enctype="multipart/form-data">
+                      <h6 class="text-center">Total Price: Rp {{ booking.price }}</h6>
+                      <h6 class="text-center">Booking ID: {{ booking.id }}</h6>
+                      <form method="POST" action="{% url 'create_payment' %}" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <input type="hidden" id="selected_payment_method" name="selected_payment_method">
                         <div class="text-center" style="margin: 20px 0;">
                           <label>
                             <input type="radio" name="payment_method" value="cash" onclick="showPaymentDetails()"> Cash
@@ -96,14 +97,20 @@
     var selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
     var cashDetails = document.getElementById('cash_details');
     var bankTransferDetails = document.getElementById('bank_transfer_details');
-    
+    var transferReceipt = document.getElementById('transfer_receipt');
+
     if (selectedMethod === 'cash') {
       cashDetails.style.display = 'block';
       bankTransferDetails.style.display = 'none';
+      transferReceipt.required = false; // make the field not required
     } else if (selectedMethod === 'bank_transfer') {
       cashDetails.style.display = 'none';
       bankTransferDetails.style.display = 'block';
+      transferReceipt.required = true; // make the field required
     }
+
+    // Update the hidden input field with the selected payment method
+  document.getElementById('selected_payment_method').value = selectedMethod;
   }
 </script>
 

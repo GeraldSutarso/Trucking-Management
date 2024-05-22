@@ -127,16 +127,16 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-6 col-sm-6" onclick="window.location.href='{% url "driver_profile" %}'">
+						<div class="col-md-6 col-sm-6" onclick="window.location.href='{% url "history" %}'">
 							<div class="single-service-item">
 								<div class="single-service-icon">
 									<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-										<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+										<path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
 									</svg>
 								</div>
-								<h2><a href='{% url "driver_profile" %}'>Notification</a></h2>
+								<h2><a href='{% url "history" %}'>Bookings</a></h2>
 								<p>
-									Check your notifications
+									Check your Bookings
 								</p>
 							</div>
 						</div>
@@ -157,7 +157,7 @@
 							</div>
 						</div>
 						<div class="col-md-6 col-sm-6">
-							<div class="single-service-item" onclick="window.location.href='{% url "driver_profile" %}'">
+							<div class="single-service-item" onclick="window.location.href='{% url "delivery" %}'">
 								<div class="single-service-icon">
 									<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
 										<path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
@@ -165,9 +165,9 @@
 										<path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
 									</svg>
 								</div>
-								<h2><a href="#">Booking/Delivery History</a></h2>
+								<h2><a href="{% url "delivery" %}">Deliveries</a></h2>
 								<p>
-									Check your booking/delivery history 
+									Check your deliveries
 								</p>
 							</div>
 						</div>
@@ -178,7 +178,7 @@
 		</section><!--/.service-->
 		<!--service end-->
 
-		<!--new-trucks start -->
+		{% comment %} <!--new-trucks start -->
 		<section id="new-trucks" class="new-trucks">
 			<div class="container">
 				<div class="section-header">
@@ -343,10 +343,10 @@
 				</div><!--/.row-->
 			</div><!--/.container-->
 
-		</section><!--/.clients-say-->	
+		</section><!--/.clients-say-->	 {% endcomment %}
 		<!-- clients-say end -->
 
-		<!--brand strat -->
+		{% comment %} <!--brand strat -->
 		<section id="brand"  class="brand">
 			<div class="container">
 				<div class="brand-area">
@@ -388,7 +388,7 @@
 
 			</div><!--/.container-->
 
-		</section><!--/brand-->	
+		</section><!--/brand-->	 {% endcomment %}
 		<!--brand end -->
 
 		<!--blog start -->
