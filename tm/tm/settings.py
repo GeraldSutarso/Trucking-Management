@@ -38,6 +38,13 @@ INSTALLED_APPS = [
     'jazzmin',
     'accounts',
     'vehicles',
+<<<<<<< Updated upstream
+=======
+    'booking',
+    'payment',
+    'maintenance',
+    'gps',
+>>>>>>> Stashed changes
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
