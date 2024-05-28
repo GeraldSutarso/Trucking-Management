@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'accounts',
     'vehicles',
     'booking',
+    'faces',
     'payment',
     'maintenance',
     'django.contrib.admin',

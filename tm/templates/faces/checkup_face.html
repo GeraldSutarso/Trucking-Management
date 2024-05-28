@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkup Face</title>
+    <style>
+      #canvas {
+        display: none;
+      }
+      .result {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Checkup Face</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div>
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <input type="hidden" name="captured_image" id="captured_image" />
+      </div>
+      <button type="button" onclick="captureImage()">Capture</button>
+      <button type="submit" name="checkup">Checkup</button>
+      <button type="submit" name="next">Next</button>
+    </form>
+
+    {% if uploaded_file_url %}
+    <h2>Analysis Result</h2>
+    <div style="position: relative; display: inline-block">
+      <img src="{{ uploaded_file_url }}" alt="Captured Image" />
+      <div class="result">{{ result }}</div>
+    </div>
+    {% endif %}
+
+    <script>
+      function captureImage() {
+        var video = document.getElementById("video");
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        context.drawImage(video, 0, 0, 640, 480);
+        var dataURL = canvas.toDataURL("image/png");
+        document.getElementById("captured_image").value = dataURL;
+      }
+
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          var video = document.getElementById("video");
+          video.srcObject = stream;
+        })
+        .catch(function (err) {
+          console.log("Error: " + err);
+        });
+    </script>
+  </body>
+</html>
