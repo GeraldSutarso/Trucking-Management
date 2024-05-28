@@ -1,8 +1,9 @@
+{% load static %} {% include 'includes/topbar.html' %} {% include 'includes/navbar.html' %} {% block content %} {% endblock %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Checkup Face</title>
+    <title>Checkup Face{% block title %} {% endblock %}</title>
     <style>
       #canvas {
         display: none;
@@ -62,3 +63,4 @@
     </script>
   </body>
 </html>
+{% endblock %}
