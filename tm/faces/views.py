@@ -8,6 +8,41 @@ from keras.models import load_model
 from .models import FacePhoto
 from io import BytesIO
 from PIL import Image
+import os
+import dlib
+
+def get_latest_model():
+    model_dir = 'trained_model'
+    models = [os.path.join(model_dir, f) for f in os.listdir(model_dir) if f.endswith('.h5')]
+    latest_model_path = max(models, key=os.path.getctime)
+    return load_model(latest_model_path)
+
+detector = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor("trained_model/shape_predictor_68_face_landmarks.dat")
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+def preprocess_image(img):
+    gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    for (x, y, w, h) in faces:
+        face = gray[y:y+h, x:x+w]
+        face = cv2.resize(face, (224, 224)).astype('float32') / 255.0  # Resize to 224x224
+        face = np.stack((face,) * 3, axis=-1)  # Convert to 3-channel image
+        return face.reshape(1, 224, 224, 3), (x, y, w, h)
+    return None, None
+
+def draw_landmarks(image, landmarks, color=(0, 255, 0)):
+    for (x, y) in landmarks:
+        cv2.circle(image, (x, y), 3, color, -1)
+
+def detect_eyes_and_mouth(image, face_rect):
+    shape = predictor(image, face_rect)
+    landmarks = [(p.x, p.y) for p in shape.parts()]
+    
+    eyes_landmarks = landmarks[36:48]  # Eyes landmarks
+    mouth_landmarks = landmarks[48:68] # Mouth landmarks
+
+    return eyes_landmarks + mouth_landmarks
 
 def checkup_face(request):
     if request.method == 'POST':
@@ -18,22 +53,29 @@ def checkup_face(request):
             img = Image.open(BytesIO(img_data))
             img.save('temp.png')
 
-            # Load the trained model
-            model = load_model('trained_model/face_model.h5')
+            # Load the latest model
+            model = get_latest_model()
             
             # Preprocess the image
-            img_cv2 = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
-            img_cv2 = cv2.resize(img_cv2, (64, 64)).reshape(1, 64, 64, 1)
+            img_cv2 = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            face_image, face_rect = preprocess_image(img)
+            if face_image is None:
+                return render(request, 'checkup_face.html', {'error': 'No face detected'})
 
             # Predict
-            result = np.argmax(model.predict(img_cv2), axis=-1)[0]
-            labels = ['Tired', 'Normal', 'Sicks', 'Normal']
-            result = labels[result]
+            result = np.argmax(model.predict(face_image), axis=-1)[0]
+            labels = ['not tired', 'Drowsiness detection', 'not sick', 'Sickness detection']
+            result_text = labels[result]
+
+            # Draw landmarks on image
+            detected_faces = detector(img_cv2, 1)
+            for i, face in enumerate(detected_faces):
+                landmarks = detect_eyes_and_mouth(img_cv2, face)
+                draw_landmarks(img_cv2, landmarks)
 
             # Overlay text on image
-            img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-            cv2.putText(img, result, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-            success, encoded_image = cv2.imencode('.png', img)
+            cv2.putText(img_cv2, result_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+            success, encoded_image = cv2.imencode('.png', img_cv2)
             if success:
                 image_file = ContentFile(encoded_image.tobytes())
                 file_name = default_storage.save('photos/annotated_image.png', image_file)
@@ -42,12 +84,12 @@ def checkup_face(request):
             # Save to database
             photo = FacePhoto()
             photo.image.save(file_name, image_file)
-            photo.result = result
+            photo.result = result_text
             photo.save()
 
             context = {
                 'uploaded_file_url': uploaded_file_url,
-                'result': result
+                'result': result_text
             }
 
             return render(request, 'checkup_face.html', context)
@@ -64,29 +106,47 @@ def upload_photo_face(request):
         
         if request.FILES.get('face_image'):
             face_image = request.FILES['face_image']
-            fs = FileSystemStorage()
-            filename = fs.save(face_image.name, face_image)
-            uploaded_file_url = fs.url(filename)
+            img = Image.open(face_image)
+            img.save('uploaded_image.png')
 
-            # Load the trained model
-            model = load_model('trained_models/face_model.h5')
-            
+            # Load the latest model
+            model = get_latest_model()
+
             # Preprocess the image
-            img = cv2.imread(fs.path(filename), cv2.IMREAD_GRAYSCALE)
-            img = cv2.resize(img, (64, 64)).reshape(1, 64, 64, 1)
+            img_cv2 = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+            face_image, face_rect = preprocess_image(img)
+            if face_image is None:
+                return render(request, 'upload_photo_face.html', {'error': 'No face detected'})
 
             # Predict
-            result = np.argmax(model.predict(img), axis=-1)[0]
-            labels = ['Tired', 'Normal', 'Sicks', 'Normal']
-            result = labels[result]
-            
+            result = np.argmax(model.predict(face_image), axis=-1)[0]
+            labels = ['not tired', 'Drowsiness detected', 'not sick', 'Sickness detected']
+            result_text = labels[result]
+
+            # Draw landmarks on image
+            detected_faces = detector(img_cv2, 1)
+            for i, face in enumerate(detected_faces):
+                landmarks = detect_eyes_and_mouth(img_cv2, face)
+                draw_landmarks(img_cv2, landmarks)
+
+            # Save the annotated image
+            success, encoded_image = cv2.imencode('.png', img_cv2)
+            if success:
+                image_file = ContentFile(encoded_image.tobytes())
+                file_name = default_storage.save('photos/annotated_image.png', image_file)
+                uploaded_file_url = default_storage.url(file_name)
+
             # Save to database
-            photo = FacePhoto(image=face_image, result=result)
+            photo = FacePhoto()
+            photo.image.save(file_name, image_file)
+            photo.result = result_text
             photo.save()
 
-            return render(request, 'upload_photo_face.html', {
+            context = {
                 'uploaded_file_url': uploaded_file_url,
-                'result': result
-            })
+                'result': result_text
+            }
+
+            return render(request, 'upload_photo_face.html', context)
 
     return render(request, 'upload_photo_face.html')
