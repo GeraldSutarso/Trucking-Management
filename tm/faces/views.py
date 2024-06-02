@@ -12,13 +12,13 @@ import os
 import dlib
 
 def get_latest_model():
-    model_dir = 'trained_model'
+    model_dir = 'trained_models'
     models = [os.path.join(model_dir, f) for f in os.listdir(model_dir) if f.endswith('.h5')]
     latest_model_path = max(models, key=os.path.getctime)
     return load_model(latest_model_path)
 
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("trained_model/shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor("trained_models/shape_predictor_68_face_landmarks.dat")
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def preprocess_image(img):
@@ -31,18 +31,63 @@ def preprocess_image(img):
         return face.reshape(1, 224, 224, 3), (x, y, w, h)
     return None, None
 
-def draw_landmarks(image, landmarks, color=(0, 255, 0)):
-    for (x, y) in landmarks:
-        cv2.circle(image, (x, y), 3, color, -1)
+def draw_landmarks(image, landmarks, face_rect, color=(0, 255, 0)):
+    # Gambar kotak persegi di area wajah
+    (x, y, w, h) = face_rect
+    cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
+    
+    # Gambar lingkaran di sekitar mata dan mulut
+    for (i, (px, py)) in enumerate(landmarks):
+        if i < 12:  # Mata (0-11)
+            cv2.circle(image, (px, py), 2, color, -1)
+        else:  # Mulut (12-19)
+            cv2.circle(image, (px, py), 2, color, -1)
 
 def detect_eyes_and_mouth(image, face_rect):
     shape = predictor(image, face_rect)
     landmarks = [(p.x, p.y) for p in shape.parts()]
     
-    eyes_landmarks = landmarks[36:48]  # Eyes landmarks
-    mouth_landmarks = landmarks[48:68] # Mouth landmarks
+    eyes_landmarks = landmarks[36:48]  # Landmark mata
+    mouth_landmarks = landmarks[48:68] # Landmark mulut
 
     return eyes_landmarks + mouth_landmarks
+
+def analyze_expression(eyes_landmarks, mouth_landmarks):
+    def euclidean_distance(point1, point2):
+        return np.linalg.norm(np.array(point1) - np.array(point2))
+
+    # Analisis mata
+    left_eye_height = euclidean_distance(eyes_landmarks[1], eyes_landmarks[5]) + euclidean_distance(eyes_landmarks[2], eyes_landmarks[4])
+    left_eye_width = euclidean_distance(eyes_landmarks[0], eyes_landmarks[3])
+    left_eye_ratio = left_eye_height / (2.0 * left_eye_width)
+
+    right_eye_height = euclidean_distance(eyes_landmarks[7], eyes_landmarks[11]) + euclidean_distance(eyes_landmarks[8], eyes_landmarks[10])
+    right_eye_width = euclidean_distance(eyes_landmarks[6], eyes_landmarks[9])
+    right_eye_ratio = right_eye_height / (2.0 * right_eye_width)
+
+    eyes_closed = (left_eye_ratio < 0.2) and (right_eye_ratio < 0.2)
+    eyes_half_closed = (0.2 <= left_eye_ratio < 0.3) and (0.2 <= right_eye_ratio < 0.3)
+    eyes_open = (left_eye_ratio >= 0.3) and (right_eye_ratio >= 0.3)
+
+    # Analisis mulut
+    mouth_height = euclidean_distance(mouth_landmarks[2], mouth_landmarks[10])
+    mouth_width = euclidean_distance(mouth_landmarks[0], mouth_landmarks[6])
+    mouth_ratio = mouth_height / mouth_width
+
+    mouth_open = mouth_ratio > 0.5
+    mouth_closed = not mouth_open
+
+    # Kriteria untuk setiap kondisi
+    if eyes_closed and mouth_closed:
+        return 'Drowsiness detected'
+    elif eyes_half_closed and mouth_closed:
+        return 'Sickness detected'
+    elif eyes_open and mouth_open:
+        return 'not_sick'
+    elif eyes_open and mouth_closed:
+        return 'not_tired'
+    else:
+        return 'Unknown'
 
 def checkup_face(request):
     if request.method == 'POST':
@@ -62,16 +107,20 @@ def checkup_face(request):
             if face_image is None:
                 return render(request, 'checkup_face.html', {'error': 'No face detected'})
 
-            # Predict
+            # Predict (assuming model output is still necessary)
             result = np.argmax(model.predict(face_image), axis=-1)[0]
-            labels = ['not tired', 'Drowsiness detection', 'not sick', 'Sickness detection']
+            labels = ['not_tired', 'Drowsiness detected', 'not_sick', 'Sickness detected']
             result_text = labels[result]
 
             # Draw landmarks on image
             detected_faces = detector(img_cv2, 1)
             for i, face in enumerate(detected_faces):
                 landmarks = detect_eyes_and_mouth(img_cv2, face)
-                draw_landmarks(img_cv2, landmarks)
+                draw_landmarks(img_cv2, landmarks, face_rect)
+                # Analyze expression
+                eyes_landmarks = landmarks[:12]
+                mouth_landmarks = landmarks[12:]
+                result_text = analyze_expression(eyes_landmarks, mouth_landmarks)
 
             # Overlay text on image
             cv2.putText(img_cv2, result_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
@@ -118,16 +167,20 @@ def upload_photo_face(request):
             if face_image is None:
                 return render(request, 'upload_photo_face.html', {'error': 'No face detected'})
 
-            # Predict
+            # Predict (assuming model output is still necessary)
             result = np.argmax(model.predict(face_image), axis=-1)[0]
-            labels = ['not tired', 'Drowsiness detected', 'not sick', 'Sickness detected']
+            labels = ['not_tired', 'Drowsiness detected', 'not_sick', 'Sickness detected']
             result_text = labels[result]
 
             # Draw landmarks on image
             detected_faces = detector(img_cv2, 1)
             for i, face in enumerate(detected_faces):
                 landmarks = detect_eyes_and_mouth(img_cv2, face)
-                draw_landmarks(img_cv2, landmarks)
+                draw_landmarks(img_cv2, landmarks, face_rect)
+                # Analyze expression
+                eyes_landmarks = landmarks[:12]
+                mouth_landmarks = landmarks[12:]
+                result_text = analyze_expression(eyes_landmarks, mouth_landmarks)
 
             # Save the annotated image
             success, encoded_image = cv2.imencode('.png', img_cv2)

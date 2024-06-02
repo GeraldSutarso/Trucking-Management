@@ -23,13 +23,13 @@ def load_images_from_folder(folder, label):
     return images, labels
 
 def prepare_data():
-    not_tired_images, not_tired_labels = load_images_from_folder('dataset/drowsiness/not tired', 0)
-    drowsiness_images, drowsiness_labels = load_images_from_folder('dataset/drowsiness/drowsy', 1)
-    not_sicks_images, not_sicks_labels = load_images_from_folder('dataset/sickness/not sicks', 2)
-    sickness_images, sickness_labels = load_images_from_folder('dataset/sickness/sickness detection', 3)
+    not_tired_images, not_tired_labels = load_images_from_folder('dataset/drowsiness/not_tired', 0)
+    drowsiness_images, drowsiness_labels = load_images_from_folder('dataset/drowsiness/Drowsiness detected', 1)
+    not_sick_images, not_sick_labels = load_images_from_folder('dataset/sickness/not_sick', 2)
+    sickness_images, sickness_labels = load_images_from_folder('dataset/sickness/Sickness detected', 3)
     
-    X = not_tired_images + drowsiness_images + not_sicks_images + sickness_images
-    y = not_tired_labels + drowsiness_labels + not_sicks_labels + sickness_labels
+    X = not_tired_images + drowsiness_images + not_sick_images + sickness_images
+    y = not_tired_labels + drowsiness_labels + not_sick_labels + sickness_labels
 
     print("Distribution of data:", Counter(y))
 
@@ -69,11 +69,14 @@ def train_model():
 
     model = create_model()
 
+    # Ensure the directory exists
+    os.makedirs('trained_models', exist_ok=True)
+
     # Calculate class weights to handle class imbalance
     class_weights = class_weight.compute_class_weight('balanced', classes=np.unique(y), y=y_train)
     class_weights_dict = dict(enumerate(class_weights))
 
-    checkpoint = ModelCheckpoint('trained_model/face_model_best.keras', monitor='val_loss', save_best_only=True, mode='min')
+    checkpoint = ModelCheckpoint('trained_models/face_model_best.keras', monitor='val_loss', save_best_only=True, mode='min')
     early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
     model.fit(datagen.flow(X_train, y_train, batch_size=32), 
@@ -83,9 +86,9 @@ def train_model():
               callbacks=[checkpoint, early_stopping])
 
     loss, accuracy = model.evaluate(X_test, y_test)
-    print(f'Akurasi: {accuracy}')
+    print(f'Accuracy: {accuracy}')
 
-    model.save('trained_model/face_model.h5')
+    model.save('trained_models/face_model.keras')
 
 if __name__ == "__main__":
     train_model()
