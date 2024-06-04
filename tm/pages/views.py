@@ -491,7 +491,7 @@ def booking_result(request, booking_id):
             booking = Booking.objects.get(id=booking_id)
             # booking.driver_id == user.id
             truck = Truck.objects.get(id=booking.truck_id)
-            customer = Customer.objects.get(id = booking.customer_id)
+            customer = Customer.objects.get(user_id = booking.customer_id)
             
         except ObjectDoesNotExist:
             return redirect('go_home')
@@ -542,7 +542,7 @@ def delivery_details(request, booking_id):
             booking = Booking.objects.get(id=booking_id)
             # booking.driver_id == user.id
             truck = Truck.objects.get(id=booking.truck_id)
-            customer = Customer.objects.get(id = booking.customer_id)
+            customer = Customer.objects.get(user_id = booking.customer_id)
             
         except ObjectDoesNotExist:
             return redirect('go_home')

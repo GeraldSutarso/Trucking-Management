@@ -7,9 +7,22 @@ from django.core.files.storage import default_storage
 from keras.models import load_model
 from .models import FacePhoto
 from io import BytesIO
+from django.contrib.auth.decorators import login_required, user_passes_test
 from PIL import Image
 import os
 import dlib
+
+#HEY USER, WHO ARE YOU??
+
+def im_customer(user):
+    # return hasattr(user, is_customer=1)
+    return user.is_customer
+def im_superman(user):
+    # return hasattr(user, is_superuser=1)
+    return user.is_superuser
+def im_driver(user):
+    # return hasattr(user, is_driver=1)
+    return user.is_driver
 
 def get_latest_model():
     model_dir = 'trained_models'
@@ -89,6 +102,8 @@ def analyze_expression(eyes_landmarks, mouth_landmarks):
     else:
         return 'Unknown'
 
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/login')
 def checkup_face(request):
     if request.method == 'POST':
         if 'checkup' in request.POST:
@@ -148,6 +163,8 @@ def checkup_face(request):
 
     return render(request, 'checkup_face.html')
 
+@login_required(login_url = 'login')
+@user_passes_test(im_driver, login_url='/login')
 def upload_photo_face(request):
     if request.method == 'POST':
         if 'backup' in request.POST:
