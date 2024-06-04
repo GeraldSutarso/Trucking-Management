@@ -26,7 +26,7 @@ def im_driver(user):
 
 def get_latest_model():
     model_dir = 'trained_models'
-    models = [os.path.join(model_dir, f) for f in os.listdir(model_dir) if f.endswith('.h5')]
+    models = [os.path.join(model_dir, f) for f in os.listdir(model_dir) if f.endswith('.keras')]
     latest_model_path = max(models, key=os.path.getctime)
     return load_model(latest_model_path)
 
@@ -156,12 +156,12 @@ def checkup_face(request):
                 'result': result_text
             }
 
-            return render(request, 'checkup_face.html', context)
+            return render(request, 'faces/checkup_face.html', context)
 
         elif 'next' in request.POST:
             return redirect('upload_photo_face')
 
-    return render(request, 'checkup_face.html')
+    return render(request, 'faces/checkup_face.html')
 
 @login_required(login_url = 'login')
 @user_passes_test(im_driver, login_url='/login')
@@ -182,7 +182,7 @@ def upload_photo_face(request):
             img_cv2 = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
             face_image, face_rect = preprocess_image(img)
             if face_image is None:
-                return render(request, 'upload_photo_face.html', {'error': 'No face detected'})
+                return render(request, 'faces/upload_photo_face.html', {'error': 'No face detected'})
 
             # Predict (assuming model output is still necessary)
             result = np.argmax(model.predict(face_image), axis=-1)[0]
@@ -217,6 +217,6 @@ def upload_photo_face(request):
                 'result': result_text
             }
 
-            return render(request, 'upload_photo_face.html', context)
+            return render(request, 'faces/upload_photo_face.html', context)
 
-    return render(request, 'upload_photo_face.html')
+    return render(request, 'faces/upload_photo_face.html')
